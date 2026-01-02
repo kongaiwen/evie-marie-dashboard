@@ -6,7 +6,7 @@ export default function Home() {
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">Your Name</h1>
+            <h1 className="text-xl font-bold text-gray-900">Evie Marie Kolb</h1>
             <div className="flex gap-6">
               <Link href="/about" className="text-gray-600 hover:text-gray-900">
                 About
