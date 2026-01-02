@@ -33,15 +33,33 @@ export default function ContactPage() {
         <div className="mt-12 space-y-6">
           <div className="rounded-lg bg-white p-6 shadow-md">
             <h3 className="text-xl font-semibold text-gray-900">Email</h3>
-            <p className="mt-2 text-gray-600">your.email@example.com</p>
+            <a
+              href="mailto:eviemariekolb@gmail.com"
+              className="mt-2 block text-indigo-600 hover:text-indigo-500"
+            >
+              eviemariekolb@gmail.com
+            </a>
           </div>
 
           <div className="rounded-lg bg-white p-6 shadow-md">
             <h3 className="text-xl font-semibold text-gray-900">Social</h3>
             <div className="mt-2 space-y-2">
-              <p className="text-gray-600">GitHub: @yourusername</p>
-              <p className="text-gray-600">LinkedIn: @yourusername</p>
-              <p className="text-gray-600">Twitter: @yourusername</p>
+              <a
+                href="https://github.com/kongaiwen"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-indigo-600 hover:text-indigo-500"
+              >
+                GitHub: @kongaiwen →
+              </a>
+              <a
+                href="https://linkedin.com/in/evie-marie-kolb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-indigo-600 hover:text-indigo-500"
+              >
+                LinkedIn: evie-marie-kolb →
+              </a>
             </div>
           </div>
         </div>
