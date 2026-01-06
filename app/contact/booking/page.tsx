@@ -1,4 +1,4 @@
-export const BookingPage = () => {
+export default function BookingPage() {
 
 
     return (
