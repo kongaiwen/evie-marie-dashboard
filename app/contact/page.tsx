@@ -19,6 +19,9 @@ export default function ContactPage() {
               <Link href="/contact" className="font-semibold text-indigo-600">
                 Contact
               </Link>
+              <Link href="/contact/booking" className="font-semibold text-indigo-900">
+                Book Me!
+              </Link>
             </div>
           </div>
         </div>
