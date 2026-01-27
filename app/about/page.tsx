@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100">
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -11,7 +11,7 @@ export default function AboutPage() {
               Evie Marie Kolb
             </Link>
             <div className="flex gap-6">
-              <Link href="/about" className="font-semibold text-indigo-600">
+              <Link href="/about" className="font-semibold text-teal-600">
                 About
               </Link>
               <Link href="/projects" className="text-gray-600 hover:text-gray-900">
@@ -19,6 +19,9 @@ export default function AboutPage() {
               </Link>
               <Link href="/contact" className="text-gray-600 hover:text-gray-900">
                 Contact
+              </Link>
+              <Link href="/contact/booking" className="font-semibold text-teal-700 hover:text-teal-600">
+                Book Me
               </Link>
             </div>
           </div>
@@ -28,13 +31,15 @@ export default function AboutPage() {
       <main className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-12 items-start">
           <div className="flex-shrink-0">
-            <Image
-              src="/images/profile.jpg"
-              alt="Evie Marie Kolb"
-              width={280}
-              height={280}
-              className="rounded-lg shadow-lg object-cover"
-            />
+            <Link href="/profile">
+              <Image
+                src="/images/profile.jpg"
+                alt="Evie Marie Kolb"
+                width={280}
+                height={280}
+                className="rounded-lg shadow-lg object-cover hover:shadow-xl transition-shadow"
+              />
+            </Link>
           </div>
           <div>
             <h1 className="text-4xl font-bold text-gray-900">About Me</h1>

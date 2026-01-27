@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100">
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
@@ -16,11 +16,11 @@ export default function ContactPage() {
               <Link href="/projects" className="text-gray-600 hover:text-gray-900">
                 Projects
               </Link>
-              <Link href="/contact" className="font-semibold text-indigo-600">
+              <Link href="/contact" className="font-semibold text-teal-600">
                 Contact
               </Link>
-              <Link href="/contact/booking" className="font-semibold text-indigo-900">
-                Book Me!
+              <Link href="/contact/booking" className="font-semibold text-teal-700 hover:text-teal-600">
+                Book Me
               </Link>
             </div>
           </div>
@@ -39,7 +39,7 @@ export default function ContactPage() {
             <h3 className="text-xl font-semibold text-gray-900">Email</h3>
             <a
               href="mailto:eviemariekolb@gmail.com"
-              className="mt-2 block text-indigo-600 hover:text-indigo-500"
+              className="mt-2 block text-teal-600 hover:text-teal-500"
             >
               eviemariekolb@gmail.com
             </a>
@@ -52,7 +52,7 @@ export default function ContactPage() {
                 href="https://github.com/kongaiwen"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-indigo-600 hover:text-indigo-500"
+                className="block text-teal-600 hover:text-teal-500"
               >
                 GitHub: @kongaiwen →
               </a>
@@ -60,7 +60,7 @@ export default function ContactPage() {
                 href="https://linkedin.com/in/evie-marie-kolb"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-indigo-600 hover:text-indigo-500"
+                className="block text-teal-600 hover:text-teal-500"
               >
                 LinkedIn: evie-marie-kolb →
               </a>
@@ -72,6 +72,19 @@ export default function ContactPage() {
             <p className="mt-2 text-gray-600">
               Available for remote positions and open to relocation opportunities.
             </p>
+          </div>
+
+          <div className="rounded-lg bg-teal-600 p-6 shadow-md text-white">
+            <h3 className="text-xl font-semibold">Ready to schedule a call?</h3>
+            <p className="mt-2 text-teal-100">
+              Book a time that works for you and let's chat about your project or opportunity.
+            </p>
+            <Link
+              href="/contact/booking"
+              className="mt-4 inline-block rounded-md bg-white px-6 py-3 text-sm font-semibold text-teal-600 shadow-sm hover:bg-teal-50"
+            >
+              Book a Meeting →
+            </Link>
           </div>
         </div>
       </main>
