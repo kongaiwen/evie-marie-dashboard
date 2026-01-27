@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Evie Marie Kolb | Full-Stack Software Engineer",
   description: "Full-Stack Software Engineer specializing in React, React Native, and Node.js. Building accessible, performant applications.",
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({

@@ -14,20 +14,6 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'board-race-ting-xie',
-    name: 'Board Race! Ting Xie!',
-    description: 'An online interactive multi-player/single-player handwriting game for anyone practicing a new language. Test your memory and handwriting skills in Chinese or any other language.',
-    techStack: ['React', 'Express', 'Socket.io', 'Google Cloud Vision API', 'Webpack'],
-    repoUrl: 'https://github.com/kongaiwen/board-race-ting-xie',
-    type: 'web-app',
-    status: 'active',
-    hasDemo: true,
-    needsApiKeys: true,
-    // Use environment variable for production URL, fallback to localhost for development
-    demoPath: process.env.NEXT_PUBLIC_BOARD_RACE_URL || 'http://localhost:3001',
-    demoType: 'iframe',
-  },
-  {
     id: 'precourse-asteroids',
     name: 'Precourse Asteroids',
     description: 'Hack Reactor seip2006 precourse takes on an Asteroids clone. A classic arcade game recreation built with vanilla JavaScript.',
@@ -41,9 +27,21 @@ export const projects: Project[] = [
     demoType: 'iframe',
   },
   {
+    id: 'board-race-ting-xie',
+    name: 'Board Race! Ting Xie!',
+    description: 'An online interactive multi-player/single-player handwriting game for anyone practicing a new language. Test your memory and handwriting skills in Chinese or any other language.',
+    techStack: ['React', 'Express', 'Socket.io', 'Google Cloud Vision API', 'Webpack'],
+    repoUrl: 'https://github.com/kongaiwen/board-race-ting-xie',
+    type: 'web-app',
+    status: 'active',
+    hasDemo: true,
+    needsApiKeys: true,
+    demoType: 'instructions',
+  },
+  {
     id: 'tic-tac-toe',
     name: 'Tic-Tac-Toe',
-    description: 'My first attempt at making a text-based tic-tac-toe game. A Python command-line implementation of the classic game. Play it directly in your browser with an interactive Python console!',
+    description: 'My first attempt at making a text-based tic-tac-toe game. A Python command-line implementation of the classic game with an AI opponent.',
     techStack: ['Python'],
     repoUrl: 'https://github.com/kongaiwen/tic-tac-toe',
     type: 'showcase',
