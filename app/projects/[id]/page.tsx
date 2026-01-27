@@ -20,7 +20,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   }
 
   let codeContent = '';
-  if (project.demoType === 'code' && project.id === 'tic-tac-toe') {
+  if (project.id === 'tic-tac-toe') {
     try {
       const filePath = path.join(process.cwd(), 'repos', 'tic-tac-toe', 'tic_tac_toe.py');
       codeContent = await readFile(filePath, 'utf-8');
@@ -141,8 +141,43 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                 )}
 
                 {project.demoType === 'game' && project.id === 'tic-tac-toe' && (
-                  <div className="max-w-md mx-auto">
-                    <TicTacToe />
+                  <div className="grid lg:grid-cols-2 gap-8">
+                    {/* JavaScript Game */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xs bg-yellow-400 text-yellow-900 px-2 py-1 rounded font-medium">JavaScript</span>
+                        <span className="text-sm text-gray-600">Interactive Recreation</span>
+                      </div>
+                      <TicTacToe />
+                    </div>
+
+                    {/* Python Code */}
+                    <div>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span className="text-xs bg-blue-500 text-white px-2 py-1 rounded font-medium">Python</span>
+                        <span className="text-sm text-gray-600">Original Source Code</span>
+                      </div>
+                      <div className="rounded-xl overflow-hidden border-2 border-gray-200 shadow-lg h-full flex flex-col">
+                        <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="flex gap-2">
+                              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <span className="text-gray-400 text-sm ml-2">tic_tac_toe.py</span>
+                          </div>
+                        </div>
+                        <pre className="bg-gray-900 text-gray-100 p-4 overflow-auto text-xs leading-relaxed flex-1" style={{ maxHeight: '500px' }}>
+                          <code>{codeContent}</code>
+                        </pre>
+                        <div className="bg-gray-800 px-4 py-3 border-t border-gray-700">
+                          <p className="text-gray-400 text-xs">
+                            Run locally: <code className="bg-gray-700 px-2 py-1 rounded text-teal-400">python tic_tac_toe.py</code>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
