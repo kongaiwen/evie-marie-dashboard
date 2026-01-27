@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { projects } from "../projectsData"
 import { readFile } from "fs/promises"
 import path from "path"
+import TicTacToe from "@/components/TicTacToe"
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
@@ -116,7 +117,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               <div className="border-t border-gray-200 pt-8">
                 <h2 className="text-xl font-semibold text-gray-900 mb-6">
                   {project.demoType === 'code' ? 'Source Code' :
-                   project.demoType === 'instructions' ? 'Setup Instructions' : 'Live Demo'}
+                   project.demoType === 'instructions' ? 'Setup Instructions' :
+                   project.demoType === 'game' ? 'Play the Game' : 'Live Demo'}
                 </h2>
 
                 {project.demoType === 'iframe' && project.demoPath && (
@@ -138,7 +140,13 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                   </div>
                 )}
 
-                {project.demoType === 'code' && project.id === 'tic-tac-toe' && (
+                {project.demoType === 'game' && project.id === 'tic-tac-toe' && (
+                  <div className="max-w-md mx-auto">
+                    <TicTacToe />
+                  </div>
+                )}
+
+                {project.demoType === 'code' && (
                   <div className="rounded-xl overflow-hidden border-2 border-gray-200 shadow-lg">
                     <div className="bg-gray-800 px-4 py-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">

@@ -9,7 +9,7 @@ export interface Project {
   hasDemo: boolean;
   needsApiKeys?: boolean;
   demoPath?: string;
-  demoType?: 'iframe' | 'code' | 'instructions';
+  demoType?: 'iframe' | 'code' | 'instructions' | 'game';
 }
 
 export const projects: Project[] = [
@@ -41,13 +41,13 @@ export const projects: Project[] = [
   {
     id: 'tic-tac-toe',
     name: 'Tic-Tac-Toe',
-    description: 'My first attempt at making a text-based tic-tac-toe game. A Python command-line implementation of the classic game with an AI opponent.',
-    techStack: ['Python'],
+    description: 'My first attempt at making a text-based tic-tac-toe game. Originally written in Python, now playable in your browser with a JavaScript recreation featuring an AI opponent.',
+    techStack: ['Python', 'JavaScript', 'React'],
     repoUrl: 'https://github.com/kongaiwen/tic-tac-toe',
     type: 'showcase',
     status: 'active',
     hasDemo: true,
     needsApiKeys: false,
-    demoType: 'code',
+    demoType: 'game',
   },
 ];
