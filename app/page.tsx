@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Home() {
   return (
@@ -24,11 +25,22 @@ export default function Home() {
 
       <main className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="text-center">
+          <div className="mb-8 flex justify-center">
+            <Image
+              src="/images/profile.jpg"
+              alt="Evie Marie Kolb"
+              width={200}
+              height={200}
+              className="rounded-full border-4 border-indigo-600 shadow-lg object-cover"
+              priority
+            />
+          </div>
           <h2 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Software Developer & Engineer
+            Full-Stack Software Engineer
           </h2>
-          <p className="mt-6 text-xl leading-8 text-gray-600">
-            Building elegant solutions to complex problems.
+          <p className="mt-6 text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
+            Building accessible, performant applications with React, React Native, and Node.js.
+            Passionate about creating elegant solutions that make technology work for everyone.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
@@ -47,22 +59,22 @@ export default function Home() {
         </div>
 
         <div className="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900">Full-Stack Development</h3>
+          <div className="rounded-lg bg-white p-6 shadow-md hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold text-gray-900">Mobile & Web Development</h3>
             <p className="mt-2 text-gray-600">
-              Building modern web applications with React, Next.js, and Node.js
+              Expertise in React Native, Expo, and Unity integrations for cross-platform mobile apps, plus modern web applications with React and Next.js.
             </p>
           </div>
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900">API Design</h3>
+          <div className="rounded-lg bg-white p-6 shadow-md hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold text-gray-900">API & Backend Architecture</h3>
             <p className="mt-2 text-gray-600">
-              Creating scalable and maintainable backend services
+              Designing scalable backend services with Node.js, GraphQL, REST APIs, and database solutions using PostgreSQL, MongoDB, and Prisma.
             </p>
           </div>
-          <div className="rounded-lg bg-white p-6 shadow-md">
-            <h3 className="text-lg font-semibold text-gray-900">Cloud Infrastructure</h3>
+          <div className="rounded-lg bg-white p-6 shadow-md hover:shadow-lg transition-shadow">
+            <h3 className="text-lg font-semibold text-gray-900">Cloud & DevOps</h3>
             <p className="mt-2 text-gray-600">
-              Deploying and managing applications on modern cloud platforms
+              Deploying and managing applications on AWS with Docker, CI/CD pipelines, Lambda functions, and infrastructure automation.
             </p>
           </div>
         </div>

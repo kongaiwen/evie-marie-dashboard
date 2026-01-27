@@ -30,7 +30,8 @@ export default function ContactPage() {
       <main className="mx-auto max-w-4xl px-4 py-20 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-gray-900">Get in Touch</h1>
         <p className="mt-4 text-lg text-gray-600">
-          Add your contact information, social links, or a contact form here.
+          I'm always interested in hearing about new opportunities, interesting projects,
+          or just connecting with fellow developers. Feel free to reach out!
         </p>
 
         <div className="mt-12 space-y-6">
@@ -64,6 +65,13 @@ export default function ContactPage() {
                 LinkedIn: evie-marie-kolb →
               </a>
             </div>
+          </div>
+
+          <div className="rounded-lg bg-white p-6 shadow-md">
+            <h3 className="text-xl font-semibold text-gray-900">Location</h3>
+            <p className="mt-2 text-gray-600">
+              Available for remote positions and open to relocation opportunities.
+            </p>
           </div>
         </div>
       </main>
