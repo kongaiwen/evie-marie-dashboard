@@ -1,0 +1,18 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.section {
+  position: relative;
+  overflow: hidden;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.content {
+  position: relative;
+  z-index: $z-10;
+  height: 100%;
+}

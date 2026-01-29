@@ -1,0 +1,50 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.wrapper {
+  width: 100%;
+}
+
+.header {
+  @include terminal-chrome;
+  gap: $space-2;
+}
+
+.dots {
+  display: flex;
+  gap: $space-2;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: $radius-full;
+
+  &.red {
+    background: $red-500;
+  }
+
+  &.yellow {
+    background: $yellow-400;
+  }
+
+  &.green {
+    background: $green-500;
+  }
+}
+
+.title {
+  color: $gray-400;
+  font-size: $font-size-sm;
+  margin-left: $space-2;
+}
+
+.iframe {
+  width: 100%;
+  background: $white;
+  border-radius: 0 0 $radius-lg $radius-lg;
+  border: 2px solid $gray-300;
+  border-top: 0;
+  height: 600px;
+  min-height: 400px;
+}

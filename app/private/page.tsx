@@ -1,5 +1,6 @@
 import { auth, signOut } from "@/auth"
 import { redirect } from "next/navigation"
+import styles from './page.module.scss'
 
 export default async function PrivatePage() {
   const session = await auth()
@@ -9,10 +10,10 @@ export default async function PrivatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Private Dashboard</h1>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Private Dashboard</h1>
           <form
             action={async () => {
               "use server"
@@ -21,22 +22,22 @@ export default async function PrivatePage() {
           >
             <button
               type="submit"
-              className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+              className={styles.signOutButton}
             >
               Sign Out
             </button>
           </form>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-md">
-          <h2 className="mb-4 text-xl font-semibold">Welcome back!</h2>
-          <p className="text-gray-600">
-            Signed in as: <span className="font-medium">{session.user.email}</span>
+        <div className={styles.content}>
+          <h2 className={styles.contentTitle}>Welcome back!</h2>
+          <p className={styles.email}>
+            Signed in as: <span className={styles.emailLabel}>{session.user.email}</span>
           </p>
 
-          <div className="mt-8">
-            <h3 className="mb-2 text-lg font-semibold">Your Private Tools</h3>
-            <p className="text-gray-600">
+          <div className={styles.tools}>
+            <h3 className={styles.toolsTitle}>Your Private Tools</h3>
+            <p className={styles.toolsDescription}>
               Add your private functionality here - API testing, admin tools, personal utilities, etc.
             </p>
           </div>

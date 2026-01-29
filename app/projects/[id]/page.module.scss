@@ -1,0 +1,369 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page {
+  @include page-bg;
+}
+
+.main {
+  @include container($max-w-6xl);
+  padding-top: $space-12;
+  padding-bottom: $space-12;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  color: $sage-600;
+  margin-bottom: $space-8;
+  @include transition(color);
+
+  &:hover {
+    color: $plum-500;
+  }
+}
+
+.projectCard {
+  background: rgba($white, 0.9);
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-xl;
+  overflow: hidden;
+}
+
+.projectHeader {
+  @include gradient-to-r($sage-600, $plum-600);
+  padding: $space-6 $space-8;
+}
+
+.headerTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.projectTitle {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $white;
+}
+
+.badgeGroup {
+  display: flex;
+  gap: $space-2;
+}
+
+.apiKeyBadge {
+  font-size: $font-size-xs;
+  background: $amber-400;
+  color: $amber-900;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-weight: $font-weight-medium;
+}
+
+.projectSubtitle {
+  margin-top: $space-3;
+  color: $sage-100;
+}
+
+.projectContent {
+  padding: $space-8;
+}
+
+.section {
+  margin-bottom: $space-8;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-3;
+}
+
+.techStackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.techBadge {
+  background: $sage-50;
+  color: $sage-700;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border: 1px solid $plum-200;
+}
+
+.githubButton {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-6;
+  background: $plum-800;
+  color: $white;
+  border-radius: $radius-xl;
+  font-weight: $font-weight-medium;
+  @include transition(background);
+
+  &:hover {
+    background: $earth-800;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.demoSection {
+  border-top: 1px solid $mist;
+  padding-top: $space-8;
+}
+
+.iframeWrapper {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 2px solid $mist;
+  box-shadow: $shadow-lg;
+}
+
+.terminalHeader {
+  @include terminal-chrome;
+  background: $gray-800;
+}
+
+.terminalDots {
+  @include terminal-dots;
+}
+
+.terminalTitle {
+  color: $gray-400;
+  font-size: $font-size-sm;
+  margin-left: $space-2;
+}
+
+.iframe {
+  width: 100%;
+  background: rgba($white, 0.9);
+}
+
+.gameGrid {
+  display: grid;
+  gap: $space-8;
+
+  @include lg {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gameSection {
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin-bottom: $space-4;
+  }
+}
+
+.languageBadge {
+  font-size: $font-size-xs;
+  padding: $space-1 $space-2;
+  border-radius: $radius-default;
+  font-weight: $font-weight-medium;
+
+  &.javascript {
+    background: $yellow-400;
+    color: $yellow-900;
+  }
+
+  &.python {
+    background: $blue-500;
+    color: $white;
+  }
+}
+
+.badgeLabel {
+  font-size: $font-size-sm;
+  color: $earth-700;
+}
+
+.codeWrapper {
+  border-radius: $radius-xl;
+  overflow: hidden;
+  border: 2px solid $mist;
+  box-shadow: $shadow-lg;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.codeHeader {
+  background: $gray-800;
+  padding: $space-3 $space-4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.codeHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.codeFileName {
+  color: $gray-400;
+  font-size: $font-size-sm;
+  margin-left: $space-2;
+}
+
+.codeBody {
+  background: $gray-950;
+  color: $gray-100;
+  padding: $space-4;
+  overflow: auto;
+  font-size: $font-size-xs;
+  line-height: $leading-relaxed;
+  flex: 1;
+  max-height: 500px;
+
+  code {
+    font-family: $font-mono;
+  }
+}
+
+.codeFooter {
+  background: $gray-800;
+  padding: $space-3 $space-4;
+  border-top: 1px solid $gray-700;
+
+  p {
+    color: $gray-400;
+    font-size: $font-size-xs;
+  }
+
+  code {
+    background: $gray-700;
+    padding: $space-1 $space-2;
+    border-radius: $radius-default;
+    color: $sage-400;
+    font-family: $font-mono;
+  }
+}
+
+.instructionsBox {
+  @include gradient-to-br($earth-50, $earth-100);
+  border: 2px solid $mist;
+  border-radius: $radius-xl;
+  padding: $space-8;
+}
+
+.instructionsTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-6;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  span {
+    font-size: $font-size-2xl;
+  }
+}
+
+.instructionsGrid {
+  display: grid;
+  gap: $space-6;
+
+  @include md {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.instructionCard {
+  background: rgba($white, 0.9);
+  border-radius: $radius-xl;
+  padding: $space-6;
+  box-shadow: $shadow-sm;
+  border: 1px solid $mist;
+}
+
+.instructionCardTitle {
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-3;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.stepNumber {
+  width: 24px;
+  height: 24px;
+  background: $sage-100;
+  color: $sage-700;
+  border-radius: $radius-full;
+  @include flex-center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+.prerequisitesList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  color: $earth-700;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  .checkmark {
+    color: $plum-500;
+  }
+}
+
+.commandList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  font-family: $font-mono;
+  font-size: $font-size-sm;
+}
+
+.command {
+  background: $gray-800;
+  color: $gray-100;
+  padding: $space-2 $space-3;
+  border-radius: $radius-default;
+}
+
+.warningBox {
+  margin-top: $space-6;
+  background: $amber-50;
+  border: 1px solid $amber-200;
+  border-radius: $radius-xl;
+  padding: $space-4;
+
+  p {
+    color: $amber-800;
+    font-size: $font-size-sm;
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+  }
+
+  .warningIcon {
+    font-size: $font-size-lg;
+  }
+
+  strong {
+    font-weight: $font-weight-semibold;
+  }
+}

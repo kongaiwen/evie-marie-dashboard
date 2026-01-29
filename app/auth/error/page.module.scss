@@ -1,0 +1,49 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page {
+  @include flex-center;
+  min-height: 100vh;
+  background: $gray-50;
+}
+
+.card {
+  width: 100%;
+  max-width: $max-w-md;
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+  border-radius: $radius-lg;
+  background: $white;
+  padding: $space-8;
+  box-shadow: $shadow-md;
+}
+
+.header {
+  text-align: center;
+}
+
+.title {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $red-600;
+}
+
+.message {
+  margin-top: $space-4;
+  color: $gray-600;
+}
+
+.button {
+  margin-top: $space-6;
+  display: inline-block;
+  border-radius: $radius-md;
+  background: $blue-600;
+  padding: $space-2 $space-4;
+  color: $white;
+  @include transition;
+
+  &:hover {
+    background: $blue-700;
+  }
+}

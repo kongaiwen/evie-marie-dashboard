@@ -1,6 +1,6 @@
 'use client'
 
-import "./booking.css";
+import styles from "./page.module.scss";
 import { CircularProgress } from "@mui/material";
 import { useCallback, useState } from "react"
 
@@ -14,14 +14,14 @@ export default function BookingPage() {
     }, [])
 
     return (
-        <div className="booking-container">
+        <div className={styles.bookingContainer}>
             {!!loading && (
-                <div className="spinner-container">
+                <div className={styles.spinnerContainer}>
                     <h1>Loading Booking Page...</h1>
-                    <CircularProgress className="booking-spinner" color="inherit" size="8rem" />
+                    <CircularProgress color="inherit" size="8rem" />
                 </div>
             )}
-            <iframe className="motion-iframe" src="https://app.usemotion.com/meet/evie-marie-kolb/booking" title="Evie Marie Kolb Booking Page" width="100%" height="100%" frameBorder="0" onLoad={onLoad}></iframe>
+            <iframe className={styles.motionIframe} src="https://app.usemotion.com/meet/evie-marie-kolb/booking" title="Evie Marie Kolb Booking Page" width="100%" height="100%" frameBorder="0" onLoad={onLoad}></iframe>
         </div>
     )
 }

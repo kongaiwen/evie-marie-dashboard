@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react';
+import styles from './PythonTerminal.module.scss';
 
 interface PythonTerminalProps {
   code: string;
@@ -19,7 +20,6 @@ export default function PythonTerminal({ code, filename }: PythonTerminalProps) 
   const inputResolveRef = useRef<((value: string) => void) | null>(null);
 
   useEffect(() => {
-    // Load Pyodide
     const loadPyodide = async () => {
       try {
         // @ts-ignore
@@ -27,17 +27,14 @@ export default function PythonTerminal({ code, filename }: PythonTerminalProps) 
           indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/',
         });
 
-        // Set up input function
         pyodideModule.globals.set('python_input', (prompt: string) => {
           return new Promise<string>((resolve) => {
             setOutput(prev => [...prev, prompt]);
             inputResolveRef.current = resolve;
-            // Focus input field
             setTimeout(() => inputRef.current?.focus(), 0);
           });
         });
 
-        // Redirect print to our output
         await pyodideModule.runPythonAsync(`
 import sys
 from io import StringIO
@@ -57,7 +54,6 @@ class OutputCapture:
 sys.stdout = OutputCapture()
 sys.stderr = OutputCapture()
 
-# Replace input with our custom input
 def custom_input(prompt=""):
     if prompt:
         print(prompt, end="")
@@ -68,7 +64,6 @@ def custom_input(prompt=""):
 __builtins__.input = custom_input
         `);
 
-        // Add output function to JS
         (window as any).addOutput = (text: string) => {
           setOutput(prev => [...prev, text]);
         };
@@ -86,7 +81,6 @@ __builtins__.input = custom_input
   }, []);
 
   useEffect(() => {
-    // Auto-scroll to bottom
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
@@ -111,10 +105,8 @@ __builtins__.input = custom_input
     e.preventDefault();
     if (!input.trim() || !inputResolveRef.current) return;
 
-    // Add input to output display
     setOutput(prev => [...prev, input]);
 
-    // Resolve the promise with the input
     if (inputResolveRef.current) {
       inputResolveRef.current(input);
       inputResolveRef.current = null;
@@ -124,48 +116,44 @@ __builtins__.input = custom_input
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-gray-900 rounded-t-lg px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+    <div className={styles.wrapper}>
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <div className={styles.dots}>
+            <div className={`${styles.dot} ${styles.red}`}></div>
+            <div className={`${styles.dot} ${styles.yellow}`}></div>
+            <div className={`${styles.dot} ${styles.green}`}></div>
           </div>
-          <span className="text-gray-400 text-sm ml-2">{filename}</span>
+          <span className={styles.filename}>{filename}</span>
         </div>
         <button
           onClick={runGame}
           disabled={!isReady || isRunning}
-          className="px-3 py-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white text-xs rounded transition-colors"
+          className={styles.runButton}
         >
           {isRunning ? 'Running...' : 'Run Game'}
         </button>
       </div>
 
-      <div className="bg-gray-950 rounded-b-lg border-2 border-t-0 border-gray-800">
-        <div
-          ref={outputRef}
-          className="p-4 font-mono text-sm text-green-400 overflow-auto"
-          style={{ height: '500px', maxHeight: '500px' }}
-        >
+      <div className={styles.body}>
+        <div ref={outputRef} className={styles.output}>
           {output.map((line, i) => (
-            <div key={i} className="whitespace-pre-wrap break-words">
+            <div key={i} className={styles.outputLine}>
               {line}
             </div>
           ))}
         </div>
 
         {isRunning && inputResolveRef.current && (
-          <form onSubmit={handleInputSubmit} className="border-t border-gray-800 p-4">
-            <div className="flex gap-2">
-              <span className="text-green-400 font-mono">→</span>
+          <form onSubmit={handleInputSubmit} className={styles.inputForm}>
+            <div className={styles.inputWrapper}>
+              <span className={styles.inputPrompt}>→</span>
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="flex-1 bg-transparent text-green-400 font-mono outline-none"
+                className={styles.input}
                 placeholder="Type your move..."
                 autoFocus
               />

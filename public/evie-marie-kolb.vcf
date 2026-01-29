@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Kolb;Evie Marie;;;
+FN:Evie Marie Kolb
+TITLE:Full-Stack Software Engineer
+EMAIL;TYPE=INTERNET:eviemariekolb@gmail.com
+URL:https://eviemariekolb.dev
+URL;TYPE=LinkedIn:https://linkedin.com/in/evie-marie-kolb
+URL;TYPE=GitHub:https://github.com/kongaiwen
+ADR;TYPE=WORK:;;Chicago;IL;;US
+NOTE:Full-Stack Software Engineer specializing in React, React Native, and Node.js
+END:VCARD

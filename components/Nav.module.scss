@@ -1,0 +1,84 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: $z-50;
+  border-bottom: 1px solid rgba($sage-100, 0.6);
+  background: rgba($parchment, 0.7);
+  @include backdrop-blur;
+}
+
+.container {
+  @include container;
+}
+
+.innerWrapper {
+  @include flex-between;
+  height: 4rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.logoIcon {
+  width: 2rem;
+  height: 2rem;
+  @include gradient-to-br($sage-500, $plum-500);
+  border-radius: $radius-lg;
+  @include flex-center;
+
+  span {
+    color: $white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-sm;
+  }
+}
+
+.logoText {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
+}
+
+.desktopNav {
+  display: none;
+
+  @include md {
+    display: flex;
+    align-items: center;
+    gap: $space-6;
+  }
+}
+
+.link {
+  color: $earth-600;
+  @include transition(color);
+
+  &:hover {
+    color: $plum-500;
+  }
+}
+
+.linkActive {
+  color: $plum-600;
+  font-weight: $font-weight-semibold;
+}
+
+.bookButton {
+  @include gradient-to-r($sage-500, $plum-500);
+  color: $white;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-lg, 0 0 20px rgba($plum-200, 0.5);
+  }
+}

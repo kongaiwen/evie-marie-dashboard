@@ -1,0 +1,264 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  @include page-bg;
+  @include flex-center;
+  padding: $space-4;
+}
+
+.container {
+  width: 100%;
+  max-width: $max-w-md;
+}
+
+.card {
+  background: rgba($white, 0.9);
+  border-radius: $radius-3xl;
+  box-shadow: $shadow-xl;
+  border: 1px solid $earth-50;
+  overflow: hidden;
+  @include backdrop-blur;
+}
+
+.header {
+  background: linear-gradient(to right, $sage-500, $plum-500, $rose-400);
+  padding: $space-8 $space-6 $space-16;
+  text-align: center;
+  position: relative;
+}
+
+.headerOverlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+}
+
+.headerBg {
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/backgrounds/mountain-panorama.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.avatarWrapper {
+  @include flex-center;
+  margin-top: -3rem;
+  position: relative;
+  z-index: $z-10;
+}
+
+.avatarContainer {
+  position: relative;
+}
+
+.avatarBorder {
+  position: absolute;
+  inset: -0.25rem;
+  background: $white;
+  border-radius: $radius-full;
+}
+
+.avatar {
+  position: relative;
+  border-radius: $radius-full;
+  border: 4px solid $white;
+  box-shadow: $shadow-lg;
+  object-fit: cover;
+}
+
+.info {
+  padding: $space-4 $space-6 $space-2;
+  text-align: center;
+}
+
+.name {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $plum-800;
+}
+
+.title {
+  color: $plum-600;
+  font-weight: $font-weight-medium;
+  margin-top: $space-1;
+}
+
+.location {
+  color: $earth-500;
+  font-size: $font-size-sm;
+  margin-top: $space-1;
+}
+
+.actions {
+  padding: $space-6;
+  padding-top: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.actionLink {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  width: 100%;
+  padding: $space-5 $space-5;
+  border-radius: $radius-2xl;
+  font-weight: $font-weight-semibold;
+  @include transition;
+}
+
+.actionLinkPrimary {
+  composes: actionLink;
+  background: linear-gradient(to right, $sage-500, $plum-500);
+  color: $white;
+
+  &:hover {
+    box-shadow: $shadow-lg, 0 4px 12px rgba($plum-200, 1);
+  }
+}
+
+.actionLinkSecondary {
+  composes: actionLink;
+  background: rgba($white, 0.9);
+  border: 2px solid $earth-50;
+  color: $plum-800;
+  @include transition;
+}
+
+.actionLinkSecondary:hover {
+  background: $blue-50;
+  border-color: $blue-200;
+}
+
+.actionLinkGithub:hover {
+  background: $earth-50;
+  border-color: $earth-200;
+}
+
+.actionLinkEmail:hover {
+  background: $sage-50;
+  border-color: $sage-200;
+}
+
+.actionLinkVcard:hover {
+  background: $plum-50;
+  border-color: $plum-200;
+}
+
+.actionLinkPortfolio:hover {
+  background: $sage-50;
+  border-color: $sage-200;
+}
+
+.iconContainer {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: $radius-xl;
+  @include flex-center;
+  flex-shrink: 0;
+}
+
+.iconContainerPrimary {
+  composes: iconContainer;
+  background: rgba($white, 0.2);
+}
+
+.iconContainerLinkedin {
+  composes: iconContainer;
+  background: $blue-100;
+}
+
+.iconContainerGithub {
+  composes: iconContainer;
+  background: $earth-100;
+}
+
+.iconContainerEmail {
+  composes: iconContainer;
+  background: $sage-100;
+}
+
+.iconContainerVcard {
+  composes: iconContainer;
+  background: $plum-100;
+}
+
+.iconContainerGradient {
+  composes: iconContainer;
+  background: linear-gradient(to bottom right, $sage-400, $plum-500);
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.iconLinkedin {
+  composes: icon;
+  color: $blue-600;
+}
+
+.iconGithub {
+  composes: icon;
+  color: $earth-700;
+}
+
+.iconEmail {
+  composes: icon;
+  color: $sage-600;
+}
+
+.iconVcard {
+  composes: icon;
+  color: $plum-600;
+}
+
+.iconPortfolio {
+  color: $white;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+}
+
+.actionText {
+  text-align: left;
+}
+
+.actionTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+}
+
+.actionSubtitle {
+  font-size: $font-size-xs;
+  color: $sage-200;
+}
+
+.actionSubtitleSecondary {
+  font-size: $font-size-xs;
+  color: $earth-500;
+}
+
+.actionArrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: auto;
+}
+
+.actionArrowLight {
+  composes: actionArrow;
+  color: $earth-400;
+}
+
+.footer {
+  padding: $space-6;
+  padding-top: 0;
+  text-align: center;
+}
+
+.footerText {
+  font-size: $font-size-xs;
+  color: $earth-400;
+}

@@ -1,0 +1,65 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.wrapper {
+  width: 100%;
+}
+
+.header {
+  @include terminal-chrome;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.dots {
+  display: flex;
+  gap: $space-2;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: $radius-full;
+
+  &.red {
+    background: $red-500;
+  }
+
+  &.yellow {
+    background: $yellow-400;
+  }
+
+  &.green {
+    background: $green-500;
+  }
+}
+
+.filename {
+  color: $gray-400;
+  font-size: $font-size-sm;
+  margin-left: $space-2;
+}
+
+.language {
+  color: $gray-500;
+  font-size: $font-size-xs;
+}
+
+.body {
+  @include terminal-body;
+  max-height: 600px;
+}
+
+.pre {
+  padding: $space-4;
+  font-size: $font-size-sm;
+}
+
+.code {
+  color: $gray-300;
+}

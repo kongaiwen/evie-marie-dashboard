@@ -1,0 +1,134 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.toggleButton {
+  display: block;
+  padding: $space-2;
+  margin-right: -$space-2;
+  color: $earth-600;
+  @include transition(color);
+
+  @include md {
+    display: none;
+  }
+
+  &:hover {
+    color: $ink;
+  }
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-40;
+  background: rgba($plum-900, 0.2);
+  @include backdrop-blur(4px);
+
+  @include md {
+    display: none;
+  }
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: $z-50;
+  height: 100%;
+  width: 18rem;
+  background: $parchment;
+  box-shadow: $shadow-2xl;
+  @include transition(transform);
+
+  @include md {
+    display: none;
+  }
+
+  &.open {
+    transform: translateX(0);
+  }
+
+  &.closed {
+    transform: translateX(100%);
+  }
+}
+
+.header {
+  @include flex-between;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $sage-100;
+
+  span {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $ink;
+  }
+}
+
+.closeButton {
+  padding: $space-2;
+  color: $earth-500;
+  @include transition(color);
+
+  &:hover {
+    color: $ink;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.navLinks {
+  padding: $space-6 $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.navLink {
+  display: block;
+  padding: $space-3 $space-4;
+  border-radius: $radius-xl;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $earth-700;
+  @include transition;
+
+  &:hover {
+    background: $sage-50;
+    color: $plum-600;
+  }
+}
+
+.navLinkActive {
+  background: $plum-50;
+  color: $plum-700;
+}
+
+.bookButtonContainer {
+  padding: $space-4 $space-6 0 $space-6;
+}
+
+.bookButton {
+  display: block;
+  width: 100%;
+  text-align: center;
+  @include gradient-to-r($sage-500, $plum-500);
+  color: $white;
+  padding: $space-3 $space-6;
+  border-radius: $radius-xl;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
+}

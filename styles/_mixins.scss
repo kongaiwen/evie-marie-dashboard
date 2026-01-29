@@ -1,0 +1,303 @@
+@use 'variables' as *;
+
+// =============================================================================
+// Mixins - Reusable style patterns
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Responsive Breakpoints
+// -----------------------------------------------------------------------------
+
+@mixin sm {
+  @media (min-width: $bp-sm) { @content; }
+}
+
+@mixin md {
+  @media (min-width: $bp-md) { @content; }
+}
+
+@mixin lg {
+  @media (min-width: $bp-lg) { @content; }
+}
+
+@mixin xl {
+  @media (min-width: $bp-xl) { @content; }
+}
+
+// -----------------------------------------------------------------------------
+// Layout
+// -----------------------------------------------------------------------------
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin grid($cols, $gap: $space-4) {
+  display: grid;
+  grid-template-columns: repeat($cols, minmax(0, 1fr));
+  gap: $gap;
+}
+
+@mixin container($max-width: $max-w-6xl) {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $max-width;
+  padding-left: $space-4;
+  padding-right: $space-4;
+
+  @include sm {
+    padding-left: $space-6;
+    padding-right: $space-6;
+  }
+
+  @include lg {
+    padding-left: $space-8;
+    padding-right: $space-8;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Gradients
+// -----------------------------------------------------------------------------
+
+@mixin gradient-primary {
+  background: linear-gradient(to right, $sage-500, $plum-500);
+}
+
+@mixin gradient-to-r($from, $to) {
+  background: linear-gradient(to right, $from, $to);
+}
+
+@mixin gradient-to-br($from, $to) {
+  background: linear-gradient(to bottom right, $from, $to);
+}
+
+@mixin gradient-to-t($from, $to) {
+  background: linear-gradient(to top, $from, $to);
+}
+
+@mixin gradient-3($from, $via, $to) {
+  background: linear-gradient(to bottom right, $from, $via, $to);
+}
+
+// -----------------------------------------------------------------------------
+// Cards
+// -----------------------------------------------------------------------------
+
+@mixin card($bg: rgba($white, 0.9), $border-color: $earth-50, $radius: $radius-2xl) {
+  background: $bg;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  box-shadow: $shadow-sm;
+}
+
+@mixin card-hover {
+  &:hover {
+    box-shadow: $shadow-xl;
+    border-color: $plum-200;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+
+@mixin btn-primary {
+  @include gradient-primary;
+  color: $white;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-lg, 0 4px 12px rgba($plum-200, 0.5);
+  }
+}
+
+@mixin btn-secondary {
+  padding: $space-2 $space-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $earth-700;
+  background: rgba($white, 0.9);
+  border: 1px solid $mist;
+  border-radius: $radius-xl;
+  @include transition;
+
+  &:hover {
+    border-color: $sage-300;
+    background: $sage-50;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Transitions
+// -----------------------------------------------------------------------------
+
+@mixin transition($props: all, $duration: $transition-default, $easing: $ease-default) {
+  transition: $props $duration $easing;
+}
+
+@mixin transition-transform($duration: $transition-default) {
+  transition: transform $duration $ease-default;
+}
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+
+@mixin section-heading {
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $plum-600;
+  letter-spacing: $tracking-wider;
+  text-transform: uppercase;
+  margin-bottom: $space-8;
+}
+
+@mixin page-title {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+@mixin body-text {
+  color: $earth-700;
+  line-height: $leading-relaxed;
+}
+
+// -----------------------------------------------------------------------------
+// Effects
+// -----------------------------------------------------------------------------
+
+@mixin backdrop-blur($amount: 16px) {
+  backdrop-filter: blur($amount);
+  -webkit-backdrop-filter: blur($amount);
+}
+
+@mixin image-overlay($from-color: $plum-900, $opacity: 0.7) {
+  background: linear-gradient(to top, rgba($from-color, $opacity), rgba($from-color, 0.2), transparent);
+}
+
+@mixin line-clamp($lines: 3) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin drop-shadow-lg {
+  filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+}
+
+// -----------------------------------------------------------------------------
+// Terminal / Code chrome (mac window dots)
+// -----------------------------------------------------------------------------
+
+@mixin terminal-chrome {
+  background: $gray-900;
+  border-radius: $radius-lg $radius-lg 0 0;
+  padding: $space-2 $space-4;
+  display: flex;
+  align-items: center;
+}
+
+@mixin terminal-dots {
+  display: flex;
+  gap: $space-2;
+
+  span {
+    width: 12px;
+    height: 12px;
+    border-radius: $radius-full;
+
+    &:nth-child(1) { background: $red-500; }
+    &:nth-child(2) { background: $yellow-400; }
+    &:nth-child(3) { background: $green-500; }
+  }
+}
+
+@mixin terminal-body {
+  background: $gray-950;
+  border-radius: 0 0 $radius-lg $radius-lg;
+  border: 2px solid $gray-800;
+  border-top: 0;
+  overflow: auto;
+}
+
+// -----------------------------------------------------------------------------
+// Page wrapper
+// -----------------------------------------------------------------------------
+
+@mixin page-bg {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, $sage-50, $parchment, $plum-50);
+}
+
+// -----------------------------------------------------------------------------
+// Image hover zoom
+// -----------------------------------------------------------------------------
+
+@mixin image-hover-zoom($duration: $transition-slow) {
+  overflow: hidden;
+
+  img {
+    @include transition(transform, $duration);
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Focus ring
+// -----------------------------------------------------------------------------
+
+@mixin focus-ring($color: $teal-500) {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $white, 0 0 0 4px $color;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Aspect ratios
+// -----------------------------------------------------------------------------
+
+@mixin aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+@mixin aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+@mixin aspect-3-4 {
+  aspect-ratio: 3 / 4;
+}
+
+@mixin aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+@mixin aspect-21-9 {
+  aspect-ratio: 21 / 9;
+}

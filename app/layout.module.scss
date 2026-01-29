@@ -1,0 +1,7 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,111 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.container {
+  @include gradient-to-br($gray-900, $gray-800);
+  border-radius: $radius-2xl;
+  padding: $space-8;
+  box-shadow: $shadow-xl;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $space-6;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $white;
+  margin-bottom: $space-2;
+}
+
+.status {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $gray-300;
+}
+
+.statusWon {
+  color: $emerald-400;
+}
+
+.statusLost {
+  color: $red-400;
+}
+
+.statusDraw {
+  color: $amber-400;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-3;
+  max-width: $max-w-xs;
+  margin: 0 auto $space-6;
+}
+
+.cell {
+  @include aspect-square;
+  font-size: 2.25rem;
+  font-weight: $font-weight-bold;
+  border-radius: $radius-xl;
+  background: rgba($gray-700, 0.5);
+  border: 2px solid $gray-600;
+  @include transition;
+
+  &:not(:disabled):hover {
+    border-color: $teal-400;
+    background: $gray-700;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+}
+
+.cellWinning {
+  background: rgba($emerald-500, 0.3) !important;
+  border-color: $emerald-400 !important;
+}
+
+.cellX {
+  color: $teal-400;
+}
+
+.cellO {
+  color: $rose-400;
+}
+
+.footer {
+  text-align: center;
+}
+
+.resetButton {
+  padding: $space-3 $space-6;
+  @include gradient-to-r($teal-500, $emerald-600);
+  color: $white;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-xl;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-lg, 0 0 20px rgba($teal-500, 0.25);
+  }
+}
+
+.info {
+  margin-top: $space-6;
+  padding-top: $space-6;
+  border-top: 1px solid $gray-700;
+}
+
+.infoText {
+  color: $gray-400;
+  font-size: $font-size-sm;
+  text-align: center;
+  line-height: $leading-normal;
+}

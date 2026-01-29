@@ -1,0 +1,147 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, $emerald-50, rgba($teal-200, 0.3), $cyan-50);
+  @include flex-col;
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: $z-50;
+  border-bottom: 1px solid rgba($teal-500, 0.1);
+  background: rgba($white, 0.7);
+  @include backdrop-blur;
+}
+
+.navContainer {
+  @include container($max-w-6xl);
+  @include flex-between;
+  height: 4rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.logoIcon {
+  width: 2rem;
+  height: 2rem;
+  background: linear-gradient(to bottom right, $teal-500, $emerald-600);
+  border-radius: $radius-lg;
+  @include flex-center;
+}
+
+.logoText {
+  color: $white;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-sm;
+}
+
+.logoName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $gray-900;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: $space-6;
+}
+
+.navLink {
+  color: $gray-600;
+  @include transition;
+
+  &:hover {
+    color: $teal-600;
+  }
+}
+
+.navButton {
+  background: linear-gradient(to right, $teal-500, $emerald-600);
+  color: $white;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-lg, 0 4px 12px rgba($teal-200, 1);
+  }
+}
+
+.main {
+  flex: 1;
+  @include flex-center;
+  padding: $space-8;
+}
+
+.content {
+  text-align: center;
+}
+
+.imageContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.imageGlow {
+  position: absolute;
+  inset: -1rem;
+  background: linear-gradient(to right, $teal-500, $emerald-600);
+  border-radius: $radius-2xl;
+  filter: blur(24px);
+  opacity: 0.2;
+}
+
+.image {
+  position: relative;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-2xl;
+  object-fit: cover;
+}
+
+.name {
+  margin-top: $space-8;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $gray-900;
+}
+
+.role {
+  margin-top: $space-2;
+  font-size: $font-size-lg;
+  color: $gray-600;
+}
+
+.linkContainer {
+  margin-top: $space-6;
+  display: flex;
+  justify-content: center;
+  gap: $space-4;
+}
+
+.link {
+  color: $teal-600;
+  font-weight: $font-weight-medium;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  @include transition;
+
+  &:hover {
+    color: $teal-700;
+  }
+}
+
+.linkIcon {
+  width: 1rem;
+  height: 1rem;
+}

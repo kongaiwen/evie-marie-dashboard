@@ -1,12 +1,13 @@
 import { signIn } from "@/auth"
+import styles from './page.module.scss'
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Sign In</h2>
-          <p className="mt-2 text-gray-600">
+    <div className={styles.page}>
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Sign In</h2>
+          <p className={styles.subtitle}>
             Sign in to access your private dashboard
           </p>
         </div>
@@ -18,7 +19,7 @@ export default function SignInPage() {
         >
           <button
             type="submit"
-            className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className={styles.button}
           >
             Sign in with Google
           </button>
