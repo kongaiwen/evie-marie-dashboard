@@ -7,20 +7,39 @@
 
 .main {
   @include container($max-w-6xl);
-  padding-top: $space-16;
-  padding-bottom: $space-16;
+  padding-top: $space-20;
+  padding-bottom: $space-20;
+
+  @include md {
+    padding-top: $space-24;
+    padding-bottom: $space-24;
+  }
 }
 
 .header {
   text-align: center;
-  margin-bottom: $space-12;
+  margin-bottom: $space-16;
+
+  @include md {
+    margin-bottom: $space-20;
+  }
 }
 
 .title {
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
-  color: $plum-800;
-  margin-bottom: $space-4;
+  color: $plum-900;
+  margin-bottom: $space-6;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+
+  @include md {
+    font-size: $font-size-5xl;
+  }
+
+  @include lg {
+    font-size: $font-size-6xl;
+  }
 }
 
 .description {
@@ -47,17 +66,27 @@
 .projectCard {
   @include card;
   overflow: hidden;
-  @include transition;
+  background: rgba($white, 0.95);
+  border: 1px solid rgba($plum-100, 0.3);
+  box-shadow:
+    $shadow-lg,
+    0 0 0 1px rgba($white, 0.1) inset;
+  @include transition(all, $transition-slow);
 
   &:hover {
-    box-shadow: $shadow-xl;
-    border-color: $plum-200;
+    box-shadow:
+      $shadow-2xl,
+      0 0 0 1px rgba($white, 0.2) inset,
+      0 0 40px rgba($plum-200, 0.3);
+    border-color: rgba($plum-200, 0.5);
+    transform: translateY(-6px);
   }
 }
 
 .cardAccent {
-  height: 8px;
+  height: 6px;
   @include gradient-to-r($sage-500, $plum-500);
+  box-shadow: 0 2px 8px rgba($plum-300, 0.3);
 }
 
 .cardContent {

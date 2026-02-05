@@ -55,17 +55,22 @@
   margin-left: auto;
   margin-right: auto;
   max-width: $max-width;
-  padding-left: $space-4;
-  padding-right: $space-4;
+  padding-left: $space-5;
+  padding-right: $space-5;
 
   @include sm {
     padding-left: $space-6;
     padding-right: $space-6;
   }
 
-  @include lg {
+  @include md {
     padding-left: $space-8;
     padding-right: $space-8;
+  }
+
+  @include lg {
+    padding-left: $space-10;
+    padding-right: $space-10;
   }
 }
 
@@ -97,17 +102,38 @@
 // Cards
 // -----------------------------------------------------------------------------
 
-@mixin card($bg: rgba($white, 0.9), $border-color: $earth-50, $radius: $radius-2xl) {
+@mixin card($bg: rgba($white, 0.95), $border-color: $earth-50, $radius: $radius-2xl) {
   background: $bg;
   border: 1px solid $border-color;
   border-radius: $radius;
-  box-shadow: $shadow-sm;
+  box-shadow: $shadow-md;
+  @include transition(all, $transition-default);
 }
 
 @mixin card-hover {
   &:hover {
-    box-shadow: $shadow-xl;
+    box-shadow: $shadow-2xl;
     border-color: $plum-200;
+    transform: translateY(-2px);
+  }
+}
+
+@mixin card-elegant($bg: rgba($white, 0.95)) {
+  background: $bg;
+  border: 1px solid rgba($plum-100, 0.3);
+  border-radius: $radius-3xl;
+  box-shadow:
+    $shadow-lg,
+    0 0 0 1px rgba($white, 0.1) inset;
+  @include transition(all, $transition-default);
+
+  &:hover {
+    box-shadow:
+      $shadow-2xl,
+      0 0 0 1px rgba($white, 0.2) inset,
+      0 0 40px rgba($plum-200, 0.3);
+    border-color: rgba($plum-200, 0.5);
+    transform: translateY(-4px);
   }
 }
 
@@ -118,30 +144,45 @@
 @mixin btn-primary {
   @include gradient-primary;
   color: $white;
-  padding: $space-2 $space-4;
-  border-radius: $radius-full;
+  padding: $space-3 $space-6;
+  border-radius: $radius-xl;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  @include transition;
+  box-shadow: $shadow-md, 0 4px 12px rgba($plum-300, 0.4);
+  @include transition(all, $transition-default);
 
   &:hover {
-    box-shadow: $shadow-lg, 0 4px 12px rgba($plum-200, 0.5);
+    box-shadow: $shadow-xl, 0 8px 24px rgba($plum-400, 0.5);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: $shadow-sm, 0 2px 8px rgba($plum-300, 0.4);
   }
 }
 
 @mixin btn-secondary {
-  padding: $space-2 $space-4;
+  padding: $space-3 $space-6;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  color: $earth-700;
-  background: rgba($white, 0.9);
-  border: 1px solid $mist;
+  color: $earth-800;
+  background: rgba($white, 0.95);
+  border: 1px solid $sage-200;
   border-radius: $radius-xl;
-  @include transition;
+  box-shadow: $shadow-sm;
+  @include transition(all, $transition-default);
 
   &:hover {
-    border-color: $sage-300;
+    border-color: $sage-400;
     background: $sage-50;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: $shadow-sm;
   }
 }
 
@@ -166,21 +207,72 @@
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $plum-600;
-  letter-spacing: $tracking-wider;
+  letter-spacing: $tracking-widest;
   text-transform: uppercase;
-  margin-bottom: $space-8;
+  margin-bottom: $space-12;
 }
 
 @mixin page-title {
   font-size: $font-size-4xl;
   font-weight: $font-weight-bold;
+  color: $plum-900;
+  margin-bottom: $space-6;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+
+  @include md {
+    font-size: $font-size-5xl;
+  }
+}
+
+@mixin hero-title {
+  font-size: $font-size-5xl;
+  font-weight: $font-weight-bold;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+  margin-bottom: $space-8;
+
+  @include sm {
+    font-size: $font-size-6xl;
+  }
+
+  @include lg {
+    font-size: 4rem;
+  }
+}
+
+@mixin section-title {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
   color: $plum-800;
-  margin-bottom: $space-4;
+  margin-bottom: $space-6;
+  line-height: $leading-snug;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
+}
+
+@mixin subsection-title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-5;
+  line-height: $leading-snug;
+
+  @include md {
+    font-size: $font-size-3xl;
+  }
 }
 
 @mixin body-text {
   color: $earth-700;
   line-height: $leading-relaxed;
+  font-size: $font-size-base;
+
+  @include md {
+    font-size: $font-size-lg;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -248,7 +340,19 @@
 
 @mixin page-bg {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, $sage-50, $parchment, $plum-50);
+  background: linear-gradient(135deg, $sage-50 0%, $parchment 50%, $plum-50 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba($sage-400, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba($plum-400, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0.6;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -300,4 +404,83 @@
 
 @mixin aspect-21-9 {
   aspect-ratio: 21 / 9;
+}
+
+// -----------------------------------------------------------------------------
+// Enhanced visual effects
+// -----------------------------------------------------------------------------
+
+@mixin text-gradient($from: $sage-500, $to: $plum-600) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin glass-effect($blur: 12px, $opacity: 0.8) {
+  background: rgba($white, $opacity);
+  @include backdrop-blur($blur);
+  border: 1px solid rgba($white, 0.2);
+}
+
+@mixin glow-effect($color: $plum-400, $intensity: 0.3) {
+  box-shadow:
+    $shadow-xl,
+    0 0 30px rgba($color, $intensity),
+    0 0 60px rgba($color, $intensity * 0.5);
+}
+
+@mixin elevated-card {
+  background: rgba($white, 0.95);
+  border: 1px solid rgba($plum-100, 0.4);
+  border-radius: $radius-3xl;
+  box-shadow:
+    0 20px 40px rgba($plum-900, 0.08),
+    0 8px 16px rgba($plum-900, 0.04),
+    0 0 0 1px rgba($white, 0.1) inset;
+  @include transition(all, $transition-slow);
+
+  &:hover {
+    box-shadow:
+      0 30px 60px rgba($plum-900, 0.12),
+      0 12px 24px rgba($plum-900, 0.06),
+      0 0 0 1px rgba($white, 0.2) inset,
+      0 0 50px rgba($plum-300, 0.2);
+    transform: translateY(-6px);
+  }
+}
+
+@mixin smooth-container-padding {
+  padding-left: $space-4;
+  padding-right: $space-4;
+
+  @include sm {
+    padding-left: $space-6;
+    padding-right: $space-6;
+  }
+
+  @include md {
+    padding-left: $space-8;
+    padding-right: $space-8;
+  }
+
+  @include lg {
+    padding-left: $space-10;
+    padding-right: $space-10;
+  }
+}
+
+@mixin section-spacing {
+  padding-top: $space-20;
+  padding-bottom: $space-20;
+
+  @include md {
+    padding-top: $space-28;
+    padding-bottom: $space-28;
+  }
+
+  @include lg {
+    padding-top: $space-32;
+    padding-bottom: $space-32;
+  }
 }

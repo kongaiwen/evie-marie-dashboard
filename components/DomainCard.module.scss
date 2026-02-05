@@ -5,13 +5,21 @@
   @include card;
   display: block;
   text-decoration: none;
-  @include transition;
   height: 100%;
+  background: rgba($white, 0.95);
+  border: 1px solid rgba($plum-100, 0.3);
+  box-shadow:
+    $shadow-lg,
+    0 0 0 1px rgba($white, 0.1) inset;
+  @include transition(all, $transition-slow);
 
   &:hover {
-    box-shadow: $shadow-xl;
-    border-color: $plum-200;
-    transform: translateY(-2px);
+    box-shadow:
+      $shadow-2xl,
+      0 0 0 1px rgba($white, 0.2) inset,
+      0 0 40px rgba($plum-200, 0.3);
+    border-color: rgba($plum-200, 0.5);
+    transform: translateY(-6px);
   }
 }
 
@@ -23,26 +31,36 @@
 }
 
 .icon {
-  width: 48px;
-  height: 48px;
-  border-radius: $radius-xl;
+  width: 56px;
+  height: 56px;
+  border-radius: $radius-2xl;
   @include flex-center;
   margin-bottom: $space-6;
+  box-shadow: $shadow-md;
+  @include transition(transform, $transition-default);
+
+  .card:hover & {
+    transform: scale(1.05);
+  }
 
   &.sage {
     @include gradient-to-br($sage-400, $plum-500);
+    box-shadow: $shadow-md, $shadow-sage;
   }
 
   &.plum {
     @include gradient-to-br($plum-400, $sage-500);
+    box-shadow: $shadow-md, $shadow-plum;
   }
 
   &.rose {
     @include gradient-to-br($rose-400, $sage-500);
+    box-shadow: $shadow-md, $shadow-rose;
   }
 
   &.earth {
     @include gradient-to-br($earth-400, $sage-500);
+    box-shadow: $shadow-md, 0 10px 30px -5px rgba($earth-500, 0.3);
   }
 }
 
@@ -63,9 +81,15 @@
 
 .title {
   font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-bold;
   color: $plum-900;
   margin: 0;
+  line-height: $leading-snug;
+  @include transition(color, $transition-default);
+
+  .card:hover & {
+    color: $sage-700;
+  }
 }
 
 .statusBadge {

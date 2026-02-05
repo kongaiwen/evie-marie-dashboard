@@ -5,9 +5,11 @@
   position: sticky;
   top: 0;
   z-index: $z-50;
-  border-bottom: 1px solid rgba($sage-100, 0.6);
-  background: rgba($parchment, 0.7);
-  @include backdrop-blur;
+  border-bottom: 1px solid rgba($plum-100, 0.3);
+  background: rgba($parchment, 0.85);
+  @include backdrop-blur(16px);
+  box-shadow: 0 4px 16px rgba($plum-900, 0.04);
+  @include transition(all, $transition-default);
 }
 
 .container {
@@ -29,8 +31,14 @@
   width: 2rem;
   height: 2rem;
   @include gradient-to-br($sage-500, $plum-500);
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   @include flex-center;
+  box-shadow: $shadow-md, 0 4px 12px rgba($plum-300, 0.3);
+  @include transition(transform, $transition-default);
+
+  &:hover {
+    transform: scale(1.05);
+  }
 
   span {
     color: $white;
@@ -72,13 +80,20 @@
 .bookButton {
   @include gradient-to-r($sage-500, $plum-500);
   color: $white;
-  padding: $space-2 $space-4;
+  padding: $space-2-5 $space-5;
   border-radius: $radius-full;
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
-  @include transition;
+  box-shadow: $shadow-sm, 0 4px 12px rgba($plum-300, 0.3);
+  @include transition(all, $transition-default);
 
   &:hover {
-    box-shadow: $shadow-lg, 0 0 20px rgba($plum-200, 0.5);
+    box-shadow: $shadow-lg, 0 6px 20px rgba($plum-400, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: $shadow-sm, 0 2px 8px rgba($plum-300, 0.3);
   }
 }

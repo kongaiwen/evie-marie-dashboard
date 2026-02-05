@@ -19,21 +19,31 @@
 
 .heroContent {
   @include container($max-w-4xl);
-  padding-top: $space-24;
-  padding-bottom: $space-24;
+  padding-top: $space-28;
+  padding-bottom: $space-28;
   text-align: center;
+
+  @include md {
+    padding-top: $space-32;
+    padding-bottom: $space-32;
+  }
 }
 
 .heroTitle {
   font-size: $font-size-5xl;
   font-weight: $font-weight-bold;
   color: $white;
-  margin-bottom: $space-6;
+  margin-bottom: $space-8;
   letter-spacing: $tracking-tight;
+  line-height: $leading-tight;
   @include drop-shadow-lg;
 
   @include sm {
     font-size: $font-size-6xl;
+  }
+
+  @include lg {
+    font-size: $font-size-7xl;
   }
 }
 
@@ -64,8 +74,14 @@
 .sectionTitle {
   font-size: $font-size-3xl;
   font-weight: $font-weight-bold;
-  color: $plum-800;
-  margin-bottom: $space-4;
+  color: $plum-900;
+  margin-bottom: $space-6;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-tight;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
 }
 
 .narrativeText {

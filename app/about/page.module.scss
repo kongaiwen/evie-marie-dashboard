@@ -7,9 +7,14 @@
 
 .headerContainer {
   @include container($max-w-4xl);
-  padding-top: $space-16;
-  padding-bottom: $space-16;
+  padding-top: $space-20;
+  padding-bottom: $space-20;
   text-align: center;
+
+  @include md {
+    padding-top: $space-24;
+    padding-bottom: $space-24;
+  }
 }
 
 .profileLinkWrapper {
@@ -83,13 +88,18 @@
 
 .sectionTitle {
   font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
-  color: $plum-800;
-  margin-top: $space-8;
-  margin-bottom: $space-4;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
+  margin-top: $space-10;
+  margin-bottom: $space-6;
   display: flex;
   align-items: center;
-  gap: $space-2;
+  gap: $space-3;
+  line-height: $leading-snug;
+
+  @include md {
+    font-size: $font-size-2xl;
+  }
 }
 
 .iconBox {
@@ -189,14 +199,20 @@
 }
 
 .sectionHeading {
-  font-size: $font-size-2xl;
+  font-size: $font-size-3xl;
   font-weight: $font-weight-bold;
   color: $plum-900;
-  margin-bottom: $space-6;
+  margin-bottom: $space-8;
   text-align: center;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
 
   @include md {
-    font-size: $font-size-3xl;
+    font-size: $font-size-4xl;
+  }
+
+  @include lg {
+    font-size: $font-size-5xl;
   }
 }
 
@@ -229,11 +245,17 @@
   font-size: $font-size-2xl;
   font-weight: $font-weight-bold;
   color: $plum-900;
-  margin-bottom: $space-4;
+  margin-bottom: $space-6;
   text-align: center;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-tight;
 
   @include md {
     font-size: $font-size-3xl;
+  }
+
+  @include lg {
+    font-size: $font-size-4xl;
   }
 }
 
