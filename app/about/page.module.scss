@@ -212,28 +212,42 @@
 .domainsByStatus {
   display: flex;
   flex-direction: column;
-  gap: $space-16;
+  gap: $space-24;
 }
 
 .domainCategory {
   display: flex;
   flex-direction: column;
+
+  &:last-child {
+    padding-top: $space-12;
+    border-top: 2px solid $sage-100;
+  }
 }
 
 .categoryHeading {
   font-size: $font-size-2xl;
-  font-weight: $font-weight-semibold;
-  color: $plum-800;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
   margin-bottom: $space-4;
   text-align: center;
+
+  @include md {
+    font-size: $font-size-3xl;
+  }
 }
 
 .categoryIntro {
   text-align: center;
-  color: $earth-600;
-  max-width: $max-w-2xl;
-  margin: 0 auto $space-6;
+  color: $earth-700;
+  max-width: $max-w-3xl;
+  margin: 0 auto $space-8;
   line-height: $leading-relaxed;
+  font-size: $font-size-base;
+
+  @include md {
+    font-size: $font-size-lg;
+  }
 }
 
 .domainsGrid {

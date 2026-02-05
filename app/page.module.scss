@@ -183,24 +183,40 @@
   }
 }
 
-.pivotDomainsSection {
-  margin-top: $space-16;
+.primaryDomainsSection {
+  margin-bottom: $space-20;
+}
+
+.establishedDomainsSection {
+  margin-top: $space-20;
+  padding-top: $space-12;
+  border-top: 2px solid $sage-100;
 }
 
 .subsectionHeading {
   font-size: $font-size-2xl;
   font-weight: $font-weight-semibold;
   color: $plum-800;
-  margin-bottom: $space-3;
+  margin-bottom: $space-4;
   text-align: center;
+
+  @include md {
+    font-size: $font-size-3xl;
+  }
 }
 
-.pivotIntro {
+.pivotIntro,
+.establishedIntro {
   text-align: center;
   color: $earth-700;
-  max-width: $max-w-2xl;
-  margin: 0 auto $space-8;
+  max-width: $max-w-3xl;
+  margin: 0 auto $space-10;
   line-height: $leading-relaxed;
+  font-size: $font-size-base;
+
+  @include md {
+    font-size: $font-size-lg;
+  }
 }
 
 .statsSection {

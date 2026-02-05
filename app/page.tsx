@@ -41,11 +41,12 @@ export default function Home() {
             </div>
 
             <h1 className={styles.heroTitle}>
-              Full-Stack Software Engineer
+              AI Engineer | Data Engineer | Solutions Architect
             </h1>
             <p className={styles.heroSubtitle}>
-              Building accessible, performant applications with React, React Native, and Node.js.
-              I love creating elegant solutions that make technology work for everyone.
+              Building intelligent AI systems, scalable data pipelines, and production-ready solutions.
+              Leveraging full-stack expertise to architect end-to-end machine learning workflows,
+              optimize data infrastructure, and deliver high-impact technical solutions.
             </p>
             <div className={styles.heroButtons}>
               <Link href="/projects" className={styles.primaryButton}>
@@ -66,18 +67,13 @@ export default function Home() {
         <div className={styles.whatIDoSection}>
           <h2 className={styles.sectionHeading}>What I Do</h2>
 
-          {/* Tier 1: Established domains */}
-          <div className={styles.domainsGrid}>
-            {getEstablishedDomains().map((domain) => (
-              <DomainCard key={domain.slug} domain={domain} variant="compact" />
-            ))}
-          </div>
-
-          {/* Tier 2: Pivot domains with intro */}
-          <div className={styles.pivotDomainsSection}>
-            <h3 className={styles.subsectionHeading}>Building Expertise</h3>
+          {/* Tier 1: Pivot domains - Primary focus areas */}
+          <div className={styles.primaryDomainsSection}>
+            <h3 className={styles.subsectionHeading}>AI & Data Engineering Focus</h3>
             <p className={styles.pivotIntro}>
-              I'm actively mastering new domains where technology meets mission-critical challenges.
+              Rapidly mastering AI engineering, data pipelines, and solution architecture through
+              intensive hands-on projects, certifications, and real-world application. Building the
+              future of intelligent, data-driven systems.
             </p>
             <div className={styles.domainsGrid}>
               {getPivotDomains().map((domain) => (
@@ -87,6 +83,19 @@ export default function Home() {
                   variant="compact"
                   showStatus
                 />
+              ))}
+            </div>
+          </div>
+
+          {/* Tier 2: Established domains - Proven track record */}
+          <div className={styles.establishedDomainsSection}>
+            <h3 className={styles.subsectionHeading}>Proven Track Record</h3>
+            <p className={styles.establishedIntro}>
+              Strong foundation across core technical specialties with years of hands-on experience.
+            </p>
+            <div className={styles.domainsGrid}>
+              {getEstablishedDomains().map((domain) => (
+                <DomainCard key={domain.slug} domain={domain} variant="compact" />
               ))}
             </div>
           </div>

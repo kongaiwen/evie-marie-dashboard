@@ -130,31 +130,19 @@ export default function AboutPage() {
         <section className={styles.domainExpertiseSection}>
           <h2 className={styles.sectionHeading}>Domain Expertise</h2>
           <p className={styles.introText}>
-            My work spans core technical specialties and emerging fields where I&apos;m
-            actively building expertise through intensive learning and hands-on projects.
+            AI Engineer and Data Engineer with strong full-stack foundation. Rapidly mastering
+            machine learning systems, data pipelines, and scalable architecture to deliver
+            intelligent, data-driven solutions.
           </p>
 
           <div className={styles.domainsByStatus}>
-            {/* Established */}
+            {/* Pivot - Primary Focus */}
             <div className={styles.domainCategory}>
-              <h3 className={styles.categoryHeading}>Core Specialties</h3>
-              <div className={styles.domainsGrid}>
-                {getEstablishedDomains().map((domain) => (
-                  <DomainCard
-                    key={domain.slug}
-                    domain={domain}
-                    variant="expanded"
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Pivoting */}
-            <div className={styles.domainCategory}>
-              <h3 className={styles.categoryHeading}>Building Expertise</h3>
+              <h3 className={styles.categoryHeading}>AI, Data & Architecture Focus</h3>
               <p className={styles.categoryIntro}>
-                I&apos;m rapidly mastering new domains through certifications, weekly projects,
-                and real-world application of my full-stack engineering foundation.
+                Building production-ready AI systems, designing scalable data infrastructure, and
+                architecting enterprise solutions. Combining intensive learning with hands-on
+                implementation across machine learning, data engineering, and systems design.
               </p>
               <div className={styles.domainsGrid}>
                 {getPivotDomains().map((domain) => (
@@ -163,6 +151,24 @@ export default function AboutPage() {
                     domain={domain}
                     variant="expanded"
                     showStatus
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Established - Track Record */}
+            <div className={styles.domainCategory}>
+              <h3 className={styles.categoryHeading}>Proven Technical Foundation</h3>
+              <p className={styles.categoryIntro}>
+                Years of hands-on experience across core specialties, providing a strong
+                foundation for tackling complex technical challenges.
+              </p>
+              <div className={styles.domainsGrid}>
+                {getEstablishedDomains().map((domain) => (
+                  <DomainCard
+                    key={domain.slug}
+                    domain={domain}
+                    variant="expanded"
                   />
                 ))}
               </div>

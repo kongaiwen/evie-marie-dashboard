@@ -638,5 +638,12 @@ export function getEstablishedDomains(): Domain[] {
 }
 
 export function getPivotDomains(): Domain[] {
-  return domains.filter((d) => d.status === 'pivoting');
+  const pivotDomains = domains.filter((d) => d.status === 'pivoting');
+  // Sort to prioritize AI and Data Engineering first
+  const order = ['ai-engineering', 'data-engineering', 'solution-architecting', 'climate-tech'];
+  return pivotDomains.sort((a, b) => {
+    const indexA = order.indexOf(a.slug);
+    const indexB = order.indexOf(b.slug);
+    return indexA - indexB;
+  });
 }
