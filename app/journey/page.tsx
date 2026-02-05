@@ -315,64 +315,26 @@ export default function JourneyPage() {
             </div>
           </div>
 
-          {/* Lifestyle Moments */}
+          {/* Additional Lifestyle Images */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <source src="/videos/portrait-selfie.mp4" type="video/mp4" />
-            </video>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <source src="/videos/summer-lifestyle-moment.mp4" type="video/mp4" />
-            </video>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <source src="/videos/urban-lifestyle-moment.mp4" type="video/mp4" />
-            </video>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-              }}
-            >
-              <source src="/videos/nature-exploration-moment.mp4" type="video/mp4" />
-            </video>
+            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+              <ClickableImage
+                src="/images/portraits/summer-hat-portrait.jpg"
+                alt="Summer portrait with hat"
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+              <ClickableImage
+                src="/images/portraits/urban-street-selfie.jpg"
+                alt="Urban street selfie"
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
           </div>
         </section>
 
