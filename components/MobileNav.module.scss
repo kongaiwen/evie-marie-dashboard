@@ -25,9 +25,9 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: $z-40;
-  background: rgba($plum-900, 0.2);
-  @include backdrop-blur(4px);
+  z-index: 60;
+  background: rgba($plum-900, 0.5);
+  @include backdrop-blur(8px);
 
   @include md {
     display: none;
@@ -38,7 +38,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  z-index: $z-50;
+  z-index: 70;
   height: 100%;
   width: 18rem;
   background: $parchment;
