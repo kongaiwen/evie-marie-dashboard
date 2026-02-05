@@ -3,6 +3,8 @@ import Image from "next/image"
 import ParallaxSection from "@/components/ParallaxSection"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
+import DomainCard from "@/components/DomainCard"
+import { getEstablishedDomains, getPivotDomains } from "@/app/domains/domainsData"
 import styles from "./page.module.scss"
 
 export default function AboutPage() {
@@ -123,6 +125,50 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
+
+        {/* Domain Expertise Section */}
+        <section className={styles.domainExpertiseSection}>
+          <h2 className={styles.sectionHeading}>Domain Expertise</h2>
+          <p className={styles.introText}>
+            My work spans core technical specialties and emerging fields where I&apos;m
+            actively building expertise through intensive learning and hands-on projects.
+          </p>
+
+          <div className={styles.domainsByStatus}>
+            {/* Established */}
+            <div className={styles.domainCategory}>
+              <h3 className={styles.categoryHeading}>Core Specialties</h3>
+              <div className={styles.domainsGrid}>
+                {getEstablishedDomains().map((domain) => (
+                  <DomainCard
+                    key={domain.slug}
+                    domain={domain}
+                    variant="expanded"
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Pivoting */}
+            <div className={styles.domainCategory}>
+              <h3 className={styles.categoryHeading}>Building Expertise</h3>
+              <p className={styles.categoryIntro}>
+                I&apos;m rapidly mastering new domains through certifications, weekly projects,
+                and real-world application of my full-stack engineering foundation.
+              </p>
+              <div className={styles.domainsGrid}>
+                {getPivotDomains().map((domain) => (
+                  <DomainCard
+                    key={domain.slug}
+                    domain={domain}
+                    variant="expanded"
+                    showStatus
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Workspace photo */}
         <div className={styles.workspaceSection}>

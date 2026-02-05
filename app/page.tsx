@@ -3,6 +3,8 @@ import Image from "next/image"
 import ParallaxSection from "@/components/ParallaxSection"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
+import DomainCard from "@/components/DomainCard"
+import { getEstablishedDomains, getPivotDomains } from "@/app/domains/domainsData"
 import styles from "./page.module.scss"
 
 export default function Home() {
@@ -63,41 +65,29 @@ export default function Home() {
       <div className={styles.container}>
         <div className={styles.whatIDoSection}>
           <h2 className={styles.sectionHeading}>What I Do</h2>
-          <div className={styles.servicesGrid}>
-            <div className={styles.serviceCard}>
-              <div className={`${styles.serviceIcon} ${styles.sage}`}>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <h3 className={styles.serviceTitle}>Mobile & Web Development</h3>
-              <p className={styles.serviceDescription}>
-                I specialize in React Native, Expo, and Unity integrations for cross-platform mobile apps. I also build modern web applications with React and Next.js.
-              </p>
-            </div>
 
-            <div className={styles.serviceCard}>
-              <div className={`${styles.serviceIcon} ${styles.plum}`}>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
-                </svg>
-              </div>
-              <h3 className={styles.serviceTitle}>API & Backend Architecture</h3>
-              <p className={styles.serviceDescription}>
-                I design scalable backend services with Node.js, GraphQL, and REST APIs. I work with PostgreSQL, MongoDB, and Prisma for database solutions.
-              </p>
-            </div>
+          {/* Tier 1: Established domains */}
+          <div className={styles.domainsGrid}>
+            {getEstablishedDomains().map((domain) => (
+              <DomainCard key={domain.slug} domain={domain} variant="compact" />
+            ))}
+          </div>
 
-            <div className={styles.serviceCard}>
-              <div className={`${styles.serviceIcon} ${styles.rose}`}>
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                </svg>
-              </div>
-              <h3 className={styles.serviceTitle}>Cloud & DevOps</h3>
-              <p className={styles.serviceDescription}>
-                I deploy and manage applications on AWS with Docker, CI/CD pipelines, Lambda functions, and infrastructure automation.
-              </p>
+          {/* Tier 2: Pivot domains with intro */}
+          <div className={styles.pivotDomainsSection}>
+            <h3 className={styles.subsectionHeading}>Building Expertise</h3>
+            <p className={styles.pivotIntro}>
+              I'm actively mastering new domains where technology meets mission-critical challenges.
+            </p>
+            <div className={styles.domainsGrid}>
+              {getPivotDomains().map((domain) => (
+                <DomainCard
+                  key={domain.slug}
+                  domain={domain}
+                  variant="compact"
+                  showStatus
+                />
+              ))}
             </div>
           </div>
         </div>

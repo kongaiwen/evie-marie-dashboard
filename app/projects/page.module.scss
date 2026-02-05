@@ -122,6 +122,41 @@
   border-radius: $radius-full;
 }
 
+.domainTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-4;
+  margin-bottom: $space-4;
+}
+
+.domainTag {
+  font-size: $font-size-xs;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-weight: $font-weight-medium;
+
+  &.tagSage {
+    background: $sage-100;
+    color: $sage-700;
+  }
+
+  &.tagPlum {
+    background: $plum-100;
+    color: $plum-700;
+  }
+
+  &.tagRose {
+    background: $rose-100;
+    color: $rose-700;
+  }
+
+  &.tagEarth {
+    background: $earth-100;
+    color: $earth-700;
+  }
+}
+
 .cardFooter {
   display: flex;
   gap: $space-4;

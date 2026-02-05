@@ -1,3 +1,5 @@
+import { DomainSlug } from '../domains/domainsData';
+
 export interface Project {
   id: string;
   name: string;
@@ -10,6 +12,10 @@ export interface Project {
   needsApiKeys?: boolean;
   demoPath?: string;
   demoType?: 'iframe' | 'code' | 'instructions' | 'game';
+
+  // Domain expertise associations
+  domains: DomainSlug[];
+  domainHighlights?: Partial<Record<DomainSlug, string>>;
 }
 
 export const projects: Project[] = [
@@ -25,6 +31,7 @@ export const projects: Project[] = [
     needsApiKeys: false,
     demoPath: '/demos/precourse-asteroids/asteroidsgame.html',
     demoType: 'iframe',
+    domains: ['fullstack-web'],
   },
   {
     id: 'board-race-ting-xie',
@@ -37,6 +44,12 @@ export const projects: Project[] = [
     hasDemo: true,
     needsApiKeys: true,
     demoType: 'instructions',
+    domains: ['fullstack-web', 'realtime-multiplayer', 'i18n-l10n', 'edtech-language'],
+    domainHighlights: {
+      'realtime-multiplayer': 'Real-time multiplayer using Socket.io with room management and live scoring',
+      'edtech-language': 'Interactive language learning for handwriting practice with gamification',
+      'i18n-l10n': 'Bilingual interface supporting English and Chinese with character recognition',
+    },
   },
   {
     id: 'tic-tac-toe',
@@ -49,5 +62,6 @@ export const projects: Project[] = [
     hasDemo: true,
     needsApiKeys: false,
     demoType: 'game',
+    domains: ['fullstack-web'],
   },
 ];

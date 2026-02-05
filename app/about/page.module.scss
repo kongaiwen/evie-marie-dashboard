@@ -183,6 +183,72 @@
   }
 }
 
+.domainExpertiseSection {
+  margin-top: $space-24;
+  margin-bottom: $space-24;
+}
+
+.sectionHeading {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
+  margin-bottom: $space-6;
+  text-align: center;
+
+  @include md {
+    font-size: $font-size-3xl;
+  }
+}
+
+.introText {
+  text-align: center;
+  color: $earth-700;
+  max-width: $max-w-3xl;
+  margin: 0 auto $space-12;
+  font-size: $font-size-lg;
+  line-height: $leading-relaxed;
+}
+
+.domainsByStatus {
+  display: flex;
+  flex-direction: column;
+  gap: $space-16;
+}
+
+.domainCategory {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryHeading {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+  text-align: center;
+}
+
+.categoryIntro {
+  text-align: center;
+  color: $earth-600;
+  max-width: $max-w-2xl;
+  margin: 0 auto $space-6;
+  line-height: $leading-relaxed;
+}
+
+.domainsGrid {
+  display: grid;
+  gap: $space-6;
+
+  @include sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .workspaceSection {
   margin-top: $space-12;
   position: relative;

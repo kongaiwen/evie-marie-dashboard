@@ -1,0 +1,87 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.filterContainer {
+  margin-bottom: $space-8;
+  padding: $space-6;
+  background: rgba($white, 0.9);
+  border-radius: $radius-2xl;
+  border: 1px solid $mist;
+}
+
+.filterLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $earth-700;
+  margin-bottom: $space-4;
+}
+
+.filterPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  overflow-x: auto;
+  padding-bottom: $space-2;
+
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: thin;
+  scrollbar-color: $sage-300 transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $sage-300;
+    border-radius: $radius-full;
+  }
+}
+
+.pill {
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border: 1px solid $mist;
+  background: $white;
+  color: $earth-700;
+  cursor: pointer;
+  white-space: nowrap;
+  @include transition;
+
+  &:hover {
+    border-color: $sage-300;
+    background: $sage-50;
+  }
+
+  &.active {
+    color: $white;
+    border-color: transparent;
+    box-shadow: $shadow-sm;
+
+    &.sage {
+      @include gradient-to-r($sage-500, $plum-500);
+    }
+
+    &.plum {
+      @include gradient-to-r($plum-500, $sage-500);
+    }
+
+    &.rose {
+      @include gradient-to-r($rose-500, $sage-500);
+    }
+
+    &.earth {
+      @include gradient-to-r($earth-500, $sage-500);
+    }
+
+    /* Default for "All" button */
+    &:not(.sage):not(.plum):not(.rose):not(.earth) {
+      @include gradient-to-r($sage-500, $plum-500);
+    }
+  }
+}

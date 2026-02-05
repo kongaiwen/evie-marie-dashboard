@@ -170,7 +170,7 @@
   @include section-heading;
 }
 
-.servicesGrid {
+.domainsGrid {
   display: grid;
   gap: $space-6;
 
@@ -183,52 +183,23 @@
   }
 }
 
-.serviceCard {
-  @include card;
-  padding: $space-8;
-  @include transition;
-
-  &:hover {
-    box-shadow: $shadow-xl;
-    border-color: $plum-200;
-  }
+.pivotDomainsSection {
+  margin-top: $space-16;
 }
 
-.serviceIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: $radius-xl;
-  @include flex-center;
-  margin-bottom: $space-6;
-
-  &.sage {
-    @include gradient-to-br($sage-400, $plum-500);
-  }
-
-  &.plum {
-    @include gradient-to-br($plum-400, $sage-500);
-  }
-
-  &.rose {
-    @include gradient-to-br($sage-400, $rose-500);
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    color: $white;
-  }
-}
-
-.serviceTitle {
-  font-size: $font-size-xl;
+.subsectionHeading {
+  font-size: $font-size-2xl;
   font-weight: $font-weight-semibold;
-  color: $plum-900;
+  color: $plum-800;
   margin-bottom: $space-3;
+  text-align: center;
 }
 
-.serviceDescription {
+.pivotIntro {
+  text-align: center;
   color: $earth-700;
+  max-width: $max-w-2xl;
+  margin: 0 auto $space-8;
   line-height: $leading-relaxed;
 }
 

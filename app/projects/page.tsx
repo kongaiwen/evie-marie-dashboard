@@ -1,11 +1,24 @@
+'use client';
+
+import { useState } from 'react';
 import Link from "next/link"
 import { projects } from "./projectsData"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
+import ProjectFilter from "@/components/ProjectFilter"
+import { domains, getDomainBySlug, DomainSlug } from "@/app/domains/domainsData"
 import styles from "./page.module.scss"
 
 export default function ProjectsPage() {
+  const [selectedDomains, setSelectedDomains] = useState<DomainSlug[]>([]);
+
   const activeProjects = projects.filter(p => p.status !== 'setup-only');
+
+  const filteredProjects = selectedDomains.length === 0
+    ? activeProjects
+    : activeProjects.filter(p =>
+        p.domains.some(d => selectedDomains.includes(d))
+      );
 
   return (
     <div className={`${styles.page} watercolor-wash`}>
@@ -15,12 +28,18 @@ export default function ProjectsPage() {
         <div className={styles.header}>
           <h1 className={styles.title}>Personal Projects</h1>
           <p className={styles.description}>
-            A collection of my software engineering projects showcasing web development, game development, and algorithmic problem-solving skills.
+            Showcasing work across multiple domains of expertise.
           </p>
         </div>
 
+        <ProjectFilter
+          selectedDomains={selectedDomains}
+          onFilterChange={setSelectedDomains}
+          availableDomains={domains}
+        />
+
         <div className={styles.projectsGrid}>
-          {activeProjects.map((project) => (
+          {filteredProjects.map((project) => (
             <div key={project.id} className={styles.projectCard}>
               <div className={styles.cardAccent}></div>
               <div className={styles.cardContent}>
@@ -47,6 +66,23 @@ export default function ProjectsPage() {
                     </span>
                   )}
                 </div>
+
+                {/* Domain tags */}
+                {project.domains && project.domains.length > 0 && (
+                  <div className={styles.domainTags}>
+                    {project.domains.map((domainSlug) => {
+                      const domain = getDomainBySlug(domainSlug);
+                      return domain ? (
+                        <span
+                          key={domainSlug}
+                          className={`${styles.domainTag} ${styles[`tag${domain.iconColor.charAt(0).toUpperCase() + domain.iconColor.slice(1)}`]}`}
+                        >
+                          {domain.title}
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                )}
 
                 <div className={styles.cardFooter}>
                   {project.hasDemo && (
