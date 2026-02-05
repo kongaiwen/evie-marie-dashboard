@@ -94,7 +94,6 @@ export default function JourneyPage() {
         overlayColor="rgba(74, 47, 87, 0.6)"
         minHeight="500px"
         className={styles.heroParallax}
-        rotate={90}
       >
         <div className={styles.heroWrapper}>
           <div className={styles.heroContent}>
@@ -307,7 +306,6 @@ export default function JourneyPage() {
                 alt="Teaching Mandarin at a Louisville elementary school"
                 fill
                 sizes="33vw"
-                style={{ transform: 'rotate(90deg)' }}
               />
             </div>
             <div className={styles.smallSquareImage}>
