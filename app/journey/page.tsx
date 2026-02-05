@@ -198,10 +198,10 @@ export default function JourneyPage() {
         </section>
       </main>
 
-      {/* Parallax Divider */}
+      {/* Parallax Divider - Alpine Mountains */}
       <ParallaxSection
-        imageSrc="/images/backgrounds/misty-forest.jpg"
-        overlayColor="rgba(74, 103, 65, 0.3)"
+        imageSrc="/images/alpine-mountain-snow-landscape.jpg"
+        overlayColor="rgba(74, 103, 130, 0.25)"
         minHeight="350px"
         className={styles.parallaxDivider}
       >

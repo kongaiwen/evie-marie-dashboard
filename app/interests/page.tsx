@@ -4,6 +4,7 @@ import ParallaxSection from "@/components/ParallaxSection"
 import ImageGallery from "@/components/ImageGallery"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
+import { ImageGalleryProvider } from "@/components/ClickableImage"
 import styles from "./page.module.scss"
 
 export const metadata = {
@@ -13,8 +14,9 @@ export const metadata = {
 
 export default function InterestsPage() {
   return (
-    <div className={`${styles.page} watercolor-wash`}>
-      <Nav active="/interests" />
+    <ImageGalleryProvider>
+      <div className={`${styles.page} watercolor-wash`}>
+        <Nav active="/interests" />
 
       {/* Hero */}
       <ParallaxSection
@@ -64,6 +66,52 @@ export default function InterestsPage() {
               </div>
             </div>
           </div>
+
+          {/* Music Images and Video */}
+          <div style={{ maxWidth: '800px', margin: '2rem auto' }}>
+            <Image
+              src="/images/hobbies/music-guitar-cat.jpg"
+              alt="Playing guitar with cat nearby"
+              width={800}
+              height={600}
+              style={{ width: '100%', height: 'auto', borderRadius: '12px' }}
+            />
+            <p style={{ marginTop: '0.75rem', textAlign: 'center', fontSize: '0.95rem', opacity: 0.85, fontStyle: 'italic' }}>
+              Practice sessions at home
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              poster="/videos/acoustic-guitar-performance-poster.jpg"
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '12px',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
+              }}
+            >
+              <source src="/videos/acoustic-guitar-performance-10s.mp4" type="video/mp4" />
+            </video>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '12px',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
+              }}
+            >
+              <source src="/videos/music-performance.mp4" type="video/mp4" />
+            </video>
+          </div>
         </section>
 
         {/* Parallax Divider */}
@@ -99,10 +147,74 @@ export default function InterestsPage() {
               { src: "/images/hobbies/climbing-2.jpg", alt: "Climbing higher on the wall", caption: "Finding the next hold" },
               { src: "/images/hobbies/climbing-3.jpg", alt: "Reaching for a hold", caption: "Full send" },
               { src: "/images/hobbies/climbing-mentor.jpg", alt: "Teaching a child to climb", caption: "Sharing the joy" },
+              { src: "/images/hobbies/rock-climbing-exploration.jpg", alt: "Rock climbing exploration", caption: "Adventure climbing" },
             ]}
             columns={4}
             aspectRatio="portrait"
           />
+
+          {/* Climbing Videos */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginTop: '3rem', maxWidth: '1200px', margin: '3rem auto 0' }}>
+            <div>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster="/videos/bouldering-climb-highlight-poster.jpg"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <source src="/videos/rock-climbing-overhang-traverse.mp4" type="video/mp4" />
+              </video>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Overhang traverse
+              </p>
+            </div>
+            <div>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster="/videos/bouldering-climb-highlight-poster.jpg"
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <source src="/videos/bouldering-climb-highlight.mp4" type="video/mp4" />
+              </video>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Bouldering
+              </p>
+            </div>
+            <div>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <source src="/videos/rock-climbing-ascent.mp4" type="video/mp4" />
+              </video>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Taiwan ascent
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Parallax Divider */}
@@ -156,9 +268,32 @@ export default function InterestsPage() {
                   { src: "/images/travel/mongolia-flaming-cliffs.jpg", alt: "The Flaming Cliffs of Mongolia", caption: "Bayanzag (Flaming Cliffs)" },
                   { src: "/images/travel/mongolia-sunset-camels.jpg", alt: "Sunset with camels in the Gobi", caption: "Gobi Desert sunset" },
                   { src: "/images/travel/mongolia-ger.jpg", alt: "Ger (yurt) in the snow", caption: "Nomadic ger" },
+                  { src: "/images/travel/van-desert-adventure.jpg", alt: "Van adventure across the Mongolian desert", caption: "Desert crossing" },
+                  { src: "/images/travel/desert-sunset-livestock.jpg", alt: "Livestock at desert sunset", caption: "Nomadic life" },
                 ]}
                 columns={4}
               />
+
+              {/* Mongolia Desert Journey Video */}
+              <div style={{ maxWidth: '800px', margin: '2rem auto' }}>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
+                  }}
+                >
+                  <source src="/videos/desert-sunset-van-journey.mp4" type="video/mp4" />
+                </video>
+                <p style={{ marginTop: '0.75rem', textAlign: 'center', fontSize: '0.95rem', opacity: 0.85, fontStyle: 'italic' }}>
+                  Following our van through the Gobi Desert at sunset
+                </p>
+              </div>
             </div>
 
             <div className={styles.travelSubsection}>
@@ -169,9 +304,86 @@ export default function InterestsPage() {
                   { src: "/images/travel/nara-deer.jpg", alt: "Feeding deer in Nara, Japan", caption: "Nara deer park" },
                   { src: "/images/travel/hong-kong.jpg", alt: "Hong Kong skyline from Victoria Peak", caption: "Victoria Peak, Hong Kong" },
                   { src: "/images/travel/japan-arcade.jpg", alt: "Playing Taiko no Tatsujin in a Japanese arcade", caption: "Arcade life in Japan" },
+                  { src: "/images/travel/city-panorama-waterfront.jpg", alt: "City waterfront panorama", caption: "Coastal cityscape" },
+                  { src: "/images/travel/city-lights-dusk.jpg", alt: "City lights at dusk", caption: "Urban evening" },
                 ]}
                 columns={4}
               />
+            </div>
+          </div>
+        </section>
+
+        {/* Parallax Divider - Sunset Landscape */}
+        <ParallaxSection
+          imageSrc="/images/sunset-landscape.jpg"
+          overlayColor="rgba(255, 140, 66, 0.2)"
+          minHeight="350px"
+          className={styles.parallaxDivider}
+        >
+          <div className={styles.parallaxSpacer} />
+        </ParallaxSection>
+
+        {/* Arts, Culture & Sports Section */}
+        <section className={styles.section}>
+          <div>
+            <div className={`${styles.badge} ${styles.plum}`}>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+              <span>Arts & Culture</span>
+            </div>
+            <h2 className={styles.sectionTitle}>Creative Pursuits</h2>
+            <p className={styles.narrativeText}>
+              My creative interests span from traditional Chinese calligraphy to woodworking and art.
+              I also stay active with soccer and other sports, believing that physical activity and
+              creative expression are both essential to a balanced life.
+            </p>
+          </div>
+
+          {/* Gallery with arts and sports */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
+            <div>
+              <Image
+                src="/images/hobbies/snake-art-carving.jpg"
+                alt="Snake art wood carving"
+                width={300}
+                height={300}
+                style={{ width: '100%', height: 'auto', borderRadius: '8px', objectFit: 'cover' }}
+              />
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Wood carving
+              </p>
+            </div>
+            <div>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <source src="/videos/calligraphy.mp4" type="video/mp4" />
+              </video>
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Chinese calligraphy
+              </p>
+            </div>
+            <div>
+              <Image
+                src="/images/soccer-match-stadium.jpg"
+                alt="Playing soccer at a stadium"
+                width={300}
+                height={300}
+                style={{ width: '100%', height: 'auto', borderRadius: '8px', objectFit: 'cover' }}
+              />
+              <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
+                Soccer
+              </p>
             </div>
           </div>
         </section>
@@ -240,6 +452,7 @@ export default function InterestsPage() {
       </main>
 
       <Footer quote="The glass is neither half empty nor half full. It's simply larger than it needs to be." attribution="Grace Hopper" />
-    </div>
+      </div>
+    </ImageGalleryProvider>
   )
 }

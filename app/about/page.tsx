@@ -4,18 +4,20 @@ import ParallaxSection from "@/components/ParallaxSection"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import DomainCard from "@/components/DomainCard"
+import { ImageGalleryProvider } from "@/components/ClickableImage"
 import { getEstablishedDomains, getPivotDomains } from "@/app/domains/domainsData"
 import styles from "./page.module.scss"
 
 export default function AboutPage() {
   return (
-    <div className={`${styles.page} watercolor-wash`}>
-      <Nav active="/about" />
+    <ImageGalleryProvider>
+      <div className={`${styles.page} watercolor-wash`}>
+        <Nav active="/about" />
 
       {/* Atmospheric header with parallax */}
       <ParallaxSection
-        imageSrc="/images/backgrounds/misty-forest.jpg"
-        overlayColor="rgba(74, 47, 87, 0.7)"
+        imageSrc="/images/autumn-woods-portrait.jpg"
+        overlayColor="rgba(74, 47, 87, 0.65)"
         minHeight="0px"
       >
         <div className={styles.headerContainer}>
@@ -245,6 +247,7 @@ export default function AboutPage() {
       </main>
 
       <Footer quote="Mathematical science shows what is. It is the language of unseen relations between things. But to use and apply that language, we must be able to fully to appreciate, to feel, to seize the unseen, the unconscious." attribution="Ada Lovelace" />
-    </div>
+      </div>
+    </ImageGalleryProvider>
   )
 }
