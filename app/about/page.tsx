@@ -124,6 +124,24 @@ export default function AboutPage() {
                   </svg>
                 </Link>
               </div>
+
+              {/* Workspace Moment */}
+              <div style={{ maxWidth: '500px', margin: '3rem auto' }}>
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
+                  }}
+                >
+                  <source src="/videos/creative-workspace-moment.mp4" type="video/mp4" />
+                </video>
+              </div>
             </div>
           </div>
         </div>
