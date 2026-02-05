@@ -66,7 +66,7 @@
 .projectCard {
   @include card;
   overflow: hidden;
-  background: rgba($white, 0.95);
+  background: linear-gradient(135deg, rgba($white, 0.98), rgba($rose-50, 0.2));
   border: 1px solid rgba($plum-100, 0.3);
   box-shadow:
     $shadow-lg,
@@ -74,11 +74,12 @@
   @include transition(all, $transition-slow);
 
   &:hover {
+    background: linear-gradient(135deg, rgba($white, 1), rgba($sage-50, 0.3));
     box-shadow:
       $shadow-2xl,
       0 0 0 1px rgba($white, 0.2) inset,
-      0 0 40px rgba($plum-200, 0.3);
-    border-color: rgba($plum-200, 0.5);
+      0 0 40px rgba($sage-300, 0.4);
+    border-color: rgba($sage-300, 0.6);
     transform: translateY(-6px);
   }
 }

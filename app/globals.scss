@@ -93,3 +93,37 @@
 .page-enter {
   animation: ink-spread 0.4s $ease-out;
 }
+
+// Colorful accent borders
+.accent-border-sage {
+  border-left: 4px solid $sage-500;
+}
+
+.accent-border-plum {
+  border-left: 4px solid $plum-500;
+}
+
+.accent-border-rose {
+  border-left: 4px solid $rose-500;
+}
+
+.accent-border-earth {
+  border-left: 4px solid $earth-500;
+}
+
+// Colorful backgrounds
+.bg-sage-gradient {
+  background: linear-gradient(135deg, $sage-50, $sage-100);
+}
+
+.bg-plum-gradient {
+  background: linear-gradient(135deg, $plum-50, $plum-100);
+}
+
+.bg-rose-gradient {
+  background: linear-gradient(135deg, $rose-50, $rose-100);
+}
+
+.bg-multi-gradient {
+  background: linear-gradient(135deg, $sage-50 0%, $plum-50 50%, $rose-50 100%);
+}

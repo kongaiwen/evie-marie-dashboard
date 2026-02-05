@@ -135,19 +135,23 @@ export default function JourneyPage() {
           <div className={styles.parallaxSpacer} />
         </ParallaxSection>
 
-        {/* Section 2: Finding My Way — parallax Saitama image with text overlay */}
+        {/* Section 2: Finding My Way — marathon photo on side */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Finding My Way</h2>
 
-          {/* Parallax image with text overlaid */}
-          <ParallaxSection
-            imageSrc="/images/journey/pre-marathon.jpg"
-            overlayColor="rgba(245, 240, 232, 0.88)"
-            minHeight="0px"
-            className={styles.parallaxDivider}
-          >
-            <div className={styles.parallaxContent}>
-              <p className={styles.parallaxParagraph}>
+          {/* Side-by-side layout with marathon photo */}
+          <div className={styles.narrativeGrid}>
+            <div className={styles.imageContainer}>
+              <Image
+                src="/images/journey/pre-marathon.jpg"
+                alt="Pre-marathon in Saitama, Japan"
+                fill
+                sizes="(max-width: 768px) 100vw, 40vw"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            <div className={styles.textColumn}>
+              <p className={styles.narrativeText}>
                 I studied East Asian Languages &amp; Cultures at Indiana University with a focus on
                 Mandarin Chinese. In 2012 I did an intensive language immersion course at the ICLP
                 program at National Taiwan University. In 2013, as a Fulbright-Hayes Scholar, I studied
@@ -156,21 +160,21 @@ export default function JourneyPage() {
                 I lived with a multigenerational family of tea farmers and taught English, P.E. and
                 theatre classes at the local elementary school, all in Mandarin.
               </p>
-              <p className={styles.parallaxParagraph}>
+              <p className={styles.narrativeText}>
                 From 2014 to 2015, I lived in Nanjing as a direct-enroll international student at
                 Nanjing University, completing my Capstone Year in the Chinese Language Flagship program.
                 I interned at Librairie Avant-Garde (Xianfeng Shudian), a famous local bookstore where I
                 explored my love of Chinese literature, and did translation work for professors at
                 Nanjing University.
               </p>
-              <p className={styles.parallaxParagraph}>
+              <p className={styles.narrativeText}>
                 After graduating, I worked as a Mandarin-qualified flight attendant at United Airlines for
                 five years, traveling the world and developing the kind of adaptability you only get from
                 navigating unfamiliar territory every single day. I also ran a marathon in Saitama, Japan,
                 explored Mongolia by van, and walked the Great Wall.
               </p>
             </div>
-          </ParallaxSection>
+          </div>
 
           <div className={styles.photoGrid4}>
             <div className={styles.smallSquareImage}>

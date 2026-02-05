@@ -26,10 +26,11 @@ export default function ParallaxSection({
   const bgStyle: CSSProperties = {
     backgroundImage: `url(${imageSrc})`,
     backgroundAttachment: 'fixed',
-    backgroundPosition: 'center',
+    backgroundPosition: 'center center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     minHeight,
+    width: '100%',
   }
 
   const overlayStyle: CSSProperties = {

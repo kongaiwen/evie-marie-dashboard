@@ -476,11 +476,12 @@ export const domains: Domain[] = [
     ],
     resources: [
       {
-        title: 'Building a RAG-Powered Documentation Assistant',
+        title: 'Grid Intelligence Platform - ML Models',
         type: 'project',
         description:
-          'Creating an AI assistant for technical documentation using vector embeddings',
+          'Training and deploying ML models for load forecasting, renewable generation prediction, and price spike detection using scikit-learn, XGBoost, and LightGBM',
         date: '2026-02',
+        url: 'https://github.com/yourusername/grid-intelligence-platform',
       },
     ],
     iconColor: 'plum',
@@ -543,11 +544,12 @@ export const domains: Domain[] = [
     ],
     resources: [
       {
-        title: 'Building an ETL Pipeline for Portfolio Analytics',
+        title: 'Grid Intelligence Platform - Data Pipeline',
         type: 'project',
         description:
-          'Creating a data pipeline to track and analyze portfolio website metrics',
-        date: '2026-02',
+          'Building data pipelines with Dagster and dbt to ingest real-time energy data from CAISO/PJM, transform raw grid data, and maintain data quality with automated monitoring',
+        date: '2026-01',
+        url: 'https://github.com/yourusername/grid-intelligence-platform',
       },
     ],
     iconColor: 'earth',
@@ -610,11 +612,12 @@ export const domains: Domain[] = [
     ],
     resources: [
       {
-        title: 'Architectural Decision Records for My Projects',
-        type: 'blog',
+        title: 'Grid Intelligence Platform - System Architecture',
+        type: 'project',
         description:
-          'Documenting architectural decisions and trade-offs for portfolio projects',
-        date: '2026-02',
+          'Designing and implementing a FastAPI prediction service with batch and real-time inference patterns, monitoring, data quality checks, and comprehensive documentation',
+        date: '2026-01',
+        url: 'https://github.com/yourusername/grid-intelligence-platform',
       },
     ],
     iconColor: 'rose',
