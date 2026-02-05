@@ -3,6 +3,7 @@ import Image from "next/image"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import ParallaxSection from "@/components/ParallaxSection"
+import { ImageGalleryProvider, ClickableImage } from "@/components/ClickableImage"
 import styles from "./page.module.scss"
 
 export const metadata = {
@@ -23,7 +24,7 @@ function NarrativeSection({
 }) {
   const imageBlock = (
     <div className={styles.imageContainer}>
-      <Image
+      <ClickableImage
         src={imageSrc}
         alt={imageAlt}
         fill
@@ -71,10 +72,10 @@ function DualImageSection({
       <div>{children}</div>
       <div className={styles.dualImageGrid}>
         <div className={styles.squareImage}>
-          <Image src={imageSrc1} alt={imageAlt1} fill sizes="50vw" />
+          <ClickableImage src={imageSrc1} alt={imageAlt1} fill sizes="50vw" />
         </div>
         <div className={styles.squareImage}>
-          <Image src={imageSrc2} alt={imageAlt2} fill sizes="50vw" />
+          <ClickableImage src={imageSrc2} alt={imageAlt2} fill sizes="50vw" />
         </div>
       </div>
     </div>
@@ -83,8 +84,9 @@ function DualImageSection({
 
 export default function JourneyPage() {
   return (
-    <div className={`${styles.page} watercolor-wash`}>
-      <Nav active="/journey" />
+    <ImageGalleryProvider>
+      <div className={`${styles.page} watercolor-wash`}>
+        <Nav active="/journey" />
 
       {/* Hero */}
       <ParallaxSection
@@ -124,16 +126,19 @@ export default function JourneyPage() {
             </p>
           </DualImageSection>
         </section>
+      </main>
 
-        {/* Parallax Divider */}
-        <ParallaxSection
-          imageSrc="/images/backgrounds/mountain-sunset-deck.jpg"
-          overlayColor="rgba(92, 74, 54, 0.3)"
-          minHeight="350px"
-          className={styles.parallaxDivider}
-        >
-          <div className={styles.parallaxSpacer} />
-        </ParallaxSection>
+      {/* Parallax Divider */}
+      <ParallaxSection
+        imageSrc="/images/backgrounds/mountain-sunset-deck.jpg"
+        overlayColor="rgba(92, 74, 54, 0.3)"
+        minHeight="350px"
+        className={styles.parallaxDivider}
+      >
+        <div className={styles.parallaxSpacer} />
+      </ParallaxSection>
+
+      <main className={styles.main}>
 
         {/* Section 2: Finding My Way — marathon photo on side */}
         <section className={styles.section}>
@@ -142,7 +147,7 @@ export default function JourneyPage() {
           {/* Side-by-side layout with marathon photo */}
           <div className={styles.narrativeGrid}>
             <div className={styles.imageContainer}>
-              <Image
+              <ClickableImage
                 src="/images/journey/pre-marathon.jpg"
                 alt="Pre-marathon in Saitama, Japan"
                 fill
@@ -178,29 +183,32 @@ export default function JourneyPage() {
 
           <div className={styles.photoGrid4}>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/pre-teaching.jpg" alt="With students in China" fill sizes="25vw" />
+              <ClickableImage src="/images/journey/pre-teaching.jpg" alt="With students in China" fill sizes="25vw" />
             </div>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/pre-arcade.jpg" alt="Playing Taiko no Tatsujin in Japan" fill sizes="25vw" />
+              <ClickableImage src="/images/journey/pre-arcade.jpg" alt="Playing Taiko no Tatsujin in Japan" fill sizes="25vw" />
             </div>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/calligraphy-grandmother.jpg" alt="Chinese calligraphy practice: the character for Grandmother" fill sizes="25vw" />
+              <ClickableImage src="/images/journey/calligraphy-grandmother.jpg" alt="Chinese calligraphy practice: the character for Grandmother" fill sizes="25vw" />
             </div>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/pre-outdoors.jpg" alt="Outdoors portrait" fill sizes="25vw" />
+              <ClickableImage src="/images/journey/pre-outdoors.jpg" alt="Outdoors portrait" fill sizes="25vw" />
             </div>
           </div>
         </section>
+      </main>
 
-        {/* Parallax Divider */}
-        <ParallaxSection
-          imageSrc="/images/backgrounds/misty-forest.jpg"
-          overlayColor="rgba(74, 103, 65, 0.3)"
-          minHeight="350px"
-          className={styles.parallaxDivider}
-        >
-          <div className={styles.parallaxSpacer} />
-        </ParallaxSection>
+      {/* Parallax Divider */}
+      <ParallaxSection
+        imageSrc="/images/backgrounds/misty-forest.jpg"
+        overlayColor="rgba(74, 103, 65, 0.3)"
+        minHeight="350px"
+        className={styles.parallaxDivider}
+      >
+        <div className={styles.parallaxSpacer} />
+      </ParallaxSection>
+
+      <main className={styles.main}>
 
         {/* Section 3: The Turning Point */}
         <section className={styles.section}>
@@ -246,23 +254,26 @@ export default function JourneyPage() {
 
           <div className={styles.photoGrid2}>
             <div className={styles.portraitImage}>
-              <Image src="/images/journey/dress-boots.jpg" alt="White dress and Doc Martens" fill sizes="50vw" />
+              <ClickableImage src="/images/journey/dress-boots.jpg" alt="White dress and Doc Martens" fill sizes="50vw" />
             </div>
             <div className={styles.portraitImage}>
-              <Image src="/images/journey/formal-event.jpg" alt="At a formal event with a friend" fill sizes="50vw" />
+              <ClickableImage src="/images/journey/formal-event.jpg" alt="At a formal event with a friend" fill sizes="50vw" />
             </div>
           </div>
         </section>
+      </main>
 
-        {/* Parallax Divider */}
-        <ParallaxSection
-          imageSrc="/images/backgrounds/lake-sunset.jpg"
-          overlayColor="rgba(139, 115, 85, 0.25)"
-          minHeight="350px"
-          className={styles.parallaxDivider}
-        >
-          <div className={styles.parallaxSpacer} />
-        </ParallaxSection>
+      {/* Parallax Divider */}
+      <ParallaxSection
+        imageSrc="/images/backgrounds/lake-sunset.jpg"
+        overlayColor="rgba(139, 115, 85, 0.25)"
+        minHeight="350px"
+        className={styles.parallaxDivider}
+      >
+        <div className={styles.parallaxSpacer} />
+      </ParallaxSection>
+
+      <main className={styles.main}>
 
         {/* Section 5: Today */}
         <section className={styles.section}>
@@ -288,13 +299,19 @@ export default function JourneyPage() {
 
           <div className={styles.photoGrid3}>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/headphones.jpg" alt="Casual selfie with headphones" fill sizes="33vw" />
+              <ClickableImage src="/images/journey/headphones.jpg" alt="Casual selfie with headphones" fill sizes="33vw" />
             </div>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/journey/teaching-mandarin-louisville.jpg" alt="Teaching Mandarin at a Louisville elementary school" fill sizes="33vw" />
+              <ClickableImage
+                src="/images/journey/teaching-mandarin-louisville.jpg"
+                alt="Teaching Mandarin at a Louisville elementary school"
+                fill
+                sizes="33vw"
+                style={{ transform: 'rotate(90deg)' }}
+              />
             </div>
             <div className={styles.smallSquareImage}>
-              <Image src="/images/portraits/hero-current.jpg" alt="Current photo" fill sizes="33vw" />
+              <ClickableImage src="/images/portraits/hero-current.jpg" alt="Current photo" fill sizes="33vw" />
             </div>
           </div>
         </section>
@@ -303,9 +320,9 @@ export default function JourneyPage() {
         <section className={styles.closingSection}>
           <div className={styles.closingCard}>
             <p className={styles.quote}>
-              &ldquo;We can do no great things, only small things with great love.&rdquo;
+              &ldquo;We have to be visible. We should not be ashamed of who we are.&rdquo;
             </p>
-            <p className={styles.attribution}>&mdash; Mother Teresa</p>
+            <p className={styles.attribution}>&mdash; Sylvia Rivera</p>
             <div className={styles.ctaButtons}>
               <Link href="/interests" className={styles.primaryButton}>
                 See My Interests
@@ -322,6 +339,7 @@ export default function JourneyPage() {
         quote="Every person has a responsibility to be a participant in this society and make it a better place for everybody, in whatever capacity they can."
         attribution="Megan Rapinoe"
       />
-    </div>
+      </div>
+    </ImageGalleryProvider>
   )
 }
