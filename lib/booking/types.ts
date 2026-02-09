@@ -83,54 +83,54 @@ export interface AvailabilityConstraint {
  * Availability constraints for all category/subcategory combinations
  */
 export const AVAILABILITY_CONSTRAINTS: AvailabilityConstraint[] = [
-  // PROFESSIONAL - 10am to 3:30pm on weekdays (Mon-Fri = 1-5)
+  // PROFESSIONAL - 9:30am to 4:00pm on weekdays (Mon-Fri = 1-5)
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.JOB_INTERVIEW,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.INFORMATIONAL_INTERVIEW,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.COLLABORATION_EXPLORATION,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.NETWORKING,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.PAIR_PROGRAMMING,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
   {
     category: BookingCategory.PROFESSIONAL,
     subcategory: ProfessionalSubcategory.REMOTE_COWORKING,
     weekdayStart: 1,
     weekdayEnd: 5,
-    startTime: '10:00',
-    endTime: '15:30',
+    startTime: '09:30',
+    endTime: '16:00',
   },
 
   // FRIENDS - COFFEE: 7am-2pm weekdays + weekends

@@ -80,11 +80,22 @@ export async function GET(request: NextRequest) {
       );
 
       // Convert Map to object for JSON serialization
+      // Format times as local time strings (YYYY-MM-DDTHH:mm:ss) without timezone
+      const formatLocalDateTime = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      };
+
       const availabilityObj: Record<string, any[]> = {};
       for (const [day, slots] of availability.entries()) {
         availabilityObj[day] = slots.map((slot) => ({
-          start: slot.start.toISOString(),
-          end: slot.end.toISOString(),
+          start: formatLocalDateTime(slot.start),
+          end: formatLocalDateTime(slot.end),
           available: slot.available,
           reason: slot.reason,
         }));
@@ -108,14 +119,25 @@ export async function GET(request: NextRequest) {
         filteredSlots = filterByDuration(slots, minDurationMinutes);
       }
 
+      // Format times as local time strings
+      const formatLocalDateTime = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      };
+
       return NextResponse.json({
         category,
         subcategory,
         startDate: start.toISOString(),
         endDate: end.toISOString(),
         availability: filteredSlots.map((slot) => ({
-          start: slot.start.toISOString(),
-          end: slot.end.toISOString(),
+          start: formatLocalDateTime(slot.start),
+          end: formatLocalDateTime(slot.end),
           available: slot.available,
           reason: slot.reason,
         })),

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { auth } from '@/auth'
 import styles from './page.module.scss'
 
 interface CalendarStatus {
@@ -58,7 +57,6 @@ export default function AdminCalendarPage() {
   const [status, setStatus] = useState<CalendarStatus | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [user, setUser] = useState<{ name?: string | null; email?: string | null } | null>(null)
 
   const fetchStatus = useCallback(async (showRefreshing = false) => {
     if (showRefreshing) setIsRefreshing(true)
@@ -86,16 +84,6 @@ export default function AdminCalendarPage() {
   }, [])
 
   useEffect(() => {
-    // Check auth status
-    auth().then((session) => {
-      if (session?.user) {
-        setUser({
-          name: session.user.name,
-          email: session.user.email
-        })
-      }
-    })
-
     fetchStatus()
   }, [fetchStatus])
 
@@ -147,11 +135,6 @@ export default function AdminCalendarPage() {
               <RefreshIcon />
             </button>
           </div>
-          {user && (
-            <p className={styles.userInfo}>
-              Signed in as {user.name || user.email}
-            </p>
-          )}
         </header>
 
         {status?.error && (

@@ -116,6 +116,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
       const data = await response.json()
 
       // Convert API response to DaySlots format
+      // API returns local datetime strings like "2025-02-10T10:00:00"
       const daySlots: DaySlots[] = Object.entries(data.availability).map(([date, slots]: [string, any]) => ({
         date,
         slots: slots
@@ -123,8 +124,9 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
           .map((s: any) => ({
             id: `${date}-${s.start}`,
             date,
-            startTime: new Date(s.start).toTimeString().slice(0, 5),
-            endTime: new Date(s.end).toTimeString().slice(0, 5),
+            // Extract time from local datetime string (format: YYYY-MM-DDTHH:mm:ss)
+            startTime: s.start.split('T')[1]?.slice(0, 5) || '00:00',
+            endTime: s.end.split('T')[1]?.slice(0, 5) || '00:00',
             available: s.available,
           })),
       })).filter((d: DaySlots) => d.slots.length > 0)
