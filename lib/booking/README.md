@@ -4,15 +4,59 @@
 
 This integration layer provides a complete frontend-backend connection for the booking system. It includes TypeScript types, API clients, React hooks, and calendar utilities that Agent 2 can use to build the booking UI.
 
+**IMPORTANT:** This layer includes an adapter (`adapter.ts`) that bridges our frontend types with Agent 1's backend API implementation, which uses different data structures and naming conventions.
+
 ## Architecture
 
 ```
 lib/booking/
 ├── types.ts              # TypeScript types and interfaces
-├── api-client.ts         # API client functions
+├── api-client.ts         # API client functions (with adapter integration)
+├── adapter.ts            # Converts between our types and Agent 1's API format
 ├── calendar-utils.ts     # Calendar integration utilities
 ├── hooks.ts              # React hooks for state management
-└── index.ts              # Main entry point (exports everything)
+├── index.ts              # Main entry point (exports everything)
+└── README.md             # This file
+```
+
+## Agent 1 Backend Integration
+
+Agent 1's backend API uses a different data model than our frontend:
+
+- **Our Frontend Types:** `bookingType` ('discovery' | 'consultation' | 'presentation')
+- **Agent 1's API:** `category` + `subcategory` (e.g., 'PROFESSIONAL' + 'Collaboration Exploration')
+
+The `adapter.ts` file handles all conversions:
+
+### Availability Query Mapping
+```typescript
+// Our query
+{ startDate: '2024-01-01', endDate: '2024-01-31', bookingType: 'discovery' }
+
+// Converted to Agent 1's format
+{ category: 'PROFESSIONAL', subcategory: 'Collaboration Exploration', ... }
+```
+
+### Response Format Mapping
+```typescript
+// Agent 1's response
+{
+  availability: {
+    '2024-01-01': [
+      { start: '2024-01-01T10:00:00Z', end: '2024-01-01T10:30:00Z', available: true }
+    ]
+  }
+}
+
+// Converted to our format
+[
+  {
+    date: '2024-01-01',
+    slots: [
+      { id: 'slot-123', startTime: '...', endTime: '...', status: 'available' }
+    ]
+  }
+]
 ```
 
 ## Features
@@ -279,75 +323,70 @@ try {
 
 ## Backend API Endpoints
 
-This integration layer expects the following API endpoints to be implemented by Agent 1:
+**Note:** The adapter layer automatically handles conversion between our frontend types and Agent 1's API format. You don't need to worry about the differences.
 
 ### GET /api/booking/availability
 
+Agent 1's implementation accepts these parameters (converted by adapter):
+
 Query parameters:
-- `startDate` (required) - Start date in YYYY-MM-DD format
-- `endDate` (required) - End date in YYYY-MM-DD format
-- `bookingType` (optional) - Filter by booking type
+- `category` (required) - Booking category (e.g., 'PROFESSIONAL', 'FRIENDS')
+- `subcategory` (required) - Booking subcategory (e.g., 'Collaboration Exploration')
+- `start` (required) - Start date in ISO format
+- `end` (required) - End date in ISO format
+- `groupByDay` (optional) - Group results by day (default: true)
+- `minDuration` (optional) - Minimum slot duration in minutes
 
-Response:
+Response (converted by adapter to our frontend format):
+```json
+{
+  "category": "PROFESSIONAL",
+  "subcategory": "Collaboration Exploration",
+  "startDate": "2024-01-01T00:00:00Z",
+  "endDate": "2024-01-31T23:59:59Z",
+  "availability": {
+    "2024-01-01": [
+      {
+        "start": "2024-01-01T10:00:00Z",
+        "end": "2024-01-01T10:30:00Z",
+        "available": true
+      }
+    ]
+  },
+  "totalEvents": 42
+}
+```
+
+### POST /api/booking/book
+
+Agent 1's booking endpoint (converted by adapter):
+
+Request body (after adapter conversion):
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "+1234567890",
+  "notes": "Topics: AI Engineering, Data Engineering\nDiscuss collaboration opportunities",
+  "category": "PROFESSIONAL",
+  "subcategory": "Collaboration Exploration",
+  "startTime": "2024-01-01T10:00:00Z",
+  "endTime": "2024-01-01T10:30:00Z"
+}
+```
+
+Response (converted by adapter to our BookingConfirmation format):
 ```json
 {
   "success": true,
-  "data": [
-    {
-      "date": "2024-01-01",
-      "slots": [
-        {
-          "id": "slot-123",
-          "startTime": "2024-01-01T10:00:00Z",
-          "endTime": "2024-01-01T10:30:00Z",
-          "status": "available"
-        }
-      ]
-    }
-  ]
+  "message": "Booking confirmed",
+  "eventId": "google-calendar-event-id-123"
 }
 ```
 
-### POST /api/booking/create
+### GET /api/booking/categories
 
-Request body:
-```json
-{
-  "contactInfo": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "email": "john@example.com",
-    "phone": "+1234567890"
-  },
-  "bookingDetails": {
-    "bookingType": "discovery",
-    "slotId": "slot-123",
-    "startTime": "2024-01-01T10:00:00Z",
-    "endTime": "2024-01-01T10:30:00Z",
-    "timezone": "America/Los_Angeles"
-  },
-  "agenda": {
-    "topics": ["AI Engineering", "Data Engineering"],
-    "additionalNotes": "Discuss collaboration opportunities"
-  }
-}
-```
-
-Response:
-```json
-{
-  "success": true,
-  "data": {
-    "bookingId": "booking-123",
-    "status": "confirmed",
-    "bookingDetails": { ... },
-    "contactInfo": { ... },
-    "calendarLinks": { ... },
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
-  }
-}
-```
+Returns available booking categories and subcategories.
 
 ## Example Component
 
