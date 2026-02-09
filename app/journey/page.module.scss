@@ -109,7 +109,7 @@
   position: relative;
   @include aspect-3-4;
   width: 100%;
-  max-width: 450px;
+  max-width: 100%;
   overflow: hidden;
   border-radius: $radius-2xl;
   box-shadow: $shadow-lg;
@@ -120,7 +120,7 @@
   }
 
   @include md {
-    max-width: 100%;
+    max-width: 450px;
   }
 }
 
@@ -212,18 +212,18 @@
   border-radius: $radius-xl;
   box-shadow: $shadow-md;
   border: 1px solid rgba($sage-100, 0.4);
-  max-width: 280px;
+  max-width: none;
 
   img {
     object-fit: cover;
   }
 
-  @include sm {
-    max-width: 220px;
+  @include md {
+    max-width: 280px;
   }
 
-  @include md {
-    max-width: none;
+  @include lg {
+    max-width: 320px;
   }
 }
 
