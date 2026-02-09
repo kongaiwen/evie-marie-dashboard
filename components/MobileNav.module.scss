@@ -41,7 +41,7 @@
   z-index: 70;
   height: 100%;
   width: 18rem;
-  background: $parchment;
+  background-color: $parchment;
   box-shadow: $shadow-2xl;
   @include transition(transform);
 
