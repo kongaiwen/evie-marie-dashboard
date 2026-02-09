@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './page.module.scss'
@@ -84,15 +84,21 @@ const ChevronLeftIcon = () => (
   </svg>
 )
 
-export default function BookingCalendarPage({ params }: { params: { type: string; subcategory: string } }) {
+export default function BookingCalendarPage({ params }: { params: Promise<{ type: string; subcategory: string }> }) {
   const router = useRouter()
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list')
   const [duration, setDuration] = useState(30) // minutes
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
   const [showCustomTime, setShowCustomTime] = useState(false)
+  const [resolvedParams, setResolvedParams] = useState<{ type: string; subcategory: string } | null>(null)
 
   const [availableSlots] = useState<DaySlots[]>(generateMockSlots())
+
+  // Resolve params on mount
+  useEffect(() => {
+    params.then(setResolvedParams)
+  }, [params])
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(':')
@@ -122,15 +128,15 @@ export default function BookingCalendarPage({ params }: { params: { type: string
   }
 
   const handleContinue = () => {
-    if (selectedSlot) {
+    if (selectedSlot && resolvedParams) {
       // Store selection in sessionStorage for the form page
       sessionStorage.setItem('bookingSlot', JSON.stringify({
         ...selectedSlot,
         duration,
-        type: params.type,
-        subcategory: params.subcategory
+        type: resolvedParams.type,
+        subcategory: resolvedParams.subcategory
       }))
-      router.push(`/contact/booking/${params.type}/${params.subcategory}/form`)
+      router.push(`/contact/booking/${resolvedParams.type}/${resolvedParams.subcategory}/form`)
     }
   }
 
@@ -148,7 +154,7 @@ export default function BookingCalendarPage({ params }: { params: { type: string
 
         <header className={styles.header}>
           <h1 className={styles.title}>
-            {params.subcategory.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            {resolvedParams?.subcategory.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Loading...'}
           </h1>
           <p className={styles.subtitle}>Select a date and time that works for you</p>
         </header>
