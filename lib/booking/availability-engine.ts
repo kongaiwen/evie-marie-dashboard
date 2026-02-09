@@ -1,13 +1,12 @@
 import {
   BookingCategory,
   BookingSubcategory,
-  TimeSlot,
   AvailabilitySlot,
   GoogleCalendarEvent,
   AVAILABILITY_CONSTRAINTS,
   AvailabilityConstraint,
 } from './types';
-import { addDays, setHours, setMinutes, isSameDay, isWeekend, differenceInMinutes, addMinutes } from 'date-fns';
+import { addDays, differenceInMinutes, addMinutes } from 'date-fns';
 
 // Parse time string (HH:mm) and set it on a date
 function setTimeFromDate(date: Date, timeStr: string): Date {
@@ -17,20 +16,17 @@ function setTimeFromDate(date: Date, timeStr: string): Date {
   return result;
 }
 
-// Check if a date falls within a time range
-function isWithinTimeRange(date: Date, startTime: string, endTime: string): boolean {
-  const currentMinutes = date.getHours() * 60 + date.getMinutes();
-  const [startHours, startMinutes] = startTime.split(':').map(Number);
-  const [endHours, endMinutes] = endTime.split(':').map(Number);
-  const startMinutesTotal = startHours * 60 + startMinutes;
-  const endMinutesTotal = endHours * 60 + endMinutes;
-
-  return currentMinutes >= startMinutesTotal && currentMinutes < endMinutesTotal;
-}
-
-// Check if a date falls within a day range
+// Check if a date falls within a day range (handles wrap-around for Sun=0)
 function isWithinDayRange(date: Date, startDay: number, endDay: number): boolean {
   const day = date.getDay();
+
+  // Handle wrap-around case (e.g., Sunday=0 to Saturday=6)
+  if (startDay > endDay) {
+    // Range wraps around weekend (e.g., 1-5 means Mon-Fri, 0-0 means Sunday only)
+    return day >= startDay || day <= endDay;
+  }
+
+  // Normal range (e.g., 0-6 means all days)
   return day >= startDay && day <= endDay;
 }
 
@@ -48,12 +44,15 @@ function generateTimeSlots(
   currentDate.setHours(0, 0, 0, 0);
 
   while (currentDate <= endDate) {
-    const isWeekendDay = isWeekend(currentDate);
+    const day = currentDate.getDay();
 
     // Determine if we should generate slots for this day
     let shouldGenerate = false;
-    let startTime: string;
-    let endTime: string;
+    let startTime: string | undefined;
+    let endTime: string | undefined;
+
+    // Check if this is a weekend day (Saturday=6, Sunday=0)
+    const isWeekendDay = day === 0 || day === 6;
 
     if (isWeekendDay && constraint.weekendStartTime !== undefined) {
       shouldGenerate = isWithinDayRange(
@@ -63,13 +62,13 @@ function generateTimeSlots(
       );
       startTime = constraint.weekendStartTime!;
       endTime = constraint.weekendEndTime!;
-    } else {
+    } else if (!isWeekendDay) {
       shouldGenerate = isWithinDayRange(currentDate, constraint.weekdayStart, constraint.weekdayEnd);
       startTime = constraint.startTime;
       endTime = constraint.endTime;
     }
 
-    if (shouldGenerate) {
+    if (shouldGenerate && startTime && endTime) {
       // Generate slots for this day
       let slotStart = setTimeFromDate(currentDate, startTime);
       const slotEnd = setTimeFromDate(currentDate, endTime);
@@ -145,36 +144,34 @@ export function getAllAvailability(
 // Filter available slots by minimum duration
 export function filterByDuration(slots: AvailabilitySlot[], minDurationMinutes: number): AvailabilitySlot[] {
   const availableSlots: AvailabilitySlot[] = [];
-  let currentSlotStart: Date | null = null;
-  let consecutiveSlots = 0;
 
-  for (const slot of slots) {
-    if (slot.available) {
-      if (!currentSlotStart) {
-        currentSlotStart = slot.start;
+  for (let i = 0; i < slots.length; i++) {
+    if (!slots[i].available) continue;
+
+    // Find consecutive available slots starting from this one
+    let totalDuration = 0;
+    let endIndex = i;
+
+    while (endIndex < slots.length && slots[endIndex].available) {
+      totalDuration += differenceInMinutes(slots[endIndex].end, slots[endIndex].start);
+      endIndex++;
+
+      if (totalDuration >= minDurationMinutes) {
+        break;
       }
-      consecutiveSlots++;
-    } else {
-      if (currentSlotStart && consecutiveSlots * 30 >= minDurationMinutes) {
-        availableSlots.push({
-          start: currentSlotStart,
-          end: slot.start,
-          available: true,
-        });
-      }
-      currentSlotStart = null;
-      consecutiveSlots = 0;
     }
-  }
 
-  // Handle last consecutive slots
-  if (currentSlotStart && consecutiveSlots * 30 >= minDurationMinutes) {
-    const lastSlot = slots[slots.length - 1];
-    availableSlots.push({
-      start: currentSlotStart,
-      end: lastSlot.end,
-      available: true,
-    });
+    // Only add if we found enough consecutive time
+    if (totalDuration >= minDurationMinutes) {
+      availableSlots.push({
+        start: slots[i].start,
+        end: slots[endIndex - 1].end,
+        available: true,
+      });
+    }
+
+    // Skip ahead to the end of this consecutive block
+    i = endIndex - 1;
   }
 
   return availableSlots;
@@ -190,18 +187,22 @@ export function getAvailabilityByDay(
   minDurationMinutes?: number
 ): Map<string, AvailabilitySlot[]> {
   const slots = getAvailability(category, subcategory, startDate, endDate, events);
-  const filteredSlots = minDurationMinutes
+
+  // If minDuration is specified, filter by consecutive available time
+  // Otherwise, just show individual available 30-minute slots
+  let filteredSlots = minDurationMinutes
     ? filterByDuration(slots, minDurationMinutes)
     : slots.filter((s) => s.available);
 
   const slotsByDay = new Map<string, AvailabilitySlot[]>();
 
   for (const slot of filteredSlots) {
-    const dayKey = slot.start.toISOString().split('T')[0];
-    if (!slotsByDay.has(dayKey)) {
-      slotsByDay.set(dayKey, []);
+    // Use UTC date string to avoid timezone issues
+    const dateStr = slot.start.toISOString().split('T')[0];
+    if (!slotsByDay.has(dateStr)) {
+      slotsByDay.set(dateStr, []);
     }
-    slotsByDay.get(dayKey)!.push(slot);
+    slotsByDay.get(dateStr)!.push(slot);
   }
 
   return slotsByDay;

@@ -464,3 +464,114 @@
     box-shadow: 0 0 0 3px rgba($plum-400, 0.3), $shadow-md;
   }
 }
+
+// Loading and error states
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-20 $space-8;
+  text-align: center;
+
+  p {
+    @include body-text;
+    font-size: $font-size-lg;
+    color: $earth-700;
+    margin-top: $space-4;
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    color: $plum-500;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.signInButton {
+  @include btn-primary;
+  margin-top: $space-6;
+  padding: $space-4 $space-8;
+  text-decoration: none;
+}
+
+.noSlots {
+  text-align: center;
+  padding: $space-12 $space-8;
+  background: rgba($white, 0.8);
+  border-radius: $radius-2xl;
+
+  p {
+    @include body-text;
+    font-size: $font-size-base;
+    color: $earth-700;
+    margin: $space-2 0;
+
+    &:first-child {
+      font-weight: $font-weight-semibold;
+      color: $plum-800;
+    }
+  }
+}
+
+.slotsContainer {
+  margin-top: $space-8;
+}
+
+// Continue bar
+.continueBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-4 $space-6;
+  background: rgba($white, 0.98);
+  border-top: 1px solid $earth-100;
+  box-shadow: 0 -4px 20px rgba($plum-900, 0.08);
+  z-index: 50;
+
+  @include md {
+    padding: $space-4 $space-12;
+  }
+}
+
+.selectionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  @include md {
+    flex-direction: row;
+    gap: $space-4;
+  }
+}
+
+.selectionDate {
+  font-size: $font-size-sm;
+  color: $earth-600;
+  font-weight: $font-weight-medium;
+}
+
+.selectionTime {
+  font-size: $font-size-base;
+  color: $plum-700;
+  font-weight: $font-weight-semibold;
+}
+

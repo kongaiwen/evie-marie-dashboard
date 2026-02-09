@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './page.module.scss'
 
-// Placeholder data structure - Agent 4 will connect real API
+// Time slot interface
 interface TimeSlot {
   id: string
   date: string // ISO date string
@@ -19,45 +19,18 @@ interface DaySlots {
   slots: TimeSlot[]
 }
 
-// Mock available slots - Agent 4 will replace with real API calls
-const generateMockSlots = (): DaySlots[] => {
-  const slots: DaySlots[] = []
-  const today = new Date()
-
-  for (let i = 0; i < 14; i++) {
-    const date = new Date(today)
-    date.setDate(today.getDate() + i)
-
-    // Skip weekends
-    if (date.getDay() === 0 || date.getDay() === 6) continue
-
-    const dateStr = date.toISOString().split('T')[0]
-    const daySlots: TimeSlot[] = []
-
-    // Generate time slots from 9 AM to 5 PM
-    for (let hour = 9; hour <= 17; hour++) {
-      for (let min = 0; min < 60; min += 30) {
-        // Skip lunch hour
-        if (hour === 12) continue
-
-        const startTime = `${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`
-        const endHour = min === 30 ? hour + 1 : hour
-        const endTime = `${endHour.toString().padStart(2, '0')}:${min === 30 ? '00' : '30'}`
-
-        daySlots.push({
-          id: `${dateStr}-${startTime}`,
-          date: dateStr,
-          startTime,
-          endTime,
-          available: Math.random() > 0.3 // Random availability
-        })
-      }
-    }
-
-    slots.push({ date: dateStr, slots: daySlots })
-  }
-
-  return slots
+// Map subcategory from URL to API format
+const SUBCATEGORY_MAP: Record<string, string> = {
+  'consultation': 'job_interview',
+  'interview': 'job_interview',
+  'collaboration': 'collaboration_exploration',
+  'technical-discussion': 'pair_programming',
+  'coffee-chat': 'coffee',
+  'catch-up': 'lunch',
+  'activity': 'outings',
+  'playdate': 'coffee',
+  'educational': 'lunch',
+  'family-event': 'outings',
 }
 
 const CalendarIcon = () => (
@@ -84,6 +57,14 @@ const ChevronLeftIcon = () => (
   </svg>
 )
 
+const LoadingSpinner = () => (
+  <div className={styles.spinner}>
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+  </div>
+)
+
 export default function BookingCalendarPage({ params }: { params: Promise<{ type: string; subcategory: string }> }) {
   const router = useRouter()
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list')
@@ -93,12 +74,76 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
   const [showCustomTime, setShowCustomTime] = useState(false)
   const [resolvedParams, setResolvedParams] = useState<{ type: string; subcategory: string } | null>(null)
 
-  const [availableSlots] = useState<DaySlots[]>(generateMockSlots())
+  const [availableSlots, setAvailableSlots] = useState<DaySlots[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   // Resolve params on mount
   useEffect(() => {
     params.then(setResolvedParams)
   }, [params])
+
+  // Fetch availability from API
+  const fetchAvailability = useCallback(async (durationMinutes: number) => {
+    if (!resolvedParams) return
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const today = new Date()
+      const endDate = new Date(today)
+      endDate.setDate(today.getDate() + 30) // Next 30 days
+
+      const apiSubcategory = SUBCATEGORY_MAP[resolvedParams.subcategory] || resolvedParams.subcategory
+
+      const params = new URLSearchParams({
+        category: resolvedParams.type === 'kid-activities' ? 'kid_activities' : resolvedParams.type,
+        subcategory: apiSubcategory,
+        start: today.toISOString(),
+        end: endDate.toISOString(),
+        minDuration: durationMinutes.toString(),
+        groupByDay: 'true',
+      })
+
+      const response = await fetch(`/api/booking/availability?${params}`)
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to fetch availability')
+      }
+
+      const data = await response.json()
+
+      // Convert API response to DaySlots format
+      const daySlots: DaySlots[] = Object.entries(data.availability).map(([date, slots]: [string, any]) => ({
+        date,
+        slots: slots
+          .filter((s: any) => s.available)
+          .map((s: any) => ({
+            id: `${date}-${s.start}`,
+            date,
+            startTime: new Date(s.start).toTimeString().slice(0, 5),
+            endTime: new Date(s.end).toTimeString().slice(0, 5),
+            available: s.available,
+          })),
+      })).filter((d: DaySlots) => d.slots.length > 0)
+
+      setAvailableSlots(daySlots)
+    } catch (err) {
+      console.error('Error fetching availability:', err)
+      setError(err instanceof Error ? err.message : 'Failed to load availability')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [resolvedParams])
+
+  // Fetch availability when params resolve or duration changes
+  useEffect(() => {
+    if (resolvedParams) {
+      fetchAvailability(duration)
+    }
+  }, [resolvedParams, duration, fetchAvailability])
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(':')
@@ -109,7 +154,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
   }
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr)
+    const date = new Date(dateStr + 'T00:00:00') // Ensure local time interpretation
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
       month: 'long',
@@ -138,6 +183,32 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
       }))
       router.push(`/contact/booking/${resolvedParams.type}/${resolvedParams.subcategory}/form`)
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className={styles.calendarPage}>
+        <div className={styles.container}>
+          <div className={styles.loadingContainer}>
+            <LoadingSpinner />
+            <p>Loading available times...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className={styles.calendarPage}>
+        <div className={styles.container}>
+          <div className={styles.errorContainer}>
+            <p>Unable to load availability. Please sign in to book appointments.</p>
+            <Link href="/auth/signin" className={styles.signInButton}>Sign In</Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -206,110 +277,68 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
           </button>
         </div>
 
-        {/* Custom time picker (placeholder) */}
         {showCustomTime && (
           <div className={styles.customTimePicker}>
-            <p className={styles.customTimeText}>
-              Specify your preferred date and time range:
-            </p>
+            <p className={styles.customTimeText}>Select a custom date range and time:</p>
             <div className={styles.customTimeInputs}>
-              <input
-                type="date"
-                className={styles.dateInput}
-                min={new Date().toISOString().split('T')[0]}
-              />
-              <input
-                type="time"
-                className={styles.timeInput}
-              />
-              <span>to</span>
-              <input
-                type="time"
-                className={styles.timeInput}
-              />
+            <input
+              type="date"
+              min={new Date().toISOString().split('T')[0]}
+              className={styles.dateInput}
+            />
+            <input
+              type="time"
+              className={styles.timeInput}
+            />
+            <span>to</span>
+            <input
+              type="time"
+              className={styles.timeInput}
+            />
             </div>
-            <p className={styles.customTimeNote}>
-              We'll do our best to accommodate your request
-            </p>
+            <p className={styles.customTimeNote}>Custom time selection is a feature coming soon. For now, please select from the available slots above.</p>
           </div>
         )}
 
-        {/* Calendar view - simplified grid */}
-        {viewMode === 'calendar' && (
-          <div className={styles.calendarView}>
-            <div className={styles.calendarGrid}>
-              {availableSlots.map((day) => (
-                <div key={day.date} className={styles.calendarDay}>
-                  <div className={`${styles.dayHeader} ${isToday(day.date) ? styles.today : ''}`}>
-                    {formatDate(day.date)}
-                  </div>
-                  <div className={styles.daySlots}>
-                    {day.slots.filter(s => s.available).slice(0, 4).map((slot) => (
-                      <button
-                        key={slot.id}
-                        className={`${styles.slotButton} ${selectedSlot?.id === slot.id ? styles.selected : ''}`}
-                        onClick={() => handleSlotSelect(slot)}
-                      >
-                        {formatTime(slot.startTime)}
-                      </button>
-                    ))}
-                    {day.slots.filter(s => s.available).length > 4 && (
-                      <button
-                        className={styles.moreSlots}
-                        onClick={() => setViewMode('list')}
-                      >
-                        +{day.slots.filter(s => s.available).length - 4} more
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Available Slots */}
+        {availableSlots.length === 0 ? (
+          <div className={styles.noSlots}>
+            <p>No available time slots found for the next 30 days.</p>
+            <p>Try adjusting the duration or contact me directly.</p>
           </div>
-        )}
-
-        {/* List view */}
-        {viewMode === 'list' && (
-          <div className={styles.listView}>
+        ) : (
+          <div className={styles.slotsContainer}>
             {availableSlots.map((day) => (
               <div key={day.date} className={styles.daySection}>
-                <h3 className={`${styles.dayTitle} ${isToday(day.date) ? styles.today : ''}`}>
+                <h3 className={styles.dayTitle}>
                   {formatDate(day.date)}
                   {isToday(day.date) && <span className={styles.todayBadge}>Today</span>}
                 </h3>
                 <div className={styles.slotsGrid}>
-                  {day.slots.filter(s => s.available).map((slot) => (
+                  {day.slots.map((slot) => (
                     <button
                       key={slot.id}
-                      className={`${styles.slotCard} ${selectedSlot?.id === slot.id ? styles.selected : ''}`}
                       onClick={() => handleSlotSelect(slot)}
+                      className={`${styles.slotButton} ${selectedSlot?.id === slot.id ? styles.selected : ''}`}
                     >
-                      <span className={styles.slotTime}>{formatTime(slot.startTime)}</span>
-                      <span className={styles.slotDuration}>{duration} min</span>
+                      {formatTime(slot.startTime)}
                     </button>
                   ))}
-                  {day.slots.filter(s => s.available).length === 0 && (
-                    <p className={styles.noSlots}>No available times</p>
-                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Continue button */}
+        {/* Continue Button */}
         {selectedSlot && (
-          <div className={styles.continueSection}>
-            <div className={styles.selectionSummary}>
-              <p className={styles.selectionText}>
-                Selected: <strong>{formatDate(selectedSlot.date)} at {formatTime(selectedSlot.startTime)}</strong>
-              </p>
+          <div className={styles.continueBar}>
+            <div className={styles.selectionInfo}>
+              <span className={styles.selectionDate}>{formatDate(selectedSlot.date)}</span>
+              <span className={styles.selectionTime}>{formatTime(selectedSlot.startTime)} - {formatTime(selectedSlot.endTime)}</span>
             </div>
-            <button
-              className={styles.continueButton}
-              onClick={handleContinue}
-            >
-              Continue to Booking Form
+            <button onClick={handleContinue} className={styles.continueButton}>
+              Continue
             </button>
           </div>
         )}
