@@ -126,18 +126,13 @@ export default function AboutPage() {
               </div>
 
               {/* Workspace Moment */}
-              <div style={{ maxWidth: '500px', margin: '3rem auto' }}>
+              <div className={styles.videoWrapper}>
                 <video
                   autoPlay
                   loop
                   muted
                   playsInline
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)'
-                  }}
+                  className={styles.video}
                 >
                   <source src="/videos/creative-workspace-moment.mp4" type="video/mp4" />
                 </video>
