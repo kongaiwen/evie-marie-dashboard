@@ -39,6 +39,15 @@ export {
   BookingApiError,
 } from './api-client';
 
+// Adapter (for Agent 1 backend integration)
+export {
+  adaptAvailabilityResponse,
+  adaptAvailabilityQuery,
+  adaptBookingRequest,
+  adaptBookingResponse,
+  buildAvailabilityQueryParams,
+} from './adapter';
+
 // Calendar Utilities
 export {
   generateGoogleCalendarLink,

@@ -3,6 +3,8 @@
  *
  * This file contains all functions for communicating with the booking backend API.
  * It handles availability fetching, booking submissions, and error states.
+ *
+ * Note: This client is adapted to work with Agent 1's backend API implementation.
  */
 
 import {
@@ -12,7 +14,16 @@ import {
   BookingRequest,
   BookingConfirmation,
   BookingErrorCode,
+  ContactInfo,
+  BookingDetails,
 } from './types';
+import {
+  adaptAvailabilityResponse,
+  adaptAvailabilityQuery,
+  adaptBookingRequest,
+  adaptBookingResponse,
+  buildAvailabilityQueryParams,
+} from './adapter';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
@@ -42,11 +53,8 @@ export async function fetchAvailability(
   query: AvailabilityQuery
 ): Promise<DayAvailability[]> {
   try {
-    const params = new URLSearchParams({
-      startDate: query.startDate,
-      endDate: query.endDate,
-      ...(query.bookingType && { bookingType: query.bookingType }),
-    });
+    // Build query params using adapter to match Agent 1's API
+    const params = buildAvailabilityQueryParams(query);
 
     const response = await fetch(`${API_BASE_URL}/booking/availability?${params}`, {
       method: 'GET',
@@ -64,17 +72,13 @@ export async function fetchAvailability(
       );
     }
 
-    const data: ApiResponse<DayAvailability[]> = await response.json();
+    // Agent 1's API returns data directly, not wrapped in ApiResponse
+    const agent1Response = await response.json();
 
-    if (!data.success || !data.data) {
-      throw new BookingApiError(
-        BookingErrorCode.SERVER_ERROR,
-        data.error?.message || 'Failed to fetch availability',
-        data.error?.details
-      );
-    }
+    // Adapt Agent 1's response format to our frontend format
+    const adaptedData = adaptAvailabilityResponse(agent1Response);
 
-    return data.data;
+    return adaptedData;
   } catch (error) {
     if (error instanceof BookingApiError) {
       throw error;
@@ -97,12 +101,15 @@ export async function submitBooking(
   booking: BookingRequest
 ): Promise<BookingConfirmation> {
   try {
-    const response = await fetch(`${API_BASE_URL}/booking/create`, {
+    // Adapt our booking request format to Agent 1's format
+    const adaptedRequest = adaptBookingRequest(booking);
+
+    const response = await fetch(`${API_BASE_URL}/booking/book`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(booking),
+      body: JSON.stringify(adaptedRequest),
     });
 
     if (!response.ok) {
@@ -114,17 +121,24 @@ export async function submitBooking(
       );
     }
 
-    const data: ApiResponse<BookingConfirmation> = await response.json();
+    // Agent 1's API returns { success, message, eventId }
+    const agent1Response = await response.json();
 
-    if (!data.success || !data.data) {
+    if (!agent1Response.success) {
       throw new BookingApiError(
-        data.error?.code as BookingErrorCode || BookingErrorCode.VALIDATION_ERROR,
-        data.error?.message || 'Failed to submit booking',
-        data.error?.details
+        BookingErrorCode.VALIDATION_ERROR,
+        agent1Response.message || 'Failed to submit booking'
       );
     }
 
-    return data.data;
+    // Adapt Agent 1's response to our BookingConfirmation format
+    const confirmation = adaptBookingResponse(
+      agent1Response,
+      booking.bookingDetails,
+      booking.contactInfo
+    );
+
+    return confirmation;
   } catch (error) {
     if (error instanceof BookingApiError) {
       throw error;
