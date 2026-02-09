@@ -310,3 +310,23 @@
 .closingSection {
   padding-bottom: $space-24;
 }
+
+.lifestyleImagesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: $space-6;
+  margin-top: $space-12;
+}
+
+.lifestyleImageWrapper {
+  position: relative;
+  width: 100%;
+  @include aspect-square;
+  overflow: hidden;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+
+  img {
+    object-fit: cover;
+  }
+}

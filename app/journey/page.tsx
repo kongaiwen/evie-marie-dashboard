@@ -314,23 +314,21 @@ export default function JourneyPage() {
           </div>
 
           {/* Additional Lifestyle Images */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginTop: '3rem' }}>
-            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+          <div className={styles.lifestyleImagesGrid}>
+            <div className={styles.lifestyleImageWrapper}>
               <ClickableImage
                 src="/images/portraits/summer-hat-portrait.jpg"
                 alt="Summer portrait with hat"
                 fill
                 sizes="(max-width: 768px) 50vw, 25vw"
-                style={{ objectFit: 'cover' }}
               />
             </div>
-            <div style={{ position: 'relative', width: '100%', paddingBottom: '100%', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+            <div className={styles.lifestyleImageWrapper}>
               <ClickableImage
                 src="/images/portraits/urban-street-selfie.jpg"
                 alt="Urban street selfie"
                 fill
                 sizes="(max-width: 768px) 50vw, 25vw"
-                style={{ objectFit: 'cover' }}
               />
             </div>
           </div>
