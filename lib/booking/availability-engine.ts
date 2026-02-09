@@ -188,16 +188,20 @@ export function getAvailabilityByDay(
 ): Map<string, AvailabilitySlot[]> {
   const slots = getAvailability(category, subcategory, startDate, endDate, events);
 
+  // Filter out slots that are in the past
+  const now = new Date();
+  const futureSlots = slots.filter((s) => s.end > now);
+
   // If minDuration is specified, filter by consecutive available time
   // Otherwise, just show individual available 30-minute slots
   let filteredSlots = minDurationMinutes
-    ? filterByDuration(slots, minDurationMinutes)
-    : slots.filter((s) => s.available);
+    ? filterByDuration(futureSlots, minDurationMinutes)
+    : futureSlots.filter((s) => s.available);
 
   const slotsByDay = new Map<string, AvailabilitySlot[]>();
 
   for (const slot of filteredSlots) {
-    // Use UTC date string to avoid timezone issues
+    // Use local date string for grouping
     const dateStr = slot.start.toISOString().split('T')[0];
     if (!slotsByDay.has(dateStr)) {
       slotsByDay.set(dateStr, []);

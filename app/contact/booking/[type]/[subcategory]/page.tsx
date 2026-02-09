@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from './page.module.scss'
@@ -12,11 +12,20 @@ interface TimeSlot {
   startTime: string // HH:mm format
   endTime: string // HH:mm format
   available: boolean
+  startDateTime?: Date
+  endDateTime?: Date
 }
 
 interface DaySlots {
   date: string
   slots: TimeSlot[]
+}
+
+// Raw slots from API (all 30-minute slots)
+interface RawTimeSlot {
+  start: string
+  end: string
+  available: boolean
 }
 
 // Map subcategory from URL to API format
@@ -74,7 +83,8 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
   const [showCustomTime, setShowCustomTime] = useState(false)
   const [resolvedParams, setResolvedParams] = useState<{ type: string; subcategory: string } | null>(null)
 
-  const [availableSlots, setAvailableSlots] = useState<DaySlots[]>([])
+  // Store raw 30-minute slots from API (without duration filtering)
+  const [rawSlotsByDay, setRawSlotsByDay] = useState<Map<string, RawTimeSlot[]>>(new Map())
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -83,69 +93,145 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
     params.then(setResolvedParams)
   }, [params])
 
-  // Fetch availability from API
-  const fetchAvailability = useCallback(async (durationMinutes: number) => {
+  // Fetch ALL availability (30-minute slots) once on mount
+  useEffect(() => {
     if (!resolvedParams) return
 
-    setIsLoading(true)
-    setError(null)
+    const fetchAvailability = async () => {
+      setIsLoading(true)
+      setError(null)
 
-    try {
-      const today = new Date()
-      const endDate = new Date(today)
-      endDate.setDate(today.getDate() + 30) // Next 30 days
+      try {
+        const today = new Date()
+        const endDate = new Date(today)
+        endDate.setDate(today.getDate() + 30) // Next 30 days
 
-      const apiSubcategory = SUBCATEGORY_MAP[resolvedParams.subcategory] || resolvedParams.subcategory
+        const apiSubcategory = SUBCATEGORY_MAP[resolvedParams.subcategory] || resolvedParams.subcategory
 
-      const params = new URLSearchParams({
-        category: resolvedParams.type === 'kid-activities' ? 'kid_activities' : resolvedParams.type,
-        subcategory: apiSubcategory,
-        start: today.toISOString(),
-        end: endDate.toISOString(),
-        minDuration: durationMinutes.toString(),
-        groupByDay: 'true',
-      })
+        const params = new URLSearchParams({
+          category: resolvedParams.type === 'kid-activities' ? 'kid_activities' : resolvedParams.type,
+          subcategory: apiSubcategory,
+          start: today.toISOString(),
+          end: endDate.toISOString(),
+          // Don't pass minDuration - get all 30-minute slots
+          groupByDay: 'true',
+        })
 
-      const response = await fetch(`/api/booking/availability?${params}`)
+        const response = await fetch(`/api/booking/availability?${params}`)
 
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to fetch availability')
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error || 'Failed to fetch availability')
+        }
+
+        const data = await response.json()
+
+        // Store raw slots by day for client-side filtering
+        const slotsMap = new Map<string, RawTimeSlot[]>()
+        Object.entries(data.availability).forEach(([date, slots]) => {
+          slotsMap.set(date, slots as RawTimeSlot[])
+        })
+        setRawSlotsByDay(slotsMap)
+      } catch (err) {
+        console.error('Error fetching availability:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load availability')
+      } finally {
+        setIsLoading(false)
       }
-
-      const data = await response.json()
-
-      // Convert API response to DaySlots format
-      // API returns local datetime strings like "2025-02-10T10:00:00"
-      const daySlots: DaySlots[] = Object.entries(data.availability).map(([date, slots]: [string, any]) => ({
-        date,
-        slots: slots
-          .filter((s: any) => s.available)
-          .map((s: any) => ({
-            id: `${date}-${s.start}`,
-            date,
-            // Extract time from local datetime string (format: YYYY-MM-DDTHH:mm:ss)
-            startTime: s.start.split('T')[1]?.slice(0, 5) || '00:00',
-            endTime: s.end.split('T')[1]?.slice(0, 5) || '00:00',
-            available: s.available,
-          })),
-      })).filter((d: DaySlots) => d.slots.length > 0)
-
-      setAvailableSlots(daySlots)
-    } catch (err) {
-      console.error('Error fetching availability:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load availability')
-    } finally {
-      setIsLoading(false)
     }
+
+    fetchAvailability()
   }, [resolvedParams])
 
-  // Fetch availability when params resolve or duration changes
-  useEffect(() => {
-    if (resolvedParams) {
-      fetchAvailability(duration)
+  // Filter slots by duration client-side (instant, no loading)
+  const availableSlots = useMemo(() => {
+    const now = new Date()
+    const result: DaySlots[] = []
+    const slotDurationMinutes = 30
+
+    for (const [date, slots] of rawSlotsByDay.entries()) {
+      const filteredSlots: TimeSlot[] = []
+
+      // Filter out past slots and find consecutive blocks for the duration
+      let i = 0
+      while (i < slots.length) {
+        const slot = slots[i]
+
+        // Create Date objects from the local datetime strings
+        const startDate = new Date(slot.start)
+        const endDate = new Date(slot.end)
+
+        // Skip if slot is in the past
+        if (endDate <= now) {
+          i++
+          continue
+        }
+
+        // Skip if not available
+        if (!slot.available) {
+          i++
+          continue
+        }
+
+        // Find consecutive available slots for the required duration
+        let totalDuration = 0
+        let endIndex = i
+
+        while (endIndex < slots.length && slots[endIndex].available) {
+          const slotStart = new Date(slots[endIndex].start)
+          const slotEnd = new Date(slots[endIndex].end)
+
+          // Check if this slot is in the past
+          if (slotEnd <= now) {
+            endIndex++
+            continue
+          }
+
+          // Check if slots are consecutive (no gaps)
+          if (endIndex > i) {
+            const prevSlotEnd = new Date(slots[endIndex - 1].end)
+            const gap = slotStart.getTime() - prevSlotEnd.getTime()
+            if (gap > slotDurationMinutes * 60 * 1000) {
+              // Gap detected, stop here
+              break
+            }
+          }
+
+          totalDuration += (slotEnd.getTime() - slotStart.getTime()) / (1000 * 60)
+          endIndex++
+
+          if (totalDuration >= duration) {
+            break
+          }
+        }
+
+        // Only add if we found enough consecutive time
+        if (totalDuration >= duration) {
+          const firstSlot = slots[i]
+          const lastSlot = slots[endIndex - 1]
+
+          filteredSlots.push({
+            id: `${date}-${firstSlot.start}`,
+            date,
+            startTime: firstSlot.start.split('T')[1]?.slice(0, 5) || '00:00',
+            endTime: lastSlot.end.split('T')[1]?.slice(0, 5) || '00:00',
+            available: true,
+            startDateTime: new Date(firstSlot.start),
+            endDateTime: new Date(lastSlot.end),
+          })
+        }
+
+        // Skip to the end of this block
+        i = endIndex
+      }
+
+      if (filteredSlots.length > 0) {
+        result.push({ date, slots: filteredSlots })
+      }
     }
-  }, [resolvedParams, duration, fetchAvailability])
+
+    return result
+  }, [rawSlotsByDay, duration])
 
   const formatTime = (time: string) => {
     const [hours, minutes] = time.split(':')

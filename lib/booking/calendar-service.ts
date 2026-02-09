@@ -75,7 +75,7 @@ export async function fetchEventsFromCalendars(
   endDate: Date
 ): Promise<GoogleCalendarEvent[]> {
   const calendar = await getCalendarClient(accessToken);
-  const allEvents: GoogleCalendarEvent[] = [];
+  const eventsMap = new Map<string, GoogleCalendarEvent>();
 
   // Refresh calendar IDs cache
   cachedCalendarIds = getAllCalendarIds();
@@ -108,14 +108,19 @@ export async function fetchEventsFromCalendars(
           continue; // Skip all-day events for now
         }
 
-        allEvents.push({
-          id: event.id || '',
-          summary: event.summary || 'No title',
-          start: new Date(event.start.dateTime),
-          end: new Date(event.end.dateTime),
-          busy: event.transparency !== 'transparent', // Default to busy unless marked transparent
-          transparency: event.transparency || undefined,
-        });
+        const eventId = event.id || `${calendarId}-${event.start.dateTime}`;
+
+        // Use Map to deduplicate events by ID
+        if (!eventsMap.has(eventId)) {
+          eventsMap.set(eventId, {
+            id: eventId,
+            summary: event.summary || 'No title',
+            start: new Date(event.start.dateTime),
+            end: new Date(event.end.dateTime),
+            busy: event.transparency !== 'transparent', // Default to busy unless marked transparent
+            transparency: event.transparency || undefined,
+          });
+        }
       }
     } catch (error) {
       console.error(`Error fetching events from calendar "${name}":`, error);
@@ -123,7 +128,7 @@ export async function fetchEventsFromCalendars(
     }
   }
 
-  return allEvents;
+  return Array.from(eventsMap.values());
 }
 
 // Create a new event on the primary calendar
