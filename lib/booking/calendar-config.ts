@@ -12,7 +12,7 @@ export const CALENDAR_CONFIG = {
   calendars: [
     'My calendar',
     'Ranade Kolb Family',
-    'Evie coparenting duty',
+    'Evie Coparenting Duty',
   ],
 } as const;
 
