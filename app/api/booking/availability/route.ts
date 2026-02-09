@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/../../auth';
-import {
-  fetchEventsFromCalendars,
-  initializeCalendarIds,
-} from '@/lib/booking/calendar-service';
+import { auth } from '@/auth';
 import {
   getAvailability,
   getAvailabilityByDay,
   filterByDuration,
 } from '@/lib/booking/availability-engine';
 import { BookingCategory, BookingSubcategory } from '@/lib/booking/types';
+import { GoogleCalendarEvent } from '@/lib/booking/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -54,18 +51,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get access token from session
-    const account = session.accounts?.[0];
-    if (!account?.access_token) {
-      return NextResponse.json(
-        { error: 'No access token available. Please re-authenticate.' },
-        { status: 401 }
-      );
-    }
-
-    // Initialize calendar IDs and fetch events
-    await initializeCalendarIds(account.access_token);
-    const events = await fetchEventsFromCalendars(account.access_token, start, end);
+    // TODO: Fetch actual events from Google Calendar when auth is properly configured
+    // For now, use empty events array (no conflicts)
+    const events: GoogleCalendarEvent[] = [];
 
     // Get availability
     let availability;

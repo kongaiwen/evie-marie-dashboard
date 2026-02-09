@@ -235,7 +235,7 @@ export function useAsyncState() {
  */
 export function useDebounce(delay = 300) {
   const [isDebouncing, setIsDebouncing] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const debouncedExecute = useCallback(<T,>(
     fn: () => Promise<T>

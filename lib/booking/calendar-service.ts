@@ -1,11 +1,13 @@
 import { google } from 'googleapis';
-import { OAuth2Credentials } from 'google-auth-library';
-import { CalendarEvent } from './types';
+import { GoogleCalendarEvent } from './types';
 import {
   CALENDAR_CONFIG,
   setCalendarId,
   getAllCalendarIds,
 } from './calendar-config';
+
+// Local reference to calendar IDs (updated after initialization)
+let cachedCalendarIds: Record<string, string> = {};
 
 // Initialize Google Calendar API client
 export async function getCalendarClient(accessToken: string) {
@@ -31,12 +33,10 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
     // Find and map the configured calendars
     for (const calendarName of CALENDAR_CONFIG.calendars) {
       const matchedCalendar = calendars.find((cal) => {
-        // Try to match by summary (display name) or name
+        // Try to match by summary (display name)
         return (
           cal.summary === calendarName ||
-          cal.name === calendarName ||
-          cal.summary?.includes(calendarName) ||
-          cal.name?.includes(calendarName)
+          cal.summary?.includes(calendarName)
         );
       });
 
@@ -47,6 +47,9 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
         console.warn(`Could not find calendar ID for "${calendarName}"`);
       }
     }
+
+    // Update the cache
+    cachedCalendarIds = getAllCalendarIds();
   } catch (error) {
     console.error('Error initializing calendar IDs:', error);
     throw error;
@@ -58,20 +61,25 @@ export async function fetchEventsFromCalendars(
   accessToken: string,
   startDate: Date,
   endDate: Date
-): Promise<CalendarEvent[]> {
+): Promise<GoogleCalendarEvent[]> {
   const calendar = await getCalendarClient(accessToken);
-  const allEvents: CalendarEvent[] = [];
-  const calendarIds = getAllCalendarIds();
+  const allEvents: GoogleCalendarEvent[] = [];
 
-  if (calendarIds.length === 0) {
+  // Refresh calendar IDs cache
+  cachedCalendarIds = getAllCalendarIds();
+
+  // Check if we need to initialize
+  const calendarIdValues = Object.values(cachedCalendarIds);
+  if (calendarIdValues.length === 0) {
     await initializeCalendarIds(accessToken);
+    cachedCalendarIds = getAllCalendarIds();
   }
 
   const timeMin = startDate.toISOString();
   const timeMax = endDate.toISOString();
 
   // Fetch events from each calendar
-  for (const [name, calendarId] of Object.entries(CALENDAR_IDS || {})) {
+  for (const [name, calendarId] of Object.entries(cachedCalendarIds)) {
     try {
       const response = await calendar.events.list({
         calendarId,
@@ -94,7 +102,7 @@ export async function fetchEventsFromCalendars(
           start: new Date(event.start.dateTime),
           end: new Date(event.end.dateTime),
           busy: event.transparency !== 'transparent', // Default to busy unless marked transparent
-          transparency: event.transparency,
+          transparency: event.transparency || undefined,
         });
       }
     } catch (error) {

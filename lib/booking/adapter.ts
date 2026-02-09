@@ -11,7 +11,7 @@ import {
   TimeSlot,
   SlotStatus,
   AvailabilityQuery,
-  BookingRequest as FrontendBookingRequest,
+  BookingRequest,
   BookingConfirmation,
   BookingType,
   ContactInfo,
@@ -173,8 +173,9 @@ export function adaptAvailabilityQuery(query: AvailabilityQuery): {
 
 /**
  * Convert our BookingRequest to Agent 1's booking request format
+ * NOTE: This is now a pass-through since we're using the simplified BookingRequest type
  */
-export function adaptBookingRequest(booking: FrontendBookingRequest): {
+export function adaptBookingRequest(booking: BookingRequest): {
   name: string;
   email: string;
   phone?: string;
@@ -184,39 +185,8 @@ export function adaptBookingRequest(booking: FrontendBookingRequest): {
   startTime: string;
   endTime: string;
 } {
-  const { contactInfo, bookingDetails, agenda } = booking;
-
-  // Map BookingType to Agent 1's category/subcategory
-  let category = 'PROFESSIONAL';
-  let subcategory = 'Informational Interview';
-
-  switch (bookingDetails.bookingType) {
-    case 'discovery':
-      category = 'PROFESSIONAL';
-      subcategory = 'Collaboration Exploration';
-      break;
-    case 'consultation':
-      category = 'PROFESSIONAL';
-      subcategory = 'Job Interview';
-      break;
-    case 'presentation':
-      category = 'PROFESSIONAL';
-      subcategory = 'Networking';
-      break;
-  }
-
-  return {
-    name: `${contactInfo.firstName} ${contactInfo.lastName}`,
-    email: contactInfo.email,
-    phone: contactInfo.phone,
-    notes: agenda
-      ? `Topics: ${agenda.topics.join(', ')}\n${agenda.additionalNotes || ''}`
-      : undefined,
-    category,
-    subcategory,
-    startTime: bookingDetails.startTime,
-    endTime: bookingDetails.endTime,
-  };
+  // Return the booking as-is since our types now match
+  return booking;
 }
 
 /**

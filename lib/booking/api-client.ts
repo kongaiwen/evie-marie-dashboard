@@ -3,25 +3,17 @@
  *
  * This file contains all functions for communicating with the booking backend API.
  * It handles availability fetching, booking submissions, and error states.
- *
- * Note: This client is adapted to work with Agent 1's backend API implementation.
  */
 
 import {
-  ApiResponse,
   AvailabilityQuery,
   DayAvailability,
   BookingRequest,
   BookingConfirmation,
   BookingErrorCode,
-  ContactInfo,
-  BookingDetails,
 } from './types';
 import {
   adaptAvailabilityResponse,
-  adaptAvailabilityQuery,
-  adaptBookingRequest,
-  adaptBookingResponse,
   buildAvailabilityQueryParams,
 } from './adapter';
 
@@ -72,10 +64,7 @@ export async function fetchAvailability(
       );
     }
 
-    // Agent 1's API returns data directly, not wrapped in ApiResponse
     const agent1Response = await response.json();
-
-    // Adapt Agent 1's response format to our frontend format
     const adaptedData = adaptAvailabilityResponse(agent1Response);
 
     return adaptedData;
@@ -101,15 +90,12 @@ export async function submitBooking(
   booking: BookingRequest
 ): Promise<BookingConfirmation> {
   try {
-    // Adapt our booking request format to Agent 1's format
-    const adaptedRequest = adaptBookingRequest(booking);
-
     const response = await fetch(`${API_BASE_URL}/booking/book`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(adaptedRequest),
+      body: JSON.stringify(booking),
     });
 
     if (!response.ok) {
@@ -121,7 +107,6 @@ export async function submitBooking(
       );
     }
 
-    // Agent 1's API returns { success, message, eventId }
     const agent1Response = await response.json();
 
     if (!agent1Response.success) {
@@ -131,115 +116,34 @@ export async function submitBooking(
       );
     }
 
-    // Adapt Agent 1's response to our BookingConfirmation format
-    const confirmation = adaptBookingResponse(
-      agent1Response,
-      booking.bookingDetails,
-      booking.contactInfo
-    );
+    // Create a BookingConfirmation from the API response
+    const confirmation: BookingConfirmation = {
+      bookingId: agent1Response.eventId || `booking-${Date.now()}`,
+      status: 'confirmed',
+      bookingDetails: {
+        bookingType: 'discovery', // Default value
+        slotId: 'manual',
+        startTime: booking.startTime,
+        endTime: booking.endTime,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      },
+      contactInfo: {
+        firstName: booking.name.split(' ')[0] || '',
+        lastName: booking.name.split(' ').slice(1).join(' ') || '',
+        email: booking.email,
+        phone: booking.phone,
+      },
+      calendarLinks: {
+        google: '',
+        outlook: '',
+        apple: '',
+        icsDownload: '',
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
     return confirmation;
-  } catch (error) {
-    if (error instanceof BookingApiError) {
-      throw error;
-    }
-    throw new BookingApiError(
-      BookingErrorCode.SERVER_ERROR,
-      error instanceof Error ? error.message : 'Network error occurred'
-    );
-  }
-}
-
-/**
- * Cancel an existing booking
- *
- * @param bookingId - ID of the booking to cancel
- * @returns Updated booking confirmation
- * @throws BookingApiError on API errors
- */
-export async function cancelBooking(
-  bookingId: string
-): Promise<BookingConfirmation> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/booking/${bookingId}/cancel`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new BookingApiError(
-        BookingErrorCode.SERVER_ERROR,
-        errorData.error || 'Failed to cancel booking',
-        errorData
-      );
-    }
-
-    const data: ApiResponse<BookingConfirmation> = await response.json();
-
-    if (!data.success || !data.data) {
-      throw new BookingApiError(
-        BookingErrorCode.SERVER_ERROR,
-        data.error?.message || 'Failed to cancel booking',
-        data.error?.details
-      );
-    }
-
-    return data.data;
-  } catch (error) {
-    if (error instanceof BookingApiError) {
-      throw error;
-    }
-    throw new BookingApiError(
-      BookingErrorCode.SERVER_ERROR,
-      error instanceof Error ? error.message : 'Network error occurred'
-    );
-  }
-}
-
-/**
- * Reschedule an existing booking
- *
- * @param bookingId - ID of the booking to reschedule
- * @param newSlotId - ID of the new time slot
- * @returns Updated booking confirmation
- * @throws BookingApiError on API errors
- */
-export async function rescheduleBooking(
-  bookingId: string,
-  newSlotId: string
-): Promise<BookingConfirmation> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/booking/${bookingId}/reschedule`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ newSlotId }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new BookingApiError(
-        BookingErrorCode.SERVER_ERROR,
-        errorData.error || 'Failed to reschedule booking',
-        errorData
-      );
-    }
-
-    const data: ApiResponse<BookingConfirmation> = await response.json();
-
-    if (!data.success || !data.data) {
-      throw new BookingApiError(
-        BookingErrorCode.SERVER_ERROR,
-        data.error?.message || 'Failed to reschedule booking',
-        data.error?.details
-      );
-    }
-
-    return data.data;
   } catch (error) {
     if (error instanceof BookingApiError) {
       throw error;
@@ -262,30 +166,32 @@ export function validateBooking(
 ): { isValid: boolean; errors: Record<string, string> } {
   const errors: Record<string, string> = {};
 
-  // Validate contact info
-  if (!booking.contactInfo.firstName.trim()) {
-    errors.firstName = 'First name is required';
+  // Validate name
+  if (!booking.name?.trim()) {
+    errors.name = 'Name is required';
   }
-  if (!booking.contactInfo.lastName.trim()) {
-    errors.lastName = 'Last name is required';
-  }
-  if (!booking.contactInfo.email.trim()) {
+
+  // Validate email
+  if (!booking.email?.trim()) {
     errors.email = 'Email is required';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.contactInfo.email)) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.email)) {
     errors.email = 'Invalid email format';
   }
 
-  // Validate booking details
-  if (!booking.bookingDetails.slotId) {
-    errors.slotId = 'Time slot is required';
+  // Validate category and subcategory
+  if (!booking.category) {
+    errors.category = 'Category is required';
   }
-  if (!booking.bookingDetails.timezone) {
-    errors.timezone = 'Timezone is required';
+  if (!booking.subcategory) {
+    errors.subcategory = 'Subcategory is required';
   }
 
-  // Validate agenda
-  if (booking.agenda && (!booking.agenda.topics || booking.agenda.topics.length === 0)) {
-    errors.topics = 'Please select at least one topic';
+  // Validate times
+  if (!booking.startTime) {
+    errors.startTime = 'Start time is required';
+  }
+  if (!booking.endTime) {
+    errors.endTime = 'End time is required';
   }
 
   return {

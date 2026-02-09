@@ -2,7 +2,8 @@ import {
   BookingCategory,
   BookingSubcategory,
   TimeSlot,
-  CalendarEvent,
+  AvailabilitySlot,
+  GoogleCalendarEvent,
   AVAILABILITY_CONSTRAINTS,
   AvailabilityConstraint,
 } from './types';
@@ -38,9 +39,9 @@ function generateTimeSlots(
   startDate: Date,
   endDate: Date,
   constraint: AvailabilityConstraint,
-  events: CalendarEvent[]
-): TimeSlot[] {
-  const slots: TimeSlot[] = [];
+  events: GoogleCalendarEvent[]
+): AvailabilitySlot[] {
+  const slots: AvailabilitySlot[] = [];
   const slotDurationMinutes = 30; // 30-minute slots
 
   let currentDate = new Date(startDate);
@@ -109,8 +110,8 @@ export function getAvailability(
   subcategory: BookingSubcategory,
   startDate: Date,
   endDate: Date,
-  events: CalendarEvent[]
-): TimeSlot[] {
+  events: GoogleCalendarEvent[]
+): AvailabilitySlot[] {
   // Find the constraint for this category/subcategory
   const constraint = AVAILABILITY_CONSTRAINTS.find(
     (c) => c.category === category && c.subcategory === subcategory
@@ -128,9 +129,9 @@ export function getAvailability(
 export function getAllAvailability(
   startDate: Date,
   endDate: Date,
-  events: CalendarEvent[]
-): Map<string, TimeSlot[]> {
-  const availabilityMap = new Map<string, TimeSlot[]>();
+  events: GoogleCalendarEvent[]
+): Map<string, AvailabilitySlot[]> {
+  const availabilityMap = new Map<string, AvailabilitySlot[]>();
 
   for (const constraint of AVAILABILITY_CONSTRAINTS) {
     const key = `${constraint.category}:${constraint.subcategory}`;
@@ -142,8 +143,8 @@ export function getAllAvailability(
 }
 
 // Filter available slots by minimum duration
-export function filterByDuration(slots: TimeSlot[], minDurationMinutes: number): TimeSlot[] {
-  const availableSlots: TimeSlot[] = [];
+export function filterByDuration(slots: AvailabilitySlot[], minDurationMinutes: number): AvailabilitySlot[] {
+  const availableSlots: AvailabilitySlot[] = [];
   let currentSlotStart: Date | null = null;
   let consecutiveSlots = 0;
 
@@ -185,15 +186,15 @@ export function getAvailabilityByDay(
   subcategory: BookingSubcategory,
   startDate: Date,
   endDate: Date,
-  events: CalendarEvent[],
+  events: GoogleCalendarEvent[],
   minDurationMinutes?: number
-): Map<string, TimeSlot[]> {
+): Map<string, AvailabilitySlot[]> {
   const slots = getAvailability(category, subcategory, startDate, endDate, events);
   const filteredSlots = minDurationMinutes
     ? filterByDuration(slots, minDurationMinutes)
     : slots.filter((s) => s.available);
 
-  const slotsByDay = new Map<string, TimeSlot[]>();
+  const slotsByDay = new Map<string, AvailabilitySlot[]>();
 
   for (const slot of filteredSlots) {
     const dayKey = slot.start.toISOString().split('T')[0];

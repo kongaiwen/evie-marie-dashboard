@@ -24,17 +24,17 @@ export type {
   BookingConfirmation,
   CalendarLinks,
   ApiResponse,
-  BookingErrorCode,
   BookingFormErrors,
   CalendarEvent,
 } from './types';
+
+// Re-export enums
+export { BookingErrorCode } from './types';
 
 // API Client
 export {
   fetchAvailability,
   submitBooking,
-  cancelBooking,
-  rescheduleBooking,
   validateBooking,
   BookingApiError,
 } from './api-client';
@@ -69,6 +69,3 @@ export {
   useAsyncState,
   useDebounce,
 } from './hooks';
-
-// Re-export enums for convenience
-export { BookingErrorCode } from './types';
