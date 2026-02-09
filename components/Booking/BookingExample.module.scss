@@ -1,0 +1,219 @@
+.bookingExample {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #666;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+.error {
+  padding: 1.5rem;
+  background-color: #fee;
+  border: 1px solid #fcc;
+  border-radius: 0.5rem;
+  color: #c33;
+  margin-bottom: 2rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.availability {
+  margin-bottom: 2rem;
+
+  .day {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .slot {
+    padding: 0.5rem 1rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+
+    &:hover:not(:disabled) {
+      background-color: #0070f3;
+      color: #fff;
+      border-color: #0070f3;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: #f0f0f0;
+    }
+  }
+}
+
+.form {
+  max-width: 500px;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+
+    &.error {
+      border-color: #c33;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #0070f3;
+    }
+  }
+
+  .errorMessage {
+    display: block;
+    color: #c33;
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #0070f3;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: #0051cc;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.confirmation {
+  padding: 2rem;
+  background-color: #e8f5e9;
+  border-radius: 0.5rem;
+  border: 1px solid #c8e6c9;
+
+  h2 {
+    color: #2e7d32;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+}
+
+.calendarButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &.google {
+      background-color: #4285f4;
+      color: #fff;
+
+      &:hover {
+        background-color: #3367d6;
+      }
+    }
+
+    &.outlook {
+      background-color: #0078d4;
+      color: #fff;
+
+      &:hover {
+        background-color: #005a9e;
+      }
+    }
+
+    &.ics {
+      background-color: #333;
+      color: #fff;
+
+      &:hover {
+        background-color: #000;
+      }
+    }
+  }
+}
+
+.newBooking {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  color: #0070f3;
+  border: 1px solid #0070f3;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #0070f3;
+    color: #fff;
+  }
+}
