@@ -13,19 +13,6 @@ import { BookingCategory, BookingSubcategory } from '@/lib/booking/types';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    if (!session.accessToken) {
-      return NextResponse.json(
-        { error: 'Google Calendar access token not found. Please re-authenticate.' },
-        { status: 401 }
-      );
-    }
-
     // Get query parameters
     const searchParams = request.nextUrl.searchParams;
     const category = searchParams.get('category') as BookingCategory;
@@ -61,9 +48,20 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Initialize calendar IDs and fetch events from Google Calendar
-    await initializeCalendarIds(session.accessToken);
-    const events = await fetchEventsFromCalendars(session.accessToken, start, end);
+    // Try to fetch calendar events if user is authenticated
+    // If not authenticated, show availability without calendar conflicts
+    let events: any[] = [];
+
+    try {
+      const session = await auth();
+      if (session?.accessToken) {
+        await initializeCalendarIds(session.accessToken);
+        events = await fetchEventsFromCalendars(session.accessToken, start, end);
+      }
+    } catch (error) {
+      // If calendar fetch fails, continue with empty events list
+      console.warn('Could not fetch calendar events, showing unfiltered availability:', error);
+    }
 
     // Get availability
     let availability;

@@ -34,15 +34,19 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
     for (const calendarName of CALENDAR_CONFIG.calendars) {
       const matchedCalendar = calendars.find((cal) => {
         // Try to match by summary (display name)
-        return (
-          cal.summary === calendarName ||
-          cal.summary?.includes(calendarName)
-        );
+        if (cal.summary === calendarName || cal.summary?.includes(calendarName)) {
+          return true;
+        }
+        // Special case for "My calendar" - match primary calendar or calendar by account email
+        if (calendarName === 'My calendar') {
+          return cal.primary === true || cal.id === cal.summary;
+        }
+        return false;
       });
 
       if (matchedCalendar?.id) {
         setCalendarId(calendarName, matchedCalendar.id);
-        console.log(`Mapped calendar "${calendarName}" to ID: ${matchedCalendar.id}`);
+        console.log(`Mapped calendar "${calendarName}" to ID: ${matchedCalendar.id} (${matchedCalendar.summary})`);
       } else {
         console.warn(`Could not find calendar ID for "${calendarName}"`);
       }

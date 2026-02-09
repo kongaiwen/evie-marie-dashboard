@@ -205,8 +205,13 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
       <div className={styles.calendarPage}>
         <div className={styles.container}>
           <div className={styles.errorContainer}>
-            <p>Unable to load availability. Please sign in to book appointments.</p>
-            <Link href="/auth/signin" className={styles.signInButton}>Sign In</Link>
+            <p>Unable to load availability. Please try again later.</p>
+            <Link
+              href="/contact/booking"
+              className={styles.signInButton}
+            >
+              Back to Booking
+            </Link>
           </div>
         </div>
       </div>
