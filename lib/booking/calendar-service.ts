@@ -33,13 +33,20 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
     // Find and map the configured calendars
     for (const calendarName of CALENDAR_CONFIG.calendars) {
       const matchedCalendar = calendars.find((cal) => {
-        // Try to match by summary (display name)
-        if (cal.summary === calendarName || cal.summary?.includes(calendarName)) {
+        const summary = (cal.summary || '').toLowerCase();
+        const searchName = calendarName.toLowerCase();
+
+        // Try exact match (case-insensitive)
+        if (summary === searchName) {
           return true;
         }
-        // Special case for "My calendar" - match primary calendar or calendar by account email
-        if (calendarName === 'My calendar') {
-          return cal.primary === true || cal.id === cal.summary;
+        // Try partial match (case-insensitive)
+        if (summary.includes(searchName)) {
+          return true;
+        }
+        // Special case for "My calendar" - match primary calendar
+        if (calendarName === 'My calendar' && cal.primary === true) {
+          return true;
         }
         return false;
       });
@@ -49,6 +56,7 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
         console.log(`Mapped calendar "${calendarName}" to ID: ${matchedCalendar.id} (${matchedCalendar.summary})`);
       } else {
         console.warn(`Could not find calendar ID for "${calendarName}"`);
+        console.warn('Available calendars:', calendars.map(c => `- ${c.summary} (${c.id})`).join('\n'));
       }
     }
 
