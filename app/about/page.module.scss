@@ -386,3 +386,15 @@
 .skillContent {
   color: $earth-700;
 }
+
+.videoWrapper {
+  max-width: 500px;
+  margin: $space-12 auto;
+}
+
+.video {
+  width: 100%;
+  height: auto;
+  border-radius: $radius-2xl;
+  box-shadow: $shadow-2xl;
+}
