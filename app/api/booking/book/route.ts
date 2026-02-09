@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
+import {
+  fetchEventsFromCalendars,
+  initializeCalendarIds,
+  createEvent,
+} from '@/lib/booking/calendar-service';
 import { BookingRequest, BookingResponse } from '@/lib/booking/types';
 
 export async function POST(request: NextRequest) {
@@ -8,6 +13,13 @@ export async function POST(request: NextRequest) {
 
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!session.accessToken) {
+      return NextResponse.json(
+        { error: 'Google Calendar access token not found. Please re-authenticate.' },
+        { status: 401 }
+      );
     }
 
     // Parse request body
@@ -57,13 +69,64 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Integrate with Google Calendar when auth is properly configured
-    // For now, generate a mock booking ID
-    const eventId = `booking_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+    // Initialize calendar IDs and check for conflicts
+    await initializeCalendarIds(session.accessToken);
+    const events = await fetchEventsFromCalendars(session.accessToken, start, end);
+
+    // Check for conflicts with busy events
+    const conflictingEvent = events.find((event) => {
+      return (
+        event.busy &&
+        ((start >= event.start && start < event.end) ||
+          (end > event.start && end <= event.end) ||
+          (start <= event.start && end >= event.end))
+      );
+    });
+
+    if (conflictingEvent) {
+      return NextResponse.json(
+        {
+          error: 'Time slot is not available',
+          conflict: {
+            summary: conflictingEvent.summary,
+            start: conflictingEvent.start.toISOString(),
+            end: conflictingEvent.end.toISOString(),
+          },
+        },
+        { status: 409 }
+      );
+    }
+
+    // Build event description
+    const descriptionParts = [
+      `Category: ${category}`,
+      `Subcategory: ${subcategory}`,
+      `Contact: ${name} (${email})`,
+    ];
+
+    if (phone) {
+      descriptionParts.push(`Phone: ${phone}`);
+    }
+
+    if (notes) {
+      descriptionParts.push(`\nNotes: ${notes}`);
+    }
+
+    const description = descriptionParts.join('\n');
+
+    // Create the event on Google Calendar
+    const eventId = await createEvent(
+      session.accessToken,
+      `${subcategory} - ${name}`,
+      start,
+      end,
+      description,
+      [email]
+    );
 
     const response: BookingResponse = {
       success: true,
-      message: 'Booking created successfully (mock - Google Calendar integration pending)',
+      message: 'Booking created successfully',
       eventId,
     };
 
