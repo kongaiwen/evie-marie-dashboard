@@ -22,9 +22,16 @@ export default function LanguageToggle({ className = '' }: LanguageToggleProps) 
       // Get the alternate domain
       const alternateDomain = getDomainForLocale(alternateLocale);
 
-      // Build the new URL with the alternate domain
-      // Since we use domain-based routing, pathname has no locale prefix
-      const newUrl = `https://${alternateDomain}${pathname}`;
+      // Strip locale prefix from pathname if it exists
+      let cleanPath = pathname;
+      if (pathname.startsWith('/en/') || pathname.startsWith('/zh/')) {
+        cleanPath = pathname.substring(3); // Remove /en or /zh
+      } else if (pathname === '/en' || pathname === '/zh') {
+        cleanPath = '/';
+      }
+
+      // Build URL without locale prefix (middleware will add it internally)
+      const newUrl = `https://${alternateDomain}${cleanPath}`;
 
       // Navigate to the new domain
       window.location.href = newUrl;

@@ -1,28 +1,48 @@
 import { auth } from "@/auth"
 import { NextResponse } from "next/server"
-import createMiddleware from 'next-intl/middleware';
-import { routing } from './app/i18n/routing';
 
-// Create the next-intl middleware with domain configuration
-const intlMiddleware = createMiddleware(routing);
-
-// Custom middleware that combines auth and next-intl
+// Custom middleware that combines auth and domain-based locale detection
 export default auth((req) => {
-  const { pathname } = req.nextUrl
+  const { pathname, hostname } = req.nextUrl
   const isAuthenticated = !!req.auth
 
-  // Check for authentication on /private routes (check both with and without locale prefix)
-  const isPrivateRoute = pathname.startsWith("/private") ||
-                        pathname.startsWith("/en/private") ||
-                        pathname.startsWith("/zh/private")
-
-  if (isPrivateRoute && !isAuthenticated) {
-    const signInUrl = new URL('/auth/signin', req.url)
-    return NextResponse.redirect(signInUrl)
+  // Detect locale based on hostname
+  let locale = 'en' // default
+  if (hostname.includes('kongaiwen.dev')) {
+    locale = 'zh'
+  } else if (hostname.includes('eviemariekolb.com') || hostname.includes('localhost')) {
+    locale = 'en'
   }
 
-  // Let next-intl middleware handle locale routing
-  return intlMiddleware(req)
+  // Check if pathname already has a locale prefix
+  const hasLocalePrefix = pathname.startsWith('/en/') ||
+                          pathname.startsWith('/zh/') ||
+                          pathname === '/en' ||
+                          pathname === '/zh'
+
+  // If no locale in pathname, rewrite to add it internally
+  if (!hasLocalePrefix) {
+    const url = req.nextUrl.clone()
+    url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`
+    if (pathname === '/') {
+      url.pathname = `/${locale}`
+    }
+
+    // Add locale header for next-intl
+    const response = NextResponse.rewrite(url)
+    response.headers.set('x-next-intl-locale', locale)
+
+    // Check for authentication on /private routes
+    if (pathname.includes('/private') && !isAuthenticated) {
+      const signInUrl = new URL('/auth/signin', req.url)
+      return NextResponse.redirect(signInUrl)
+    }
+
+    return response
+  }
+
+  // If locale prefix exists in URL, just pass through
+  return NextResponse.next()
 })
 
 export const config = {
