@@ -1,44 +1,28 @@
 import { auth } from "@/auth"
 import { NextResponse } from "next/server"
 import createMiddleware from 'next-intl/middleware';
-import { locales, defaultLocale } from './i18n';
+import { routing } from './app/i18n/routing';
 
-// Create the next-intl middleware with domain-based routing
-const intlMiddleware = createMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'never', // Never show locale in URL for domain-based routing
-  localeDetection: false, // We handle detection manually
-});
+// Create the next-intl middleware with domain configuration
+const intlMiddleware = createMiddleware(routing);
 
-// Custom middleware that combines auth and locale detection
+// Custom middleware that combines auth and next-intl
 export default auth((req) => {
-  const { pathname, hostname } = req.nextUrl
+  const { pathname } = req.nextUrl
   const isAuthenticated = !!req.auth
 
-  // Detect locale based on hostname
-  let detectedLocale = defaultLocale
-  if (hostname.includes('kongaiwen.dev')) {
-    detectedLocale = 'zh'
-  } else if (hostname.includes('eviemariekolb.com')) {
-    detectedLocale = 'en'
-  }
+  // Check for authentication on /private routes (check both with and without locale prefix)
+  const isPrivateRoute = pathname.startsWith("/private") ||
+                        pathname.startsWith("/en/private") ||
+                        pathname.startsWith("/zh/private")
 
-  // Create a modified request with the detected locale
-  const requestHeaders = new Headers(req.headers)
-  requestHeaders.set('x-next-intl-locale', detectedLocale)
-
-  // Check for authentication on /private routes
-  if (pathname.startsWith("/private") && !isAuthenticated) {
+  if (isPrivateRoute && !isAuthenticated) {
     const signInUrl = new URL('/auth/signin', req.url)
     return NextResponse.redirect(signInUrl)
   }
 
-  // Let next-intl middleware handle the rest with our locale header
-  const response = intlMiddleware(req)
-  response.headers.set('x-detected-locale', detectedLocale)
-
-  return response
+  // Let next-intl middleware handle locale routing
+  return intlMiddleware(req)
 })
 
 export const config = {

@@ -8,9 +8,29 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'en',
 
-  // Never show locale in URL - we use domain-based routing instead
-  // eviemariekolb.com = English, kongaiwen.dev = Chinese
-  localePrefix: 'never'
+  // Domain-based routing: locale prefix hidden for each domain's default locale
+  localePrefix: 'as-needed',
+
+  // Domain configuration for locale detection
+  domains: [
+    {
+      domain: 'eviemariekolb.com',
+      defaultLocale: 'en'
+    },
+    {
+      domain: 'kongaiwen.dev',
+      defaultLocale: 'zh'
+    },
+    // Localhost support for development
+    {
+      domain: 'localhost:3000',
+      defaultLocale: 'en'
+    },
+    {
+      domain: 'localhost:3002',
+      defaultLocale: 'zh'
+    }
+  ]
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
