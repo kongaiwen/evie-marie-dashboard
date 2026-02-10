@@ -8,9 +8,9 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'en',
 
-  // Don't use locale prefix for default locale (en)
-  // This means /about instead of /en/about for English
-  localePrefix: 'as-needed'
+  // Never show locale in URL - we use domain-based routing instead
+  // eviemariekolb.com = English, kongaiwen.dev = Chinese
+  localePrefix: 'never'
 });
 
 // Lightweight wrappers around Next.js' navigation APIs

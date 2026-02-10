@@ -3,13 +3,12 @@ import { NextResponse } from "next/server"
 import createMiddleware from 'next-intl/middleware';
 import { locales, defaultLocale } from './i18n';
 
-// Create the next-intl middleware
+// Create the next-intl middleware with domain-based routing
 const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
-  localePrefix: 'as-needed',
-  // Detect locale from hostname
-  localeDetection: false
+  localePrefix: 'never', // Never show locale in URL for domain-based routing
+  localeDetection: false, // We handle detection manually
 });
 
 // Custom middleware that combines auth and locale detection
@@ -25,28 +24,19 @@ export default auth((req) => {
     detectedLocale = 'en'
   }
 
-  // Modify request to use detected locale
-  const url = req.nextUrl.clone()
-  const pathnameHasLocale = locales.some(locale => pathname.startsWith(`/${locale}`))
+  // Create a modified request with the detected locale
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set('x-next-intl-locale', detectedLocale)
 
-  // Add locale to pathname if not present
-  if (!pathnameHasLocale && detectedLocale !== defaultLocale) {
-    url.pathname = `/${detectedLocale}${pathname}`
-    return NextResponse.rewrite(url)
-  }
-
-  // Store detected locale in headers for the app to use
-  const response = intlMiddleware(req)
-  response.headers.set('x-detected-locale', detectedLocale)
-
-  // Protect /private routes (needs to account for locale prefix)
-  const localePrefixPattern = `^/(${locales.join('|')})/`
-  const pathWithoutLocale = pathname.replace(new RegExp(localePrefixPattern), '/')
-
-  if (pathWithoutLocale.startsWith("/private") && !isAuthenticated) {
-    const signInUrl = new URL(`/${detectedLocale}/auth/signin`, req.url)
+  // Check for authentication on /private routes
+  if (pathname.startsWith("/private") && !isAuthenticated) {
+    const signInUrl = new URL('/auth/signin', req.url)
     return NextResponse.redirect(signInUrl)
   }
+
+  // Let next-intl middleware handle the rest with our locale header
+  const response = intlMiddleware(req)
+  response.headers.set('x-detected-locale', detectedLocale)
 
   return response
 })

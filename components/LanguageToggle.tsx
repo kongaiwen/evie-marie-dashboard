@@ -23,17 +23,8 @@ export default function LanguageToggle({ className = '' }: LanguageToggleProps) 
       const alternateDomain = getDomainForLocale(alternateLocale);
 
       // Build the new URL with the alternate domain
-      // Strip any locale prefix from pathname (e.g., /zh/about -> /about)
-      let cleanPathname = pathname;
-      if (pathname.startsWith('/zh/')) {
-        cleanPathname = pathname.replace('/zh', '');
-      } else if (pathname.startsWith('/en/')) {
-        cleanPathname = pathname.replace('/en', '');
-      }
-      // Ensure we have at least a '/'
-      cleanPathname = cleanPathname || '/';
-
-      const newUrl = `https://${alternateDomain}${cleanPathname}`;
+      // Since we use domain-based routing, pathname has no locale prefix
+      const newUrl = `https://${alternateDomain}${pathname}`;
 
       // Navigate to the new domain
       window.location.href = newUrl;
