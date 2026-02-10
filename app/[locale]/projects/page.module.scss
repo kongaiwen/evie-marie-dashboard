@@ -1,0 +1,232 @@
+@use '/home/evie-marie/Projects/portfolio/styles/variables' as *;
+@use '/home/evie-marie/Projects/portfolio/styles/mixins' as *;
+
+.page {
+  @include page-bg;
+}
+
+.main {
+  @include container($max-w-6xl);
+  padding-top: $space-20;
+  padding-bottom: $space-20;
+
+  @include md {
+    padding-top: $space-24;
+    padding-bottom: $space-24;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $space-16;
+
+  @include md {
+    margin-bottom: $space-20;
+  }
+}
+
+.title {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
+  margin-bottom: $space-6;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+
+  @include md {
+    font-size: $font-size-5xl;
+  }
+
+  @include lg {
+    font-size: $font-size-6xl;
+  }
+}
+
+.description {
+  font-size: $font-size-lg;
+  color: $earth-700;
+  max-width: $max-w-2xl;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.projectsGrid {
+  display: grid;
+  gap: $space-8;
+
+  @include sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.projectCard {
+  @include card;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba($white, 0.98), rgba($rose-50, 0.2));
+  border: 1px solid rgba($plum-100, 0.3);
+  box-shadow:
+    $shadow-lg,
+    0 0 0 1px rgba($white, 0.1) inset;
+  @include transition(all, $transition-slow);
+
+  &:hover {
+    background: linear-gradient(135deg, rgba($white, 1), rgba($sage-50, 0.3));
+    box-shadow:
+      $shadow-2xl,
+      0 0 0 1px rgba($white, 0.2) inset,
+      0 0 40px rgba($sage-300, 0.4);
+    border-color: rgba($sage-300, 0.6);
+    transform: translateY(-6px);
+  }
+}
+
+.cardAccent {
+  height: 6px;
+  @include gradient-to-r($sage-500, $plum-500);
+  box-shadow: 0 2px 8px rgba($plum-300, 0.3);
+}
+
+.cardContent {
+  padding: $space-6;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $space-3;
+}
+
+.projectTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  @include transition(color);
+
+  .projectCard:hover & {
+    color: $sage-600;
+  }
+}
+
+.apiBadge {
+  font-size: $font-size-xs;
+  background: $amber-100;
+  color: $amber-700;
+  padding: $space-1 $space-2;
+  border-radius: $radius-full;
+  font-weight: $font-weight-medium;
+}
+
+.projectDescription {
+  color: $earth-700;
+  font-size: $font-size-sm;
+  margin-bottom: $space-4;
+  @include line-clamp(3);
+}
+
+.techStackList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-bottom: $space-6;
+}
+
+.techBadge {
+  font-size: $font-size-xs;
+  background: $sage-50;
+  color: $sage-700;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  border: 1px solid $sage-100;
+}
+
+.moreBadge {
+  font-size: $font-size-xs;
+  background: $earth-50;
+  color: $earth-500;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+}
+
+.domainTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-4;
+  margin-bottom: $space-4;
+}
+
+.domainTag {
+  font-size: $font-size-xs;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-weight: $font-weight-medium;
+
+  &.tagSage {
+    background: $sage-100;
+    color: $sage-700;
+  }
+
+  &.tagPlum {
+    background: $plum-100;
+    color: $plum-700;
+  }
+
+  &.tagRose {
+    background: $rose-100;
+    color: $rose-700;
+  }
+
+  &.tagEarth {
+    background: $earth-100;
+    color: $earth-700;
+  }
+}
+
+.cardFooter {
+  display: flex;
+  gap: $space-4;
+  padding-top: $space-4;
+  border-top: 1px solid $earth-50;
+}
+
+.viewProjectLink {
+  color: $sage-600;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  @include transition(color);
+
+  &:hover {
+    color: $sage-700;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.githubLink {
+  color: $earth-500;
+  font-size: $font-size-sm;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  @include transition(color);
+
+  &:hover {
+    color: $earth-700;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}

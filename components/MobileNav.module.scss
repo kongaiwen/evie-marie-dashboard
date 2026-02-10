@@ -112,6 +112,18 @@
   color: $plum-700;
 }
 
+.langToggleContainer {
+  padding: $space-4 $space-6;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid $sage-100;
+  border-bottom: 1px solid $sage-100;
+
+  .langToggle {
+    margin: 0;
+  }
+}
+
 .bookButtonContainer {
   padding: $space-4 $space-6 0 $space-6;
 }

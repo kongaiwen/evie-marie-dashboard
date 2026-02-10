@@ -1,6 +1,6 @@
 'use client';
 
-import { Domain, DomainSlug } from '@/app/domains/domainsData';
+import { Domain, DomainSlug } from '@/app/[locale]/domains/domainsData';
 import styles from './ProjectFilter.module.scss';
 
 interface ProjectFilterProps {

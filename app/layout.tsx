@@ -1,38 +1,21 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.scss";
-import styles from './layout.module.scss';
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Evie Marie Kolb | Full-Stack Software Engineer",
-  description: "Full-Stack Software Engineer specializing in React, React Native, and Node.js. Building accessible, performant applications.",
-  icons: {
-    icon: '/icon.svg',
-  },
-};
+import { routing } from './i18n/routing';
+import { notFound } from 'next/navigation';
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  // This layout is a redirect to the localized version
+  // The actual rendering happens in [locale]/layout.tsx
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${styles.body}`}
-      >
-        {children}
-      </body>
+    <html>
+      <body>{children}</body>
     </html>
   );
+}
+
+// Generate static params for all locales
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
 }

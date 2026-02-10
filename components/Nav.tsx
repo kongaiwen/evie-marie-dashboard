@@ -1,12 +1,18 @@
-import Link from "next/link"
-import MobileNav from "./MobileNav"
-import styles from './Nav.module.scss'
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { Link } from '@/app/i18n/routing';
+import MobileNav from "./MobileNav";
+import LanguageToggle from "./LanguageToggle";
+import styles from './Nav.module.scss';
 
 interface NavProps {
   active?: string
 }
 
 export default function Nav({ active }: NavProps) {
+  const t = useTranslations('nav');
+
   const linkClass = (href: string) =>
     href === active
       ? `${styles.link} ${styles.linkActive}`
@@ -20,22 +26,25 @@ export default function Nav({ active }: NavProps) {
             <div className={styles.logoIcon}>
               <span>E</span>
             </div>
-            <span className={styles.logoText}>Evie Marie Kolb</span>
+            <span className={styles.logoText}>{t('logo')}</span>
           </Link>
 
           {/* Desktop nav */}
           <div className={styles.desktopNav}>
-            <Link href="/about" className={linkClass('/about')}>About</Link>
-            <Link href="/projects" className={linkClass('/projects')}>Projects</Link>
-            <Link href="/journey" className={linkClass('/journey')}>Journey</Link>
-            <Link href="/interests" className={linkClass('/interests')}>Interests</Link>
-            <Link href="/contact" className={linkClass('/contact')}>Contact</Link>
+            <Link href="/about" className={linkClass('/about')}>{t('about')}</Link>
+            <Link href="/projects" className={linkClass('/projects')}>{t('projects')}</Link>
+            <Link href="/journey" className={linkClass('/journey')}>{t('journey')}</Link>
+            <Link href="/interests" className={linkClass('/interests')}>{t('interests')}</Link>
+            <Link href="/contact" className={linkClass('/contact')}>{t('contact')}</Link>
             <Link
               href="/contact/booking"
               className={styles.bookButton}
             >
-              Book Me
+              {t('bookMe')}
             </Link>
+
+            {/* Language toggle */}
+            <LanguageToggle className={styles.langToggle} />
           </div>
 
           {/* Mobile nav */}

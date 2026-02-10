@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Domain } from '@/app/domains/domainsData';
+import { Domain } from '@/app/[locale]/domains/domainsData';
 import styles from './DomainCard.module.scss';
 
 interface DomainCardProps {

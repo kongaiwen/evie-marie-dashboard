@@ -1,3 +1,6 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
 import styles from './Footer.module.scss'
 
 interface FooterProps {
@@ -6,6 +9,8 @@ interface FooterProps {
 }
 
 export default function Footer({ quote, attribution }: FooterProps) {
+  const t = useTranslations('footer');
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -14,7 +19,7 @@ export default function Footer({ quote, attribution }: FooterProps) {
           <p className={styles.attribution}>&mdash; {attribution}</p>
         </div>
         <div className={styles.bottomRow}>
-          <p className={styles.copyright}>&copy; 2025 Evie Marie Kolb. All rights reserved.</p>
+          <p className={styles.copyright}>{t('copyright')}</p>
           <div className={styles.socialLinks}>
             <a href="https://github.com/kongaiwen" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
               <svg fill="currentColor" viewBox="0 0 24 24">

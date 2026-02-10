@@ -1,0 +1,478 @@
+@use '/home/evie-marie/Projects/portfolio/styles/variables' as *;
+@use '/home/evie-marie/Projects/portfolio/styles/mixins' as *;
+@use '/home/evie-marie/Projects/portfolio/styles/mixins' as *;
+
+.formPage {
+  @include page-bg;
+  min-height: 100vh;
+  padding-bottom: $space-20;
+}
+
+.container {
+  @include container($max-w-2xl);
+  padding-top: $space-8;
+  padding-bottom: $space-8;
+
+  @include md {
+    padding-top: $space-12;
+    padding-bottom: $space-12;
+  }
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  color: $earth-600;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  margin-bottom: $space-8;
+  transition: color $transition-fast $ease-default;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    color: $plum-600;
+  }
+}
+
+.loadingText {
+  text-align: center;
+  color: $earth-600;
+  font-size: $font-size-lg;
+  padding: $space-20;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $space-10;
+}
+
+.title {
+  @include page-title;
+  font-size: $font-size-3xl;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
+}
+
+.subtitle {
+  @include body-text;
+  font-size: $font-size-base;
+  color: $earth-700;
+  margin-top: $space-4;
+}
+
+// Booking Summary
+.bookingSummary {
+  @include elevated-card;
+  padding: $space-6;
+  margin-bottom: $space-8;
+}
+
+.summaryTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+.summaryDetails {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3 0;
+  border-bottom: 1px solid $earth-100;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.summaryLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $earth-600;
+}
+
+.summaryValue {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $plum-700;
+  text-align: right;
+}
+
+// Form
+.form {
+  @include elevated-card;
+  padding: $space-6;
+  margin-bottom: $space-8;
+
+  @include md {
+    padding: $space-8;
+  }
+}
+
+.formGroup {
+  margin-bottom: $space-6;
+
+  &:last-of-type {
+    margin-bottom: $space-8;
+  }
+}
+
+.label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $earth-800;
+  margin-bottom: $space-2;
+}
+
+.required {
+  color: $rose-500;
+}
+
+.optional {
+  font-weight: $font-weight-normal;
+  color: $earth-500;
+  font-size: $font-size-xs;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: $space-3 $space-4;
+  background: $white;
+  border: 2px solid $earth-200;
+  border-radius: $radius-lg;
+  font-size: $font-size-base;
+  color: $earth-800;
+  font-family: $font-sans;
+  transition: all $transition-fast $ease-default;
+
+  &::placeholder {
+    color: $earth-400;
+  }
+
+  &:hover {
+    border-color: $earth-300;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $plum-400;
+    box-shadow: 0 0 0 3px rgba($plum-400, 0.1);
+  }
+
+  &:disabled {
+    background: $gray-50;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &.inputError {
+    border-color: $rose-400;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($rose-400, 0.1);
+    }
+  }
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: $leading-relaxed;
+}
+
+.characterCount {
+  text-align: right;
+  font-size: $font-size-xs;
+  color: $earth-500;
+  margin-top: $space-2;
+}
+
+.error {
+  display: block;
+  color: $rose-600;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  margin-top: $space-2;
+}
+
+.submitError {
+  padding: $space-4;
+  background: rgba($rose-100, 0.5);
+  border: 1px solid $rose-300;
+  border-radius: $radius-lg;
+  color: $rose-700;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  margin-bottom: $space-6;
+  text-align: center;
+}
+
+.submitButton {
+  @include btn-primary;
+  width: 100%;
+  padding: $space-4 $space-6;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  position: relative;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+
+    &:hover {
+      transform: none;
+      box-shadow: $shadow-md, 0 4px 12px rgba($plum-300, 0.4);
+    }
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($plum-400, 0.3), $shadow-md;
+  }
+}
+
+.privacyNote {
+  @include body-text;
+  font-size: $font-size-xs;
+  color: $earth-600;
+  text-align: center;
+  max-width: $max-w-md;
+  margin: $space-6 auto 0;
+  font-style: italic;
+}
+
+// Success State
+.successCard {
+  @include elevated-card;
+  padding: $space-10;
+  text-align: center;
+  animation: slideUp 0.5s ease-out;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto $space-6;
+  background: linear-gradient(135deg, $sage-400, $sage-500);
+  border-radius: $radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.successTitle {
+  @include page-title;
+  font-size: $font-size-3xl;
+  margin-bottom: $space-4;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
+}
+
+.successMessage {
+  @include body-text;
+  font-size: $font-size-lg;
+  color: $earth-700;
+  margin-bottom: $space-6;
+}
+
+.bookingDetails {
+  background: rgba($sage-50, 0.5);
+  border: 1px solid $sage-200;
+  border-radius: $radius-2xl;
+  padding: $space-6;
+  margin-bottom: $space-8;
+  text-align: left;
+
+  @include md {
+    padding: $space-8;
+  }
+}
+
+.bookingDetail {
+  @include body-text;
+  font-size: $font-size-base;
+  color: $earth-700;
+  margin: $space-3 0;
+
+  strong {
+    color: $plum-800;
+    display: inline-block;
+    min-width: 80px;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.calendarOptions {
+  margin-bottom: $space-8;
+}
+
+.calendarOptionsTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+.calendarButtons {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  @include md {
+    flex-direction: row;
+  }
+}
+
+.calendarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  background: $white;
+  border: 2px solid $earth-200;
+  border-radius: $radius-xl;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $earth-700;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+  text-decoration: none;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    border-color: $plum-400;
+    background: $plum-50;
+    color: $plum-700;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($plum-400, 0.3);
+  }
+}
+
+.appleHint {
+  @include body-text;
+  font-size: $font-size-xs;
+  color: $earth-600;
+  margin-top: $space-4;
+  font-style: italic;
+}
+
+.successActions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin-bottom: $space-6;
+
+  @include md {
+    flex-direction: row;
+  }
+}
+
+.backButton,
+.homeButton {
+  flex: 1;
+  padding: $space-4 $space-6;
+  border-radius: $radius-xl;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  text-align: center;
+  text-decoration: none;
+  transition: all $transition-default $ease-default;
+}
+
+.backButton {
+  background: linear-gradient(135deg, $sage-500, $plum-500);
+  color: $white;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg, 0 8px 24px rgba($plum-400, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($plum-400, 0.3), $shadow-md;
+  }
+}
+
+.homeButton {
+  background: $white;
+  border: 2px solid $earth-200;
+  color: $earth-700;
+
+  &:hover {
+    border-color: $sage-400;
+    background: $sage-50;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($plum-400, 0.3);
+  }
+}
+
+.confirmationEmail {
+  @include body-text;
+  font-size: $font-size-sm;
+  color: $earth-600;
+  padding-top: $space-4;
+  border-top: 1px solid $earth-200;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

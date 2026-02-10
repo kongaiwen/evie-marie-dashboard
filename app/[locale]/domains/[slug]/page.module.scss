@@ -1,0 +1,528 @@
+@use '/home/evie-marie/Projects/portfolio/styles/variables' as *;
+@use '/home/evie-marie/Projects/portfolio/styles/mixins' as *;
+@use '/home/evie-marie/Projects/portfolio/styles/mixins' as *;
+
+.page {
+  @include page-bg;
+}
+
+.main {
+  padding-bottom: $space-24;
+}
+
+// ============================================================================
+// Hero Section
+// ============================================================================
+
+.heroSection {
+  min-height: 500px;
+  @include flex-center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  @include image-overlay($plum-900, 0.7);
+  @include flex-center;
+}
+
+.heroContent {
+  @include container($max-w-4xl);
+  text-align: center;
+  padding: $space-20 $space-6;
+  color: $white;
+}
+
+.heroHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-6;
+}
+
+.heroTitle {
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-bold;
+  color: $white;
+  margin: 0;
+
+  @include md {
+    font-size: $font-size-5xl;
+  }
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  background: rgba($white, 0.2);
+  border: 1px solid rgba($white, 0.3);
+  border-radius: $radius-full;
+  padding: $space-2 $space-4;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  background: $white;
+  border-radius: $radius-full;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.statusText {
+  color: $white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+}
+
+.heroTagline {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $space-4;
+  color: rgba($white, 0.95);
+
+  @include md {
+    font-size: $font-size-3xl;
+  }
+}
+
+.heroMission {
+  font-size: $font-size-lg;
+  line-height: $leading-relaxed;
+  color: rgba($white, 0.9);
+  max-width: $max-w-2xl;
+  margin: 0 auto;
+}
+
+// ============================================================================
+// Section Styles
+// ============================================================================
+
+.section {
+  margin-top: $space-24;
+}
+
+.container {
+  @include container($max-w-6xl);
+}
+
+.sectionHeading {
+  @include section-heading;
+  margin-bottom: $space-12;
+}
+
+// ============================================================================
+// Expertise Grid
+// ============================================================================
+
+.expertiseGrid {
+  display: grid;
+  gap: $space-6;
+
+  @include sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.expertiseCard {
+  @include card;
+  padding: $space-6;
+  display: flex;
+  align-items: flex-start;
+  gap: $space-4;
+}
+
+.expertiseIcon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-lg;
+  @include gradient-to-br($sage-400, $plum-500);
+  @include flex-center;
+}
+
+.expertiseIconCircle {
+  width: 20px;
+  height: 20px;
+  background: $white;
+  border-radius: $radius-full;
+  opacity: 0.9;
+}
+
+.expertiseText {
+  color: $earth-700;
+  line-height: $leading-relaxed;
+  margin: 0;
+  font-size: $font-size-base;
+}
+
+// ============================================================================
+// Experience Timeline
+// ============================================================================
+
+.experienceTimeline {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.experienceCard {
+  @include card;
+  padding: $space-8;
+}
+
+.experienceHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-4;
+}
+
+.experienceCompany {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-900;
+  margin: 0;
+}
+
+.experienceRole {
+  color: $earth-600;
+  font-size: $font-size-base;
+}
+
+.experienceYear {
+  color: $earth-500;
+  font-size: $font-size-sm;
+  padding: $space-1 $space-3;
+  background: $sage-50;
+  border-radius: $radius-full;
+}
+
+.experienceDescription {
+  color: $earth-700;
+  line-height: $leading-relaxed;
+  margin-bottom: $space-4;
+}
+
+.experienceHighlight {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-2;
+  padding: $space-4;
+  background: $sage-50;
+  border-left: 3px solid $plum-500;
+  border-radius: $radius-md;
+  color: $earth-700;
+  font-size: $font-size-sm;
+  line-height: $leading-relaxed;
+}
+
+.highlightIcon {
+  flex-shrink: 0;
+}
+
+// ============================================================================
+// Journey Section
+// ============================================================================
+
+.journeySection {
+  min-height: 400px;
+  margin-top: $space-24;
+}
+
+.journeyOverlay {
+  position: absolute;
+  inset: 0;
+  @include image-overlay($plum-900, 0.75);
+  @include flex-center;
+}
+
+.journeyContent {
+  @include container($max-w-3xl);
+  padding: $space-20 $space-6;
+  color: $white;
+}
+
+.journeyTitle {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $white;
+  text-align: center;
+  margin-bottom: $space-10;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
+}
+
+.journeyParagraph {
+  font-size: $font-size-lg;
+  line-height: $leading-relaxed;
+  color: rgba($white, 0.95);
+  margin-bottom: $space-6;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ============================================================================
+// Projects Grid
+// ============================================================================
+
+.projectsGrid {
+  display: grid;
+  gap: $space-6;
+
+  @include sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.projectCard {
+  @include card;
+  padding: $space-6;
+  text-decoration: none;
+  display: block;
+  @include transition;
+
+  &:hover {
+    box-shadow: $shadow-xl;
+    border-color: $plum-200;
+    transform: translateY(-2px);
+  }
+}
+
+.projectName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-900;
+  margin-bottom: $space-3;
+}
+
+.projectDescription {
+  color: $earth-700;
+  line-height: $leading-relaxed;
+  margin-bottom: $space-4;
+  font-size: $font-size-base;
+}
+
+.projectHighlight {
+  background: $sage-50;
+  padding: $space-3;
+  border-radius: $radius-md;
+  color: $earth-700;
+  font-size: $font-size-sm;
+  line-height: $leading-relaxed;
+  margin-bottom: $space-4;
+  border-left: 3px solid $sage-500;
+}
+
+.projectTech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.techTag {
+  font-size: $font-size-xs;
+  padding: $space-1 $space-3;
+  background: $plum-50;
+  color: $plum-700;
+  border-radius: $radius-full;
+  font-weight: $font-weight-medium;
+}
+
+// ============================================================================
+// Certifications Grid
+// ============================================================================
+
+.certificationsGrid {
+  display: grid;
+  gap: $space-6;
+
+  @include sm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.certificationCard {
+  @include card;
+  padding: $space-6;
+}
+
+.certificationName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-900;
+  margin-bottom: $space-2;
+}
+
+.certificationIssuer {
+  color: $earth-600;
+  font-size: $font-size-base;
+  margin-bottom: $space-3;
+}
+
+.certificationStatus {
+  display: inline-block;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  margin-bottom: $space-2;
+
+  &.completed {
+    background: $sage-100;
+    color: $sage-700;
+  }
+
+  &.in-progress {
+    background: $amber-100;
+    color: $amber-800;
+  }
+
+  &.planned {
+    background: $blue-100;
+    color: $blue-700;
+  }
+}
+
+.certificationYear {
+  color: $earth-500;
+  font-size: $font-size-sm;
+}
+
+// ============================================================================
+// Resources List
+// ============================================================================
+
+.resourcesList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.resourceCard {
+  @include card;
+  padding: $space-6;
+}
+
+.resourceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-3;
+}
+
+.resourceType {
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+
+  &.blog {
+    background: $sage-100;
+    color: $sage-700;
+  }
+
+  &.project {
+    background: $plum-100;
+    color: $plum-700;
+  }
+
+  &.course {
+    background: $blue-100;
+    color: $blue-700;
+  }
+
+  &.talk {
+    background: $rose-100;
+    color: $rose-700;
+  }
+}
+
+.resourceDate {
+  color: $earth-500;
+  font-size: $font-size-sm;
+}
+
+.resourceTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $plum-900;
+  margin-bottom: $space-2;
+}
+
+.resourceDescription {
+  color: $earth-700;
+  line-height: $leading-relaxed;
+  font-size: $font-size-base;
+}
+
+// ============================================================================
+// CTA Section
+// ============================================================================
+
+.ctaSection {
+  margin-top: $space-24;
+  text-align: center;
+}
+
+.ctaHeading {
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $plum-900;
+  margin-bottom: $space-4;
+
+  @include md {
+    font-size: $font-size-4xl;
+  }
+}
+
+.ctaDescription {
+  font-size: $font-size-lg;
+  color: $earth-700;
+  line-height: $leading-relaxed;
+  max-width: $max-w-2xl;
+  margin: 0 auto $space-8;
+}
+
+.ctaButton {
+  @include gradient-to-r($sage-500, $plum-500);
+  padding: $space-4 $space-8;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg, 0 4px 12px rgba($plum-200, 1);
+  @include transition;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover {
+    box-shadow: $shadow-xl, 0 8px 16px rgba($sage-300, 1);
+    transform: translateY(-2px);
+  }
+}
