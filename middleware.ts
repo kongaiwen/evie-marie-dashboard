@@ -14,6 +14,12 @@ export default auth((req) => {
     locale = 'en'
   }
 
+  // Check for authentication on /private routes
+  if (pathname.includes('/private') && !isAuthenticated) {
+    const signInUrl = new URL('/auth/signin', req.url)
+    return NextResponse.redirect(signInUrl)
+  }
+
   // Check if pathname already has a locale prefix
   const hasLocalePrefix = pathname.startsWith('/en/') ||
                           pathname.startsWith('/zh/') ||
@@ -23,22 +29,16 @@ export default auth((req) => {
   // If no locale in pathname, rewrite to add it internally
   if (!hasLocalePrefix) {
     const url = req.nextUrl.clone()
-    url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`
+
+    // Build the new pathname with locale
     if (pathname === '/') {
       url.pathname = `/${locale}`
+    } else {
+      url.pathname = `/${locale}${pathname}`
     }
 
-    // Add locale header for next-intl
-    const response = NextResponse.rewrite(url)
-    response.headers.set('x-next-intl-locale', locale)
-
-    // Check for authentication on /private routes
-    if (pathname.includes('/private') && !isAuthenticated) {
-      const signInUrl = new URL('/auth/signin', req.url)
-      return NextResponse.redirect(signInUrl)
-    }
-
-    return response
+    // Rewrite to the locale-prefixed path
+    return NextResponse.rewrite(url)
   }
 
   // If locale prefix exists in URL, just pass through
