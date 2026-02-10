@@ -23,9 +23,17 @@ export default function LanguageToggle({ className = '' }: LanguageToggleProps) 
       const alternateDomain = getDomainForLocale(alternateLocale);
 
       // Build the new URL with the alternate domain
-      // We need to replace the locale in the pathname
-      const newPathname = pathname.replace(`/${locale}`, '') || '/';
-      const newUrl = `https://${alternateDomain}${newPathname}`;
+      // Strip any locale prefix from pathname (e.g., /zh/about -> /about)
+      let cleanPathname = pathname;
+      if (pathname.startsWith('/zh/')) {
+        cleanPathname = pathname.replace('/zh', '');
+      } else if (pathname.startsWith('/en/')) {
+        cleanPathname = pathname.replace('/en', '');
+      }
+      // Ensure we have at least a '/'
+      cleanPathname = cleanPathname || '/';
+
+      const newUrl = `https://${alternateDomain}${cleanPathname}`;
 
       // Navigate to the new domain
       window.location.href = newUrl;
@@ -43,31 +51,11 @@ export default function LanguageToggle({ className = '' }: LanguageToggleProps) 
       disabled={isPending}
       className={`${styles.toggle} ${className} ${isPending ? styles.pending : ''}`}
       aria-label={`Switch to ${localeNames[alternateLocale].english}`}
+      title={`Switch to ${localeNames[alternateLocale].english}`}
     >
-      <div className={styles.toggleTrack}>
-        {/* Left side - Current locale */}
-        <div className={`${styles.side} ${styles.current}`}>
-          <span className={styles.flag}>{currentFlag}</span>
-          <span className={styles.label}>{currentName}</span>
-        </div>
-
-        {/* Animated slider */}
-        <div className={styles.slider}>
-          <span className={styles.sliderFlag}>{altFlag}</span>
-        </div>
-
-        {/* Right side - Alternate locale (hint) */}
-        <div className={`${styles.side} ${styles.alternate}`}>
-          <span className={styles.flag}>{altFlag}</span>
-          <span className={styles.label}>{altName}</span>
-        </div>
-      </div>
-
-      {/* Decorative elements */}
-      <svg className={styles.decorations} viewBox="0 0 100 100" preserveAspectRatio="none">
-        <circle cx="10" cy="50" r="3" className={styles.dot1} />
-        <circle cx="90" cy="50" r="3" className={styles.dot2} />
-      </svg>
+      <span className={styles.currentFlag}>{currentFlag}</span>
+      <span className={styles.divider}>/</span>
+      <span className={styles.altFlag}>{altFlag}</span>
     </button>
   );
 }

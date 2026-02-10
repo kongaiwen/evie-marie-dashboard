@@ -1,207 +1,86 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
 .toggle {
-  position: relative;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background: rgba($parchment, 0.6);
+  border: 1px solid rgba($plum-200, 0.4);
+  border-radius: $radius-full;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  min-width: 120px;
-  height: 44px;
+  @include transition(all, $transition-default);
+  box-shadow: $shadow-sm;
+  font-size: $font-size-base;
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.3),
-      0 0 40px rgba(100, 150, 255, 0.1);
+    background: rgba($parchment, 0.9);
+    border-color: rgba($plum-300, 0.6);
+    box-shadow: $shadow-md, 0 4px 12px rgba($plum-300, 0.2);
+    transform: translateY(-1px);
   }
 
   &:active {
     transform: translateY(0);
+    box-shadow: $shadow-sm;
   }
 
   &.pending {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: wait;
+    pointer-events: none;
   }
 }
 
-.toggleTrack {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 50px;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.side {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 2;
-
-  &.current {
-    .flag {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .label {
-      opacity: 1;
-    }
-  }
-
-  &.alternate {
-    .flag {
-      opacity: 0.4;
-      transform: scale(0.85);
-    }
-
-    .label {
-      opacity: 0;
-      width: 0;
-      overflow: hidden;
-    }
-  }
-}
-
-.toggle:hover {
-  .side.alternate {
-    .flag {
-      opacity: 0.7;
-      transform: scale(1);
-    }
-
-    .label {
-      opacity: 0.7;
-      width: auto;
-    }
-  }
-
-  .side.current {
-    .flag {
-      opacity: 0.5;
-    }
-  }
-}
-
-.flag {
-  font-size: 18px;
+.currentFlag {
+  font-size: 1.125rem;
   line-height: 1;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  @include transition(transform);
+  filter: drop-shadow(0 1px 2px rgba($plum-900, 0.1));
 }
 
-.label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  white-space: nowrap;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+.divider {
+  color: $plum-400;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  opacity: 0.5;
 }
 
-.slider {
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  bottom: 4px;
-  width: calc(50% - 4px);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 3;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
-    border-radius: 50px;
-  }
-
-  &:hover {
-    width: calc(100% - 8px);
-    left: 4px;
-  }
+.altFlag {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.5;
+  @include transition(all);
+  filter: grayscale(0.3);
 }
 
-.sliderFlag {
-  font-size: 20px;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-  animation: pulse 2s ease-in-out infinite;
+.toggle:hover .currentFlag {
+  transform: scale(0.95);
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+.toggle:hover .altFlag {
+  opacity: 0.8;
+  filter: grayscale(0);
+  transform: scale(1.05);
 }
 
-.decorations {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.dot1,
-.dot2 {
-  fill: rgba(255, 255, 255, 0.15);
-  animation: twinkle 3s ease-in-out infinite;
-}
-
-.dot1 {
-  animation-delay: 0s;
-}
-
-.dot2 {
-  animation-delay: 1.5s;
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-// Responsive adjustments
+// Mobile adjustments
 @media (max-width: 768px) {
   .toggle {
-    min-width: 100px;
-    height: 40px;
+    padding: $space-1-5 $space-3;
+    gap: $space-1-5;
   }
 
-  .flag {
-    font-size: 16px;
+  .currentFlag {
+    font-size: 1rem;
   }
 
-  .label {
-    font-size: 13px;
+  .altFlag {
+    font-size: 0.875rem;
   }
 
-  .sliderFlag {
-    font-size: 18px;
-  }
-
-  .toggle:hover .side.alternate .label {
-    opacity: 0;
-    width: 0;
+  .divider {
+    font-size: 0.75rem;
   }
 }
