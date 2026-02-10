@@ -15,20 +15,24 @@ export const routing = defineRouting({
   domains: [
     {
       domain: 'eviemariekolb.com',
-      defaultLocale: 'en'
+      defaultLocale: 'en',
+      locales: ['en']
     },
     {
       domain: 'kongaiwen.dev',
-      defaultLocale: 'zh'
+      defaultLocale: 'zh',
+      locales: ['zh']
     },
     // Localhost support for development
     {
       domain: 'localhost:3000',
-      defaultLocale: 'en'
+      defaultLocale: 'en',
+      locales: ['en']
     },
     {
       domain: 'localhost:3002',
-      defaultLocale: 'zh'
+      defaultLocale: 'zh',
+      locales: ['zh']
     }
   ]
 });
