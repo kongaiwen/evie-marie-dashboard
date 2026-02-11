@@ -37,7 +37,7 @@ export async function generateMetadata({
     title: t('title'),
     description: t('description'),
     icons: {
-      icon: '/icon.svg',
+      icon: locale === 'zh' ? '/icon-zh.svg' : '/icon.svg',
     },
     alternates: {
       canonical: `https://${locale === 'en' ? 'eviemariekolb.com' : 'kongaiwen.dev'}`,

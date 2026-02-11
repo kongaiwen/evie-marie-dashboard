@@ -319,13 +319,11 @@ export default function InterestsPage() {
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
               </svg>
-              <span>Arts & Culture</span>
+              <span>{t('artsCulture')}</span>
             </div>
-            <h2 className={styles.sectionTitle}>Creative Pursuits</h2>
+            <h2 className={styles.sectionTitle}>{t('creativePursuits')}</h2>
             <p className={styles.narrativeText}>
-              My creative interests span from traditional Chinese calligraphy to woodworking and art.
-              I also stay active with soccer and other sports, believing that physical activity and
-              creative expression are both essential to a balanced life.
+              {t('creativeText')}
             </p>
           </div>
 
@@ -340,7 +338,7 @@ export default function InterestsPage() {
                 style={{ width: '100%', height: 'auto', borderRadius: '8px', objectFit: 'cover' }}
               />
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
-                Wood carving
+                {t('woodCarving')}
               </p>
             </div>
             <div>
@@ -359,7 +357,7 @@ export default function InterestsPage() {
                 <source src="/videos/calligraphy.mp4" type="video/mp4" />
               </video>
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
-                Chinese calligraphy
+                {t('chineseCalligraphy')}
               </p>
             </div>
             <div>
@@ -371,7 +369,7 @@ export default function InterestsPage() {
                 style={{ width: '100%', height: 'auto', borderRadius: '8px', objectFit: 'cover' }}
               />
               <p style={{ marginTop: '0.5rem', textAlign: 'center', fontSize: '0.9rem', opacity: 0.8 }}>
-                Soccer
+                {t('soccer')}
               </p>
             </div>
           </div>
@@ -395,24 +393,20 @@ export default function InterestsPage() {
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
-                <span>Food & Earth</span>
+                <span>{t('foodEarth')}</span>
               </div>
-              <h2 className={styles.sectionTitle}>From Soil to Table</h2>
+              <h2 className={styles.sectionTitle}>{t('soilToTable')}</h2>
               <p className={styles.narrativeText}>
-                I grow food, forage wild plants, ferment vegetables, and cook from scratch, often
-                inspired by the flavors I fell in love with in East Asia. There&apos;s something
-                deeply satisfying about the full cycle: planting seeds, pulling weeds, harvesting
-                dandelions, making kimchi, and cooking a meal that connects me to the earth and to
-                the cultures that shaped my palate.
+                {t('foodText')}
               </p>
             </div>
             <div>
               <ImageGallery
                 images={[
-                  { src: "/images/hobbies/garden-raised-beds.jpg", alt: "Raised bed vegetable garden", caption: "The garden" },
-                  { src: "/images/hobbies/garden-roses.jpg", alt: "Rose garden", caption: "Roses in bloom" },
-                  { src: "/images/hobbies/fermentation.jpg", alt: "Red cabbage fermentation", caption: "Red cabbage kraut" },
-                  { src: "/images/hobbies/chinese-food.jpg", alt: "Chinese dishes", caption: "Homestyle Chinese cooking" },
+                  { src: "/images/hobbies/garden-raised-beds.jpg", alt: "Raised bed vegetable garden", caption: t('theGarden') },
+                  { src: "/images/hobbies/garden-roses.jpg", alt: "Rose garden", caption: t('rosesBloom') },
+                  { src: "/images/hobbies/fermentation.jpg", alt: "Red cabbage fermentation", caption: t('redCabbageKraut') },
+                  { src: "/images/hobbies/chinese-food.jpg", alt: "Chinese dishes", caption: t('homestyleChinese') },
                 ]}
                 columns={2}
                 aspectRatio="square"

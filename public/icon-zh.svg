@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red stamp background with slightly rough edges -->
+  <defs>
+    <filter id="roughEdge">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+
+  <!-- Main stamp background -->
+  <rect x="2" y="2" width="60" height="60" fill="#c4503d" rx="2" filter="url(#roughEdge)"/>
+
+  <!-- Border frame -->
+  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.9"/>
+
+  <!-- 孔 (Kong) - Large on left side -->
+  <text x="18" y="42" font-family="serif" font-size="32" font-weight="bold" fill="#ffffff" text-anchor="middle" style="font-family: 'Noto Serif SC', serif;">孔</text>
+
+  <!-- 爱 (Ai) - Top right, vertical -->
+  <text x="45" y="26" font-family="serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle" style="font-family: 'Noto Serif SC', serif;">爱</text>
+
+  <!-- 文 (Wen) - Bottom right, vertical -->
+  <text x="45" y="46" font-family="serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle" style="font-family: 'Noto Serif SC', serif;">文</text>
+</svg>
