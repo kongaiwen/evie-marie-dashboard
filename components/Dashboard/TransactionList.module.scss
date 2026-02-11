@@ -1,0 +1,111 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $space-6;
+  box-shadow: $shadow-md;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+.empty {
+  text-align: center;
+  color: $gray-500;
+  padding: $space-8;
+}
+
+.table {
+  overflow-x: auto;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 100px 1fr 150px 100px 200px;
+  gap: $space-3;
+  padding: $space-3;
+  background: $gray-50;
+  border-radius: $radius-md;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  margin-bottom: $space-2;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 100px 1fr 150px 100px 200px;
+  gap: $space-3;
+  padding: $space-3;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  transition: background $transition-default $ease-default;
+
+  &:hover {
+    background: $gray-50;
+  }
+}
+
+.col {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-1;
+  align-items: center;
+}
+
+.tag {
+  padding: $space-1 $space-2;
+  background: $sage-100;
+  color: $sage-800;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+}
+
+.tagInput {
+  padding: $space-1 $space-2;
+  border: 1px solid $sage-300;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  width: 80px;
+
+  &:focus {
+    outline: none;
+    border-color: $sage-500;
+  }
+}
+
+.addTagButton {
+  padding: $space-1 $space-2;
+  background: $gray-200;
+  color: $gray-600;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $sage-200;
+    color: $sage-700;
+  }
+}

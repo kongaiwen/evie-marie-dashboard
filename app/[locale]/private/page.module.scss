@@ -4,66 +4,133 @@
 .page {
   min-height: 100vh;
   background: $gray-50;
-  padding: $space-8;
+  padding: $space-8 $space-4;
+
+  @media (min-width: $bp-md) {
+    padding: $space-12 $space-8;
+  }
 }
 
 .container {
-  @include container($max-w-4xl);
+  max-width: $max-w-7xl;
+  margin: 0 auto;
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: $space-8;
-  @include flex-between;
+  flex-wrap: wrap;
+  gap: $space-4;
 }
 
 .title {
   font-size: $font-size-3xl;
   font-weight: $font-weight-bold;
+  color: $plum-800;
+
+  @media (min-width: $bp-md) {
+    font-size: $font-size-4xl;
+  }
+}
+
+.subtitle {
+  color: $gray-600;
+  margin-top: $space-1;
+  font-size: $font-size-base;
+}
+
+.headerActions {
+  display: flex;
+  gap: $space-3;
+  align-items: center;
+}
+
+.refreshButton {
+  padding: $space-2 $space-4;
+  border-radius: $radius-md;
+  background: $sage-500;
+  color: $white;
+  font-weight: $font-weight-medium;
+  transition: background $transition-default $ease-default;
+
+  &:hover:not(:disabled) {
+    background: $sage-600;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .signOutButton {
+  padding: $space-2 $space-4;
   border-radius: $radius-md;
   background: $red-600;
-  padding: $space-2 $space-4;
   color: $white;
-  @include transition;
+  font-weight: $font-weight-medium;
+  transition: background $transition-default $ease-default;
 
   &:hover {
     background: $red-700;
   }
 }
 
+.budgetSelector {
+  margin-bottom: $space-6;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+
+  label {
+    font-weight: $font-weight-medium;
+    color: $gray-700;
+  }
+
+  select {
+    padding: $space-2 $space-4;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    background: $white;
+    font-size: $font-size-base;
+
+    &:focus {
+      outline: none;
+      border-color: $sage-500;
+    }
+  }
+}
+
 .content {
-  border-radius: $radius-lg;
-  background: $white;
-  padding: $space-6;
-  box-shadow: $shadow-md;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: 320px 1fr;
+  }
 }
 
-.contentTitle {
-  margin-bottom: $space-4;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
 }
 
-.email {
-  color: $gray-600;
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
 }
 
-.emailLabel {
-  font-weight: $font-weight-medium;
-}
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-6;
 
-.tools {
-  margin-top: $space-8;
-}
-
-.toolsTitle {
-  margin-bottom: $space-2;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-}
-
-.toolsDescription {
-  color: $gray-600;
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

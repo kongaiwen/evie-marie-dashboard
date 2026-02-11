@@ -1,0 +1,114 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $space-6;
+  box-shadow: $shadow-md;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+.section {
+  margin-bottom: $space-6;
+}
+
+.label {
+  display: block;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+  margin-bottom: $space-2;
+  font-size: $font-size-sm;
+}
+
+.presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-2;
+  margin-bottom: $space-3;
+
+  button {
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    background: $sage-50;
+    color: $sage-700;
+    font-size: $font-size-sm;
+    transition: background $transition-default $ease-default;
+
+    &:hover {
+      background: $sage-100;
+    }
+  }
+}
+
+.dateInputs {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  input {
+    flex: 1;
+    padding: $space-2;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+
+    &:focus {
+      outline: none;
+      border-color: $sage-500;
+    }
+  }
+
+  span {
+    color: $gray-500;
+    font-size: $font-size-sm;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+}
+
+.chip {
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+  border: 1px solid $gray-300;
+  background: $white;
+  color: $gray-700;
+  font-size: $font-size-sm;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    border-color: $sage-400;
+    background: $sage-50;
+  }
+}
+
+.chipActive {
+  border-color: $sage-500;
+  background: $sage-100;
+  color: $sage-800;
+  font-weight: $font-weight-medium;
+}
+
+.clearButton {
+  width: 100%;
+  padding: $space-3;
+  border-radius: $radius-md;
+  background: $rose-100;
+  color: $rose-700;
+  font-weight: $font-weight-medium;
+  transition: background $transition-default $ease-default;
+
+  &:hover {
+    background: $rose-200;
+  }
+}

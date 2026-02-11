@@ -1,0 +1,23 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.container {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $space-6;
+  box-shadow: $shadow-md;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-4;
+}
+
+.empty {
+  @include flex-center;
+  height: 300px;
+  color: $gray-500;
+  font-size: $font-size-base;
+}

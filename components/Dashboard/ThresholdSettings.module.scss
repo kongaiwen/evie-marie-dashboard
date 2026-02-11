@@ -1,0 +1,113 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $space-6;
+  box-shadow: $shadow-md;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $plum-800;
+  margin-bottom: $space-1;
+}
+
+.subtitle {
+  font-size: $font-size-sm;
+  color: $gray-600;
+  margin-bottom: $space-4;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin-bottom: $space-4;
+}
+
+.select,
+.input {
+  padding: $space-2;
+  border: 1px solid $gray-300;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+    border-color: $sage-500;
+  }
+}
+
+.addButton {
+  padding: $space-2 $space-4;
+  background: $sage-500;
+  color: $white;
+  border-radius: $radius-md;
+  font-weight: $font-weight-medium;
+  transition: background $transition-default $ease-default;
+
+  &:hover:not(:disabled) {
+    background: $sage-600;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3;
+  background: $gray-50;
+  border-radius: $radius-md;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+}
+
+.itemCategory {
+  font-weight: $font-weight-medium;
+  color: $gray-800;
+  font-size: $font-size-sm;
+}
+
+.itemLimit {
+  font-size: $font-size-sm;
+  color: $gray-600;
+}
+
+.removeButton {
+  padding: $space-1 $space-3;
+  background: $rose-100;
+  color: $rose-700;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  transition: background $transition-default $ease-default;
+
+  &:hover {
+    background: $rose-200;
+  }
+}
+
+.empty {
+  text-align: center;
+  color: $gray-500;
+  font-size: $font-size-sm;
+  padding: $space-4;
+}
