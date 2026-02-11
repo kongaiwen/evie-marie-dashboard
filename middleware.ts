@@ -7,12 +7,7 @@ export default auth((req) => {
   const isAuthenticated = !!req.auth
 
   // Detect locale based on hostname
-  let locale = 'en' // default
-  if (hostname.includes('kongaiwen.dev')) {
-    locale = 'zh'
-  } else if (hostname.includes('eviemariekolb.com') || hostname.includes('localhost')) {
-    locale = 'en'
-  }
+  const locale = hostname.includes('kongaiwen.dev') ? 'zh' : 'en';
 
   // Check for authentication on /private routes
   if (pathname.includes('/private') && !isAuthenticated) {
@@ -21,13 +16,13 @@ export default auth((req) => {
   }
 
   // Check if pathname already has a locale prefix
-  const hasLocalePrefix = pathname.startsWith('/en/') ||
-                          pathname.startsWith('/zh/') ||
-                          pathname === '/en' ||
-                          pathname === '/zh'
+  const pathnameHasLocale = pathname.startsWith('/en/') ||
+                            pathname.startsWith('/zh/') ||
+                            pathname === '/en' ||
+                            pathname === '/zh'
 
-  // If no locale in pathname, rewrite to add it internally
-  if (!hasLocalePrefix) {
+  // If no locale in pathname, redirect to add it
+  if (!pathnameHasLocale) {
     const url = req.nextUrl.clone()
 
     // Build the new pathname with locale
@@ -37,8 +32,8 @@ export default auth((req) => {
       url.pathname = `/${locale}${pathname}`
     }
 
-    // Rewrite to the locale-prefixed path
-    return NextResponse.rewrite(url)
+    // Redirect to the locale-prefixed path
+    return NextResponse.redirect(url)
   }
 
   // If locale prefix exists in URL, just pass through
