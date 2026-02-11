@@ -54,7 +54,7 @@ export default function SpendingOverTime({ data }: Props) {
             style={{ fontSize: '12px' }}
           />
           <Tooltip
-            formatter={(value: number) => formatCurrency(value)}
+            formatter={(value: number | undefined) => formatCurrency(value ?? 0)}
             labelFormatter={(date) =>
               format(new Date(date), 'MMMM d, yyyy')
             }

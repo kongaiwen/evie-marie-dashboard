@@ -60,7 +60,7 @@ export default function BudgetVsActual({ categories }: Props) {
             stroke="#6b7280"
             style={{ fontSize: '12px' }}
           />
-          <Tooltip formatter={(value: number) => formatCurrency(value)} />
+          <Tooltip formatter={(value: number | undefined) => formatCurrency(value ?? 0)} />
           <Legend />
           <Bar dataKey="budgeted" fill="#7c9a72" name="Budgeted" />
           <Bar dataKey="actual" fill="#c9707d" name="Actual" />

@@ -61,7 +61,7 @@ export default function CategoryBreakdown({ data }: Props) {
               />
             ))}
           </Pie>
-          <Tooltip formatter={(value: number) => formatCurrency(value)} />
+          <Tooltip formatter={(value: number | undefined) => formatCurrency(value ?? 0)} />
           <Legend />
         </PieChart>
       </ResponsiveContainer>

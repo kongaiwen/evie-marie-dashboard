@@ -51,7 +51,7 @@ export default function CategoryComparison({ data }: Props) {
             stroke="#6b7280"
             style={{ fontSize: '12px' }}
           />
-          <Tooltip formatter={(value: number) => formatCurrency(value)} />
+          <Tooltip formatter={(value: number | undefined) => formatCurrency(value ?? 0)} />
           <Bar dataKey="total" fill="#7c9a72" />
         </BarChart>
       </ResponsiveContainer>
