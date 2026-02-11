@@ -1,19 +1,12 @@
 import { auth } from "@/auth"
-import { NextResponse } from "next/server"
+import { NextResponse, type NextRequest } from "next/server"
 
-// Custom middleware that combines auth and domain-based locale detection
-export default auth((req) => {
+// Main middleware function
+function mainMiddleware(req: NextRequest) {
   const { pathname, hostname } = req.nextUrl
-  const isAuthenticated = !!req.auth
 
   // Detect locale based on hostname
   const locale = hostname.includes('kongaiwen.dev') ? 'zh' : 'en';
-
-  // Check for authentication on /private routes
-  if (pathname.includes('/private') && !isAuthenticated) {
-    const signInUrl = new URL('/auth/signin', req.url)
-    return NextResponse.redirect(signInUrl)
-  }
 
   // Check if pathname already has a locale prefix
   const pathnameHasLocale = pathname.startsWith('/en/') ||
@@ -32,13 +25,28 @@ export default auth((req) => {
       url.pathname = `/${locale}${pathname}`
     }
 
-    // Redirect to the locale-prefixed path
+    // Redirect to the locale-prefixed path on the SAME domain
     return NextResponse.redirect(url)
   }
 
   // If locale prefix exists in URL, just pass through
   return NextResponse.next()
-})
+}
+
+// Export wrapped with auth for protected routes
+export default auth((req) => {
+  const { pathname } = req.nextUrl
+  const isAuthenticated = !!req.auth
+
+  // Check for authentication on /private routes
+  if (pathname.includes('/private') && !isAuthenticated) {
+    const signInUrl = new URL('/auth/signin', req.url)
+    return NextResponse.redirect(signInUrl)
+  }
+
+  // Pass to main middleware
+  return mainMiddleware(req as NextRequest)
+}) as any
 
 export const config = {
   matcher: [
