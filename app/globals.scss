@@ -127,3 +127,12 @@
 .bg-multi-gradient {
   background: linear-gradient(135deg, $sage-50 0%, $plum-50 50%, $rose-50 100%);
 }
+
+// Chinese font support
+.font-chinese {
+  font-family: var(--font-noto-sans-sc), var(--font-geist-sans), sans-serif;
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-noto-sans-sc), var(--font-geist-sans), sans-serif;
+  }
+}

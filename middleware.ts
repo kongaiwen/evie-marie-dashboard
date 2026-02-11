@@ -14,7 +14,7 @@ function mainMiddleware(req: NextRequest) {
                             pathname === '/en' ||
                             pathname === '/zh'
 
-  // If no locale in pathname, redirect to add it
+  // If no locale in pathname, rewrite to add it internally (not redirect!)
   if (!pathnameHasLocale) {
     const url = req.nextUrl.clone()
 
@@ -25,8 +25,8 @@ function mainMiddleware(req: NextRequest) {
       url.pathname = `/${locale}${pathname}`
     }
 
-    // Redirect to the locale-prefixed path on the SAME domain
-    return NextResponse.redirect(url)
+    // Rewrite to the locale-prefixed path (user doesn't see it)
+    return NextResponse.rewrite(url)
   }
 
   // If locale prefix exists in URL, just pass through
