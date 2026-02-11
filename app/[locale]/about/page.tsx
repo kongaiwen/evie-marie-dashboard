@@ -114,17 +114,6 @@ export default function AboutPage() {
                   </svg>
                 </Link>
               </div>
-
-              {/* Workspace Moment */}
-              <div className={styles.videoWrapper}>
-                <Image
-                  src="/images/portraits/workspace-mirror-selfie.jpg"
-                  alt="Workspace mirror selfie"
-                  width={400}
-                  height={533}
-                  className={styles.video}
-                />
-              </div>
             </div>
           </div>
         </div>

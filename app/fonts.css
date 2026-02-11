@@ -63,57 +63,51 @@
 
 /* Apply fonts for Chinese locale */
 .font-chinese {
-  /* Body text - warm and readable with lighter weight - USE FOR ALL TEXT */
-  font-family: 'LXGW WenKai TC', Georgia, serif;
-  font-weight: 300;
+  /* All text uses Noto Sans SC - professional and modern */
+  font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
+  font-weight: 400;
   line-height: 1.8;
   letter-spacing: 0.02em;
 
-  /* Navigation & UI elements - use body font, LARGER on Chinese site */
+  /* Navigation & UI elements - LARGER on Chinese site */
   nav, button, .nav-link, .button {
-    font-family: 'LXGW WenKai TC', Georgia, serif;
+    font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
     font-size: 1.15em;
     letter-spacing: 0.05em;
   }
 
-  /* Page header titles (h1) - elegant cursive for impact */
-  h1 {
-    font-family: 'Long Cang', Georgia, serif;
+  /* Non-root page header titles (h1) - elegant cursive for impact */
+  /* This selector targets h1s that are NOT on the root page */
+  :not(#__next > div > main:first-child) h1 {
+    font-family: 'Long Cang', var(--font-noto-sans-sc), sans-serif;
     font-weight: 400;
     letter-spacing: 0.08em;
   }
 
-  /* Main page hero title - professional Noto Sans font */
-  main h1:first-of-type {
-    font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-  }
-
-  /* Section headings - use body font, bold and clear */
+  /* Section headings - Noto Sans, bold and clear */
   h2, h3 {
-    font-family: 'LXGW WenKai TC', Georgia, serif;
+    font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
     font-weight: 700;
   }
 
   h4, h5, h6 {
-    font-family: 'LXGW WenKai TC', Georgia, serif;
+    font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
   }
 
   /* Quotes and footer - traditional elegance */
   blockquote, .quote, footer {
-    font-family: 'Ma Shan Zheng', 'LXGW WenKai TC', Georgia, serif;
+    font-family: 'Ma Shan Zheng', var(--font-noto-sans-sc), sans-serif;
   }
 
   /* Interests/creative sections - playful */
   .interests-section, .hobbies-section {
     h2, h3 {
-      font-family: 'Zhi Mang Xing', 'LXGW WenKai TC', Georgia, serif;
+      font-family: 'Zhi Mang Xing', var(--font-noto-sans-sc), sans-serif;
     }
   }
 
-  /* English fallback for untranslated words - respectable serif */
+  /* English fallback for untranslated words - Noto Sans */
   *:lang(en) {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: 'Noto Sans', Arial, sans-serif;
   }
 }
