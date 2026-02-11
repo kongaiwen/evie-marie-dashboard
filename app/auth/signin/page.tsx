@@ -14,7 +14,7 @@ export default function SignInPage() {
         <form
           action={async () => {
             "use server"
-            await signIn("google", { redirectTo: "/private" })
+            await signIn("google", { redirectTo: "/admin" })
           }}
         >
           <button

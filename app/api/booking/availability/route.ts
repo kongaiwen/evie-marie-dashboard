@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
 import {
-  fetchEventsFromCalendars,
-  initializeCalendarIds,
-} from '@/lib/booking/calendar-service';
+  isServiceAccountConfigured,
+  fetchEventsWithServiceAccount,
+} from '@/lib/booking/service-account-calendar';
 import {
   getAvailability,
   getAvailabilityByDay,
@@ -48,19 +47,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Try to fetch calendar events if user is authenticated
-    // If not authenticated, show availability without calendar conflicts
+    // Fetch calendar events using service account (always available, no login required)
     let events: any[] = [];
 
-    try {
-      const session = await auth();
-      if (session?.accessToken) {
-        await initializeCalendarIds(session.accessToken);
-        events = await fetchEventsFromCalendars(session.accessToken, start, end);
+    if (isServiceAccountConfigured()) {
+      try {
+        events = await fetchEventsWithServiceAccount(start, end);
+      } catch (error) {
+        console.error('Could not fetch calendar events with service account:', error);
+        // Return error instead of showing unfiltered availability
+        return NextResponse.json(
+          { error: 'Calendar service temporarily unavailable', details: error instanceof Error ? error.message : 'Unknown error' },
+          { status: 503 }
+        );
       }
-    } catch (error) {
-      // If calendar fetch fails, continue with empty events list
-      console.warn('Could not fetch calendar events, showing unfiltered availability:', error);
+    } else {
+      console.warn('Service account not configured. Booking availability will not reflect actual calendar conflicts.');
     }
 
     // Get availability

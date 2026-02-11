@@ -1,0 +1,111 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.nav {
+  background: $white;
+  border-bottom: 1px solid $gray-200;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: $z-40;
+}
+
+.container {
+  max-width: $max-w-7xl;
+  margin: 0 auto;
+  padding: 0 $space-4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  gap: $space-4;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-weight: $font-weight-bold;
+  color: $plum-800;
+  font-size: $font-size-lg;
+}
+
+.brandIcon {
+  font-size: $font-size-2xl;
+}
+
+.brandText {
+  @media (max-width: $bp-sm) {
+    display: none;
+  }
+}
+
+.links {
+  display: flex;
+  gap: $space-2;
+  flex: 1;
+  justify-content: center;
+
+  @media (max-width: $bp-md) {
+    gap: $space-1;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  border-radius: $radius-md;
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+  transition: all $transition-default $ease-default;
+  font-size: $font-size-sm;
+
+  &:hover {
+    background: $sage-50;
+    color: $sage-700;
+  }
+
+  @media (max-width: $bp-md) {
+    padding: $space-2 $space-3;
+    gap: $space-1;
+  }
+}
+
+.linkActive {
+  background: $sage-100;
+  color: $sage-800;
+}
+
+.linkIcon {
+  font-size: $font-size-lg;
+}
+
+.linkText {
+  @media (max-width: $bp-sm) {
+    display: none;
+  }
+}
+
+.signOutForm {
+  margin: 0;
+}
+
+.signOutButton {
+  padding: $space-2 $space-4;
+  border-radius: $radius-md;
+  background: $red-600;
+  color: $white;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-sm;
+  transition: background $transition-default $ease-default;
+
+  &:hover {
+    background: $red-700;
+  }
+
+  @media (max-width: $bp-sm) {
+    padding: $space-2 $space-3;
+  }
+}

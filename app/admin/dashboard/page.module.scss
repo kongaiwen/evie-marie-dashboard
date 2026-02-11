@@ -65,19 +65,6 @@
   }
 }
 
-.signOutButton {
-  padding: $space-2 $space-4;
-  border-radius: $radius-md;
-  background: $red-600;
-  color: $white;
-  font-weight: $font-weight-medium;
-  transition: background $transition-default $ease-default;
-
-  &:hover {
-    background: $red-700;
-  }
-}
-
 .budgetSelector {
   margin-bottom: $space-6;
   display: flex;

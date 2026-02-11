@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
-import { handleSignOut } from './actions';
 import {
   useBudgets,
   useCategories,
@@ -21,7 +20,7 @@ import TransactionList from '@/components/Dashboard/TransactionList';
 import ThresholdSettings from '@/components/Dashboard/ThresholdSettings';
 import styles from './page.module.scss';
 
-export default function PrivatePage() {
+export default function YnabDashboardPage() {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -121,11 +120,6 @@ export default function PrivatePage() {
             >
               {transactionsLoading ? 'Refreshing...' : 'Refresh'}
             </button>
-            <form action={handleSignOut}>
-              <button type="submit" className={styles.signOutButton}>
-                Sign Out
-              </button>
-            </form>
           </div>
         </div>
 
