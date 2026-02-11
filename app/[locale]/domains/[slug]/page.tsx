@@ -37,9 +37,10 @@ export async function generateMetadata({
 export default async function DomainPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'quotes.domains' });
   const domain = getDomainBySlug(slug);
 
   if (!domain) {
@@ -269,8 +270,8 @@ export default async function DomainPage({
       </main>
 
       <Footer
-        quote="The best way to predict the future is to invent it."
-        attribution="Alan Kay"
+        quote={t('text')}
+        attribution={t('author')}
       />
     </div>
   );

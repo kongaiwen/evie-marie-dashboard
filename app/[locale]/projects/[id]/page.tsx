@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { projects } from "../projectsData"
 import { readFile } from "fs/promises"
 import path from "path"
+import { getTranslations } from 'next-intl/server'
 import TicTacToe from "@/components/TicTacToe"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
@@ -14,8 +15,9 @@ export async function generateStaticParams() {
   }))
 }
 
-export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function ProjectPage({ params }: { params: Promise<{ id: string; locale: string }> }) {
+  const { id, locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'quotes.projects' });
   const project = projects.find((p) => p.id === id);
 
   if (!project) {
@@ -226,7 +228,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         </div>
       </main>
 
-      <Footer quote="First, solve the problem. Then, write the code." attribution="John Johnson" />
+      <Footer quote={t('text')} attribution={t('author')} />
     </div>
   )
 }

@@ -12,6 +12,7 @@ import styles from "./page.module.scss"
 
 export default function Home() {
   const t = useTranslations('home');
+  const quotes = useTranslations('quotes.home');
 
   return (
     <div className={`${styles.page} watercolor-wash`}>
@@ -161,7 +162,7 @@ export default function Home() {
         </div>
       </div>
 
-      <Footer quote="The only way to do great work is to love what you do." attribution="Steve Jobs" />
+      <Footer quote={quotes('text')} attribution={quotes('author')} />
     </div>
   )
 }

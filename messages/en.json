@@ -195,5 +195,35 @@
     "interestsDesc": "Music, rock climbing, travel, cooking, gardening, and more. The passions that shape who I am beyond the code.",
     "contactTitle": "Contact | Evie Marie Kolb",
     "contactDesc": "Get in touch with Evie Marie Kolb for opportunities, projects, or just to connect."
+  },
+  "quotes": {
+    "home": {
+      "text": "The only way to do great work is to love what you do.",
+      "author": "Steve Jobs"
+    },
+    "about": {
+      "text": "Mathematical science shows what is. It is the language of unseen relations between things. But to use and apply that language, we must be able to fully to appreciate, to feel, to seize the unseen, the unconscious.",
+      "author": "Ada Lovelace"
+    },
+    "projects": {
+      "text": "First, solve the problem. Then, write the code.",
+      "author": "John Johnson"
+    },
+    "interests": {
+      "text": "The glass is neither half empty nor half full. It's simply larger than it needs to be.",
+      "author": "Grace Hopper"
+    },
+    "contact": {
+      "text": "If you want to change the future, start living as if you're already there",
+      "author": "Lynn Conway"
+    },
+    "journey": {
+      "text": "Every person has a responsibility to be a participant in this society and make it a better place for everybody, in whatever capacity they can.",
+      "author": "Megan Rapinoe"
+    },
+    "domains": {
+      "text": "The best way to predict the future is to invent it.",
+      "author": "Alan Kay"
+    }
   }
 }

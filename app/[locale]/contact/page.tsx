@@ -10,6 +10,7 @@ import styles from './page.module.scss'
 
 export default function ContactPage() {
   const t = useTranslations('contact')
+  const quotes = useTranslations('quotes.contact')
   return (
     <div className={`${styles.page} watercolor-wash`}>
       <Nav active="/contact" />
@@ -122,7 +123,7 @@ export default function ContactPage() {
         </div>
       </main>
 
-      <Footer quote="If you want to change the future, start living as if you're already there" attribution="Lynn Conway" />
+      <Footer quote={quotes('text')} attribution={quotes('author')} />
     </div>
   )
 }

@@ -12,6 +12,7 @@ import styles from "./page.module.scss"
 
 export default function ProjectsPage() {
   const t = useTranslations('projects')
+  const quotes = useTranslations('quotes.projects')
   const [selectedDomains, setSelectedDomains] = useState<DomainSlug[]>([]);
 
   const activeProjects = projects.filter(p => p.status !== 'setup-only');
@@ -113,7 +114,7 @@ export default function ProjectsPage() {
         </div>
       </main>
 
-      <Footer quote="First, solve the problem. Then, write the code." attribution="John Johnson" />
+      <Footer quote={quotes('text')} attribution={quotes('author')} />
     </div>
   )
 }

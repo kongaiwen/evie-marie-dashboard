@@ -13,6 +13,7 @@ import styles from "./page.module.scss"
 
 export default function AboutPage() {
   const t = useTranslations('about')
+  const quotes = useTranslations('quotes.about')
   return (
     <ImageGalleryProvider>
       <div className={`${styles.page} watercolor-wash`}>
@@ -243,7 +244,7 @@ export default function AboutPage() {
         </div>
       </main>
 
-      <Footer quote="Mathematical science shows what is. It is the language of unseen relations between things. But to use and apply that language, we must be able to fully to appreciate, to feel, to seize the unseen, the unconscious." attribution="Ada Lovelace" />
+      <Footer quote={quotes('text')} attribution={quotes('author')} />
       </div>
     </ImageGalleryProvider>
   )

@@ -12,6 +12,7 @@ import styles from "./page.module.scss"
 
 export default function InterestsPage() {
   const t = useTranslations('interests')
+  const quotes = useTranslations('quotes.interests')
   return (
     <ImageGalleryProvider>
       <div className={`${styles.page} watercolor-wash`}>
@@ -439,7 +440,7 @@ export default function InterestsPage() {
         </section>
       </main>
 
-      <Footer quote="The glass is neither half empty nor half full. It's simply larger than it needs to be." attribution="Grace Hopper" />
+      <Footer quote={quotes('text')} attribution={quotes('author')} />
       </div>
     </ImageGalleryProvider>
   )

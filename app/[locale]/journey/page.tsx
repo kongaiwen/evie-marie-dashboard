@@ -82,6 +82,7 @@ const DualImageSection = ({
 
 export default function JourneyPage() {
   const t = useTranslations('journey')
+  const quotes = useTranslations('quotes.journey')
 
   return (
     <ImageGalleryProvider>
@@ -323,8 +324,8 @@ export default function JourneyPage() {
       </main>
 
       <Footer
-        quote="Every person has a responsibility to be a participant in this society and make it a better place for everybody, in whatever capacity they can."
-        attribution="Megan Rapinoe"
+        quote={quotes('text')}
+        attribution={quotes('author')}
       />
       </div>
     </ImageGalleryProvider>
