@@ -6,6 +6,11 @@ import { getEnglishPath } from "./app/i18n/pathMappings"
 function mainMiddleware(req: NextRequest) {
   const { pathname, hostname } = req.nextUrl
 
+  // Skip locale processing for admin and auth routes (English-only)
+  if (pathname.startsWith('/admin') || pathname.startsWith('/auth')) {
+    return NextResponse.next()
+  }
+
   // Detect locale based on hostname
   const locale = hostname.includes('kongaiwen.dev') ? 'zh' : 'en';
 
@@ -59,8 +64,8 @@ export default auth((req) => {
   const { pathname } = req.nextUrl
   const isAuthenticated = !!req.auth
 
-  // Check for authentication on /private routes
-  if (pathname.includes('/private') && !isAuthenticated) {
+  // Check for authentication on /private and /admin routes
+  if ((pathname.includes('/private') || pathname.startsWith('/admin')) && !isAuthenticated) {
     const signInUrl = new URL('/auth/signin', req.url)
     return NextResponse.redirect(signInUrl)
   }

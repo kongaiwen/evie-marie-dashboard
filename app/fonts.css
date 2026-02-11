@@ -63,45 +63,57 @@
 
 /* Apply fonts for Chinese locale */
 .font-chinese {
-  /* Body text - warm and readable with lighter weight */
-  font-family: 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+  /* Body text - warm and readable with lighter weight - USE FOR ALL TEXT */
+  font-family: 'LXGW WenKai TC', Georgia, serif;
   font-weight: 300;
   line-height: 1.8;
   letter-spacing: 0.02em;
 
-  /* Navigation & UI elements - modern and sleek, LARGER on Chinese site */
+  /* Navigation & UI elements - use body font, LARGER on Chinese site */
   nav, button, .nav-link, .button {
-    font-family: 'ZCOOL XiaoWei', var(--font-geist-sans), sans-serif;
+    font-family: 'LXGW WenKai TC', Georgia, serif;
     font-size: 1.15em;
     letter-spacing: 0.05em;
   }
 
-  /* Hero titles - use nav font for consistency and modern feel */
+  /* Page header titles (h1) - elegant cursive for impact */
   h1 {
-    font-family: 'ZCOOL XiaoWei', var(--font-geist-sans), sans-serif;
+    font-family: 'Long Cang', Georgia, serif;
     font-weight: 400;
     letter-spacing: 0.08em;
   }
 
-  /* Section headings - bold and clear */
+  /* Main page hero title - professional Noto Sans font */
+  main h1:first-of-type {
+    font-family: var(--font-noto-sans-sc), 'Noto Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* Section headings - use body font, bold and clear */
   h2, h3 {
-    font-family: 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+    font-family: 'LXGW WenKai TC', Georgia, serif;
     font-weight: 700;
   }
 
   h4, h5, h6 {
-    font-family: 'ZCOOL XiaoWei', var(--font-geist-sans), sans-serif;
+    font-family: 'LXGW WenKai TC', Georgia, serif;
   }
 
   /* Quotes and footer - traditional elegance */
   blockquote, .quote, footer {
-    font-family: 'Ma Shan Zheng', 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+    font-family: 'Ma Shan Zheng', 'LXGW WenKai TC', Georgia, serif;
   }
 
   /* Interests/creative sections - playful */
   .interests-section, .hobbies-section {
     h2, h3 {
-      font-family: 'Zhi Mang Xing', 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+      font-family: 'Zhi Mang Xing', 'LXGW WenKai TC', Georgia, serif;
     }
+  }
+
+  /* English fallback for untranslated words - respectable serif */
+  *:lang(en) {
+    font-family: Georgia, 'Times New Roman', serif;
   }
 }

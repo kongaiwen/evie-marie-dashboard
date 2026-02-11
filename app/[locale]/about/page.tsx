@@ -21,7 +21,7 @@ export default function AboutPage() {
 
       {/* Atmospheric header with parallax */}
       <ParallaxSection
-        imageSrc="/images/autumn-woods-portrait.jpg"
+        imageSrc="/images/backgrounds/mountain-panorama.jpg"
         overlayColor="rgba(74, 47, 87, 0.65)"
         minHeight="0px"
       >
@@ -117,15 +117,13 @@ export default function AboutPage() {
 
               {/* Workspace Moment */}
               <div className={styles.videoWrapper}>
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+                <Image
+                  src="/images/portraits/workspace-mirror-selfie.jpg"
+                  alt="Workspace mirror selfie"
+                  width={400}
+                  height={533}
                   className={styles.video}
-                >
-                  <source src="/videos/creative-workspace-moment.mp4" type="video/mp4" />
-                </video>
+                />
               </div>
             </div>
           </div>
