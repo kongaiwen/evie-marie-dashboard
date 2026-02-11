@@ -25,19 +25,9 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
-  const titles: Record<string, string> = {
-    en: "Evie Marie Kolb | Full-Stack Software Engineer",
-    zh: "龚爱文 | 全栈软件工程师"
-  };
-
-  const descriptions: Record<string, string> = {
-    en: "Full-Stack Software Engineer specializing in React, React Native, and Node.js. Building accessible, performant applications.",
-    zh: "全栈软件工程师，专注于 React、React Native 和 Node.js。构建可访问、高性能的应用程序。"
-  };
-
   return {
-    title: titles[locale] || titles.en,
-    description: descriptions[locale] || descriptions.en,
+    title: t('title'),
+    description: t('description'),
     icons: {
       icon: '/icon.svg',
     },
