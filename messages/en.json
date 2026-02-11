@@ -187,6 +187,22 @@
     "more": "more",
     "learnMore": "Learn more"
   },
+  "domainPage": {
+    "buildingExpertise": "Building Expertise",
+    "whatIBring": "What I Bring",
+    "whereApplied": "Where I've Applied This",
+    "howBuilding": "How I'm Building This",
+    "relatedProjects": "Related Projects",
+    "learningCredentials": "Learning & Credentials",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "planned": "Planned",
+    "buildingInPublic": "Building in Public",
+    "resourcesProjects": "Resources & Projects",
+    "letsBuildTogether": "Let's Build Together",
+    "interestedWorking": "Interested in working together on {domain} projects? I'd love to hear from you.",
+    "getInTouch": "Get in Touch"
+  },
   "metadata": {
     "title": "Evie Marie Kolb | Full-Stack Software Engineer",
     "description": "Full-Stack Software Engineer specializing in React, React Native, and Node.js. Building accessible, performant applications.",

@@ -17,6 +17,10 @@ export default function DomainCard({
   showStatus = false,
 }: DomainCardProps) {
   const t = useTranslations('domainCard');
+  const tDomain = useTranslations(`domains.${domain.slug}`);
+
+  // Get translated expertise areas
+  const expertiseAreas = tDomain.raw('expertiseAreas') as string[];
 
   return (
     <Link href={`/domains/${domain.slug}`} className={styles.card}>
@@ -29,7 +33,7 @@ export default function DomainCard({
 
         {/* Title and Status */}
         <div className={styles.header}>
-          <h3 className={styles.title}>{domain.title}</h3>
+          <h3 className={styles.title}>{tDomain('title')}</h3>
           {showStatus && domain.status === 'pivoting' && (
             <span className={styles.statusBadge}>
               <span className={styles.statusDot} />
@@ -39,19 +43,19 @@ export default function DomainCard({
         </div>
 
         {/* Description */}
-        <p className={styles.description}>{domain.shortDescription}</p>
+        <p className={styles.description}>{tDomain('shortDescription')}</p>
 
         {/* Expanded variant shows expertise areas */}
-        {variant === 'expanded' && domain.expertiseAreas.length > 0 && (
+        {variant === 'expanded' && expertiseAreas.length > 0 && (
           <ul className={styles.expertiseList}>
-            {domain.expertiseAreas.slice(0, 3).map((area, index) => (
+            {expertiseAreas.slice(0, 3).map((area, index) => (
               <li key={index} className={styles.expertiseItem}>
                 {area}
               </li>
             ))}
-            {domain.expertiseAreas.length > 3 && (
+            {expertiseAreas.length > 3 && (
               <li className={styles.expertiseMore}>
-                +{domain.expertiseAreas.length - 3} {t('more')}
+                +{expertiseAreas.length - 3} {t('more')}
               </li>
             )}
           </ul>

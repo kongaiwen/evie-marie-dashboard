@@ -17,9 +17,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const domain = getDomainBySlug(slug);
 
   if (!domain) {
@@ -28,9 +28,11 @@ export async function generateMetadata({
     };
   }
 
+  const tDomain = await getTranslations({ locale, namespace: `domains.${slug}` });
+
   return {
-    title: `${domain.title} | Evie Marie Kolb`,
-    description: domain.metaDescription,
+    title: `${tDomain('title')} | Evie Marie Kolb`,
+    description: tDomain('metaDescription'),
   };
 }
 
@@ -40,7 +42,9 @@ export default async function DomainPage({
   params: Promise<{ slug: string; locale: string }>;
 }) {
   const { slug, locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'quotes.domains' });
+  const tQuotes = await getTranslations({ locale, namespace: 'quotes.domains' });
+  const tDomain = await getTranslations({ locale, namespace: `domains.${slug}` });
+  const tUI = await getTranslations({ locale, namespace: 'domainPage' });
   const domain = getDomainBySlug(slug);
 
   if (!domain) {
@@ -65,16 +69,16 @@ export default async function DomainPage({
           <div className={styles.heroOverlay}>
             <div className={styles.heroContent}>
               <div className={styles.heroHeader}>
-                <h1 className={styles.heroTitle}>{domain.title}</h1>
+                <h1 className={styles.heroTitle}>{tDomain('title')}</h1>
                 {domain.status === 'pivoting' && (
                   <span className={styles.statusBadge}>
                     <span className={styles.statusDot} />
-                    <span className={styles.statusText}>Building Expertise</span>
+                    <span className={styles.statusText}>{tUI('buildingExpertise')}</span>
                   </span>
                 )}
               </div>
-              <p className={styles.heroTagline}>{domain.heroTagline}</p>
-              <p className={styles.heroMission}>{domain.missionStatement}</p>
+              <p className={styles.heroTagline}>{tDomain('heroTagline')}</p>
+              <p className={styles.heroMission}>{tDomain('missionStatement')}</p>
             </div>
           </div>
         </ParallaxSection>
@@ -82,9 +86,9 @@ export default async function DomainPage({
         {/* Expertise Section */}
         <section className={styles.section}>
           <div className={styles.container}>
-            <h2 className={styles.sectionHeading}>What I Bring</h2>
+            <h2 className={styles.sectionHeading}>{tUI('whatIBring')}</h2>
             <div className={styles.expertiseGrid}>
-              {domain.expertiseAreas.map((area, index) => (
+              {tDomain.raw('expertiseAreas').map((area: string, index: number) => (
                 <div key={index} className={styles.expertiseCard}>
                   <div className={styles.expertiseIcon}>
                     <div className={styles.expertiseIconCircle} />
@@ -101,11 +105,11 @@ export default async function DomainPage({
           <div className={styles.container}>
             <h2 className={styles.sectionHeading}>
               {domain.status === 'established'
-                ? "Where I've Applied This"
-                : "How I'm Building This"}
+                ? tUI('whereApplied')
+                : tUI('howBuilding')}
             </h2>
             <div className={styles.experienceTimeline}>
-              {domain.experience.map((exp, index) => (
+              {tDomain.raw('experience').map((exp: any, index: number) => (
                 <div key={index} className={styles.experienceCard}>
                   {exp.company && (
                     <div className={styles.experienceHeader}>
@@ -138,8 +142,8 @@ export default async function DomainPage({
         >
           <div className={styles.journeyOverlay}>
             <div className={styles.journeyContent}>
-              <h2 className={styles.journeyTitle}>{domain.journey.title}</h2>
-              {domain.journey.paragraphs.map((paragraph, index) => (
+              <h2 className={styles.journeyTitle}>{tDomain('journey.title')}</h2>
+              {tDomain.raw('journey.paragraphs').map((paragraph: string, index: number) => (
                 <p key={index} className={styles.journeyParagraph}>
                   {paragraph}
                 </p>
@@ -152,7 +156,7 @@ export default async function DomainPage({
         {relatedProjects.length > 0 && (
           <section className={styles.section}>
             <div className={styles.container}>
-              <h2 className={styles.sectionHeading}>Related Projects</h2>
+              <h2 className={styles.sectionHeading}>{tUI('relatedProjects')}</h2>
               <div className={styles.projectsGrid}>
                 {relatedProjects.map((project) => (
                   <Link
@@ -188,7 +192,7 @@ export default async function DomainPage({
         {domain.certifications && domain.certifications.length > 0 && (
           <section className={styles.section}>
             <div className={styles.container}>
-              <h2 className={styles.sectionHeading}>Learning & Credentials</h2>
+              <h2 className={styles.sectionHeading}>{tUI('learningCredentials')}</h2>
               <div className={styles.certificationsGrid}>
                 {domain.certifications.map((cert, index) => (
                   <div key={index} className={styles.certificationCard}>
@@ -200,9 +204,9 @@ export default async function DomainPage({
                           styles[cert.status]
                         }`}
                       >
-                        {cert.status === 'completed' && 'Completed'}
-                        {cert.status === 'in-progress' && 'In Progress'}
-                        {cert.status === 'planned' && 'Planned'}
+                        {cert.status === 'completed' && tUI('completed')}
+                        {cert.status === 'in-progress' && tUI('inProgress')}
+                        {cert.status === 'planned' && tUI('planned')}
                       </span>
                     )}
                     {cert.year && (
@@ -221,8 +225,8 @@ export default async function DomainPage({
             <div className={styles.container}>
               <h2 className={styles.sectionHeading}>
                 {domain.status === 'pivoting'
-                  ? 'Building in Public'
-                  : 'Resources & Projects'}
+                  ? tUI('buildingInPublic')
+                  : tUI('resourcesProjects')}
               </h2>
               <div className={styles.resourcesList}>
                 {domain.resources.map((resource, index) => (
@@ -256,22 +260,21 @@ export default async function DomainPage({
         <section className={styles.ctaSection}>
           <div className={styles.container}>
             <h2 className={styles.ctaHeading}>
-              {domain.ctaText || "Let's Build Together"}
+              {tDomain('ctaText')}
             </h2>
             <p className={styles.ctaDescription}>
-              Interested in working together on {domain.title.toLowerCase()}{' '}
-              projects? I'd love to hear from you.
+              {tUI('interestedWorking', { domain: tDomain('title').toLowerCase() })}
             </p>
             <Link href="/contact" className={styles.ctaButton}>
-              Get in Touch
+              {tUI('getInTouch')}
             </Link>
           </div>
         </section>
       </main>
 
       <Footer
-        quote={t('text')}
-        attribution={t('author')}
+        quote={tQuotes('text')}
+        attribution={tQuotes('author')}
       />
     </div>
   );
