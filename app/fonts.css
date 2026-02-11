@@ -1,0 +1,101 @@
+/* Chinese Font Declarations */
+
+/* LXGW WenKai TC - Body text (Warm, professional kai-shu) */
+@font-face {
+  font-family: 'LXGW WenKai TC';
+  src: url('/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LXGW WenKai TC';
+  src: url('/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LXGW WenKai TC';
+  src: url('/fonts/LXGW_WenKai_TC/LXGWWenKaiTC-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ZCOOL XiaoWei - Navigation & UI (Modern, sleek sans-serif) */
+@font-face {
+  font-family: 'ZCOOL XiaoWei';
+  src: url('/fonts/ZCOOL_XiaoWei/ZCOOLXiaoWei-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Long Cang - Hero titles (Dramatic brush calligraphy) */
+@font-face {
+  font-family: 'Long Cang';
+  src: url('/fonts/Long_Cang/LongCang-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Ma Shan Zheng - Quotes & decorative (Traditional brush) */
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  src: url('/fonts/Ma_Shan_Zheng/MaShanZheng-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Zhi Mang Xing - Playful sections (Casual brush) */
+@font-face {
+  font-family: 'Zhi Mang Xing';
+  src: url('/fonts/Zhi_Mang_Xing/ZhiMangXing-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply fonts for Chinese locale */
+.font-chinese {
+  /* Body text - warm and readable */
+  font-family: 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+
+  /* Navigation & UI elements - modern and sleek */
+  nav, button, .nav-link, .button {
+    font-family: 'ZCOOL XiaoWei', var(--font-geist-sans), sans-serif;
+  }
+
+  /* Hero titles - dramatic impact */
+  h1 {
+    font-family: 'Long Cang', 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+    font-weight: 400;
+  }
+
+  /* Section headings - bold and clear */
+  h2, h3 {
+    font-family: 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+    font-weight: 700;
+  }
+
+  h4, h5, h6 {
+    font-family: 'ZCOOL XiaoWei', var(--font-geist-sans), sans-serif;
+  }
+
+  /* Quotes and footer - traditional elegance */
+  blockquote, .quote, footer {
+    font-family: 'Ma Shan Zheng', 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+  }
+
+  /* Interests/creative sections - playful */
+  .interests-section, .hobbies-section {
+    h2, h3 {
+      font-family: 'Zhi Mang Xing', 'LXGW WenKai TC', var(--font-geist-sans), sans-serif;
+    }
+  }
+}
