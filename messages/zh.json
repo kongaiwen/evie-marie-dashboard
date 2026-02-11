@@ -182,6 +182,11 @@
     "english": "English",
     "chinese": "中文"
   },
+  "domainCard": {
+    "buildingExpertise": "构建专业能力",
+    "more": "更多",
+    "learnMore": "了解更多"
+  },
   "metadata": {
     "title": "孔爱文 | 全栈软件工程师",
     "description": "全栈软件工程师，专注于 React、React Native 和 Node.js。构建可访问、高性能的应用程序。",

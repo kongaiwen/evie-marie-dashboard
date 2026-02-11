@@ -182,6 +182,11 @@
     "english": "English",
     "chinese": "中文"
   },
+  "domainCard": {
+    "buildingExpertise": "Building Expertise",
+    "more": "more",
+    "learnMore": "Learn more"
+  },
   "metadata": {
     "title": "Evie Marie Kolb | Full-Stack Software Engineer",
     "description": "Full-Stack Software Engineer specializing in React, React Native, and Node.js. Building accessible, performant applications.",

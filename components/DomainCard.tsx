@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Domain } from '@/app/[locale]/domains/domainsData';
 import styles from './DomainCard.module.scss';
 
@@ -13,6 +16,8 @@ export default function DomainCard({
   variant = 'compact',
   showStatus = false,
 }: DomainCardProps) {
+  const t = useTranslations('domainCard');
+
   return (
     <Link href={`/domains/${domain.slug}`} className={styles.card}>
       <div className={styles.cardContent}>
@@ -28,7 +33,7 @@ export default function DomainCard({
           {showStatus && domain.status === 'pivoting' && (
             <span className={styles.statusBadge}>
               <span className={styles.statusDot} />
-              <span className={styles.statusText}>Building Expertise</span>
+              <span className={styles.statusText}>{t('buildingExpertise')}</span>
             </span>
           )}
         </div>
@@ -46,7 +51,7 @@ export default function DomainCard({
             ))}
             {domain.expertiseAreas.length > 3 && (
               <li className={styles.expertiseMore}>
-                +{domain.expertiseAreas.length - 3} more
+                +{domain.expertiseAreas.length - 3} {t('more')}
               </li>
             )}
           </ul>
@@ -54,7 +59,7 @@ export default function DomainCard({
 
         {/* Learn more link */}
         <div className={styles.learnMore}>
-          Learn more →
+          {t('learnMore')} →
         </div>
       </div>
     </Link>
