@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from '@/app/i18n/routing'
+import { useTranslations } from 'next-intl'
 import styles from './page.module.scss'
 
 interface BookingSlot {
@@ -57,6 +58,7 @@ const GoogleIcon = () => (
 
 export default function BookingFormPage({ params }: { params: { type: string; subcategory: string } }) {
   const router = useRouter()
+  const t = useTranslations('booking')
   const [bookingSlot, setBookingSlot] = useState<BookingSlot | null>(null)
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -104,30 +106,30 @@ export default function BookingFormPage({ params }: { params: { type: string; su
 
     // Name validation
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
+      newErrors.name = t('nameRequired')
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters'
+      newErrors.name = t('nameTooShort')
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
+      newErrors.email = t('emailRequired')
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
+      newErrors.email = t('emailInvalid')
     }
 
     // Phone validation (optional but must be valid if provided)
     if (formData.phone.trim()) {
       const phoneRegex = /^[\d\s\-\+\(\)]+$/
       if (!phoneRegex.test(formData.phone)) {
-        newErrors.phone = 'Please enter a valid phone number'
+        newErrors.phone = t('phoneInvalid')
       }
     }
 
     // Notes validation (optional but max length)
     if (formData.notes.length > 500) {
-      newErrors.notes = 'Notes must be less than 500 characters'
+      newErrors.notes = t('notesTooLong')
     }
 
     setErrors(newErrors)
@@ -250,7 +252,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
     return (
       <div className={styles.formPage}>
         <div className={styles.container}>
-          <p className={styles.loadingText}>Loading...</p>
+          <p className={styles.loadingText}>{t('loading')}</p>
         </div>
       </div>
     )
@@ -264,39 +266,39 @@ export default function BookingFormPage({ params }: { params: { type: string; su
             <div className={styles.successIcon}>
               <CheckIcon />
             </div>
-            <h1 className={styles.successTitle}>Booking Confirmed!</h1>
+            <h1 className={styles.successTitle}>{t('bookingConfirmed')}</h1>
             <p className={styles.successMessage}>
-              Your meeting has been scheduled for:
+              {t('yourMeetingScheduled')}
             </p>
             <div className={styles.bookingDetails}>
               <p className={styles.bookingDetail}>
-                <strong>Date:</strong> {formatDate(bookingSlot.date)}
+                <strong>{t('date')}:</strong> {formatDate(bookingSlot.date)}
               </p>
               <p className={styles.bookingDetail}>
-                <strong>Time:</strong> {formatTime(bookingSlot.startTime)} - {formatTime(bookingSlot.endTime)}
+                <strong>{t('time')}:</strong> {formatTime(bookingSlot.startTime)} - {formatTime(bookingSlot.endTime)}
               </p>
               <p className={styles.bookingDetail}>
-                <strong>Duration:</strong> {bookingSlot.duration} minutes
+                <strong>{t('duration')}:</strong> {bookingSlot.duration} {t('minutes')}
               </p>
             </div>
 
             {showCalendarOptions && (
               <div className={styles.calendarOptions}>
-                <h2 className={styles.calendarOptionsTitle}>Add to Calendar</h2>
+                <h2 className={styles.calendarOptionsTitle}>{t('addToCalendar')}</h2>
                 <div className={styles.calendarButtons}>
                   <button
                     className={styles.calendarButton}
                     onClick={addToGoogleCalendar}
                   >
                     <GoogleIcon />
-                    <span>Google Calendar</span>
+                    <span>{t('addToGoogle')}</span>
                   </button>
                   <button
                     className={styles.calendarButton}
                     onClick={downloadICS}
                   >
                     <CalendarIcon />
-                    <span>Download .ics</span>
+                    <span>{t('downloadICS')}</span>
                   </button>
                   <button
                     className={styles.calendarButton}
@@ -306,7 +308,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
                   </button>
                 </div>
                 <p className={styles.appleHint}>
-                  Apple users: Download the .ics file and open it to add to your calendar
+                  {t('appleHint')}
                 </p>
               </div>
             )}
@@ -316,18 +318,18 @@ export default function BookingFormPage({ params }: { params: { type: string; su
                 href="/contact/booking"
                 className={styles.backButton}
               >
-                Book Another Meeting
+                {t('bookAnotherMeeting')}
               </Link>
               <Link
                 href="/"
                 className={styles.homeButton}
               >
-                Return Home
+                {t('returnHome')}
               </Link>
             </div>
 
             <p className={styles.confirmationEmail}>
-              A confirmation email has been sent to {formData.email}
+              {t('confirmationEmailSent', { email: formData.email })}
             </p>
           </div>
         </div>
@@ -344,39 +346,39 @@ export default function BookingFormPage({ params }: { params: { type: string; su
           className={styles.backLink}
         >
           <ChevronLeftIcon />
-          <span>Back to time selection</span>
+          <span>{t('backToTimeSelection')}</span>
         </Link>
 
         <header className={styles.header}>
-          <h1 className={styles.title}>Complete Your Booking</h1>
+          <h1 className={styles.title}>{t('completeYourBooking')}</h1>
           <p className={styles.subtitle}>
-            Please provide your details to confirm the meeting
+            {t('provideDetails')}
           </p>
         </header>
 
         {/* Booking summary */}
         <div className={styles.bookingSummary}>
-          <h2 className={styles.summaryTitle}>Meeting Details</h2>
+          <h2 className={styles.summaryTitle}>{t('meetingDetails')}</h2>
           <div className={styles.summaryDetails}>
             <div className={styles.summaryItem}>
-              <span className={styles.summaryLabel}>Type:</span>
+              <span className={styles.summaryLabel}>{t('type')}:</span>
               <span className={styles.summaryValue}>
                 {bookingSlot.subcategory.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </span>
             </div>
             <div className={styles.summaryItem}>
-              <span className={styles.summaryLabel}>Date:</span>
+              <span className={styles.summaryLabel}>{t('date')}:</span>
               <span className={styles.summaryValue}>{formatDate(bookingSlot.date)}</span>
             </div>
             <div className={styles.summaryItem}>
-              <span className={styles.summaryLabel}>Time:</span>
+              <span className={styles.summaryLabel}>{t('time')}:</span>
               <span className={styles.summaryValue}>
                 {formatTime(bookingSlot.startTime)} - {formatTime(bookingSlot.endTime)}
               </span>
             </div>
             <div className={styles.summaryItem}>
-              <span className={styles.summaryLabel}>Duration:</span>
-              <span className={styles.summaryValue}>{bookingSlot.duration} minutes</span>
+              <span className={styles.summaryLabel}>{t('duration')}:</span>
+              <span className={styles.summaryValue}>{bookingSlot.duration} {t('minutes')}</span>
             </div>
           </div>
         </div>
@@ -385,7 +387,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="name" className={styles.label}>
-              Name <span className={styles.required}>*</span>
+              {t('name')} <span className={styles.required}>{t('required')}</span>
             </label>
             <input
               type="text"
@@ -394,7 +396,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
               value={formData.name}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-              placeholder="Your full name"
+              placeholder={t('yourFullName')}
               disabled={isSubmitting}
             />
             {errors.name && <span className={styles.error}>{errors.name}</span>}
@@ -402,7 +404,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
 
           <div className={styles.formGroup}>
             <label htmlFor="email" className={styles.label}>
-              Email <span className={styles.required}>*</span>
+              {t('email')} <span className={styles.required}>{t('required')}</span>
             </label>
             <input
               type="email"
@@ -411,7 +413,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
               value={formData.email}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-              placeholder="your.email@example.com"
+              placeholder={t('yourEmail')}
               disabled={isSubmitting}
             />
             {errors.email && <span className={styles.error}>{errors.email}</span>}
@@ -419,7 +421,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
 
           <div className={styles.formGroup}>
             <label htmlFor="phone" className={styles.label}>
-              Phone <span className={styles.optional}>(optional)</span>
+              {t('phone')} <span className={styles.optional}>{t('optional')}</span>
             </label>
             <input
               type="tel"
@@ -428,7 +430,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
               value={formData.phone}
               onChange={handleInputChange}
               className={`${styles.input} ${errors.phone ? styles.inputError : ''}`}
-              placeholder="+1 (555) 123-4567"
+              placeholder={t('yourPhone')}
               disabled={isSubmitting}
             />
             {errors.phone && <span className={styles.error}>{errors.phone}</span>}
@@ -436,7 +438,7 @@ export default function BookingFormPage({ params }: { params: { type: string; su
 
           <div className={styles.formGroup}>
             <label htmlFor="notes" className={styles.label}>
-              Notes <span className={styles.optional}>(optional)</span>
+              {t('notes')} <span className={styles.optional}>{t('optional')}</span>
             </label>
             <textarea
               id="notes"
@@ -444,13 +446,13 @@ export default function BookingFormPage({ params }: { params: { type: string; su
               value={formData.notes}
               onChange={handleInputChange}
               className={`${styles.textarea} ${errors.notes ? styles.inputError : ''}`}
-              placeholder="Any topics you'd like to discuss or special requests..."
+              placeholder={t('anyTopics')}
               rows={4}
               maxLength={500}
               disabled={isSubmitting}
             />
             <div className={styles.characterCount}>
-              {formData.notes.length} / 500
+              {t('characterCount', { count: formData.notes.length })}
             </div>
             {errors.notes && <span className={styles.error}>{errors.notes}</span>}
           </div>
@@ -466,12 +468,12 @@ export default function BookingFormPage({ params }: { params: { type: string; su
             className={styles.submitButton}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Confirm Booking'}
+            {isSubmitting ? t('submitting') : t('confirmBooking')}
           </button>
         </form>
 
         <p className={styles.privacyNote}>
-          Your information is secure and will only be used to coordinate this meeting.
+          {t('privacyNote')}
         </p>
       </div>
     </div>

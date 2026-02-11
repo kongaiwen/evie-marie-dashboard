@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from '@/app/i18n/routing'
+import { useTranslations } from 'next-intl'
 import styles from './page.module.scss'
 
 // Time slot interface
@@ -76,6 +77,7 @@ const LoadingSpinner = () => (
 
 export default function BookingCalendarPage({ params }: { params: Promise<{ type: string; subcategory: string }> }) {
   const router = useRouter()
+  const t = useTranslations('booking')
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list')
   const [duration, setDuration] = useState(30) // minutes
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
@@ -279,7 +281,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
         <div className={styles.container}>
           <div className={styles.loadingContainer}>
             <LoadingSpinner />
-            <p>Loading available times...</p>
+            <p>{t('loadingAvailability')}</p>
           </div>
         </div>
       </div>
@@ -291,12 +293,12 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
       <div className={styles.calendarPage}>
         <div className={styles.container}>
           <div className={styles.errorContainer}>
-            <p>Unable to load availability. Please try again later.</p>
+            <p>{t('unableToLoad')}</p>
             <Link
               href="/contact/booking"
               className={styles.signInButton}
             >
-              Back to Booking
+              {t('backToBooking')}
             </Link>
           </div>
         </div>
@@ -313,14 +315,14 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
           className={styles.backButton}
         >
           <ChevronLeftIcon />
-          <span>Back to booking types</span>
+          <span>{t('backToBookingTypes')}</span>
         </Link>
 
         <header className={styles.header}>
           <h1 className={styles.title}>
             {resolvedParams?.subcategory.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || 'Loading...'}
           </h1>
-          <p className={styles.subtitle}>Select a date and time that works for you</p>
+          <p className={styles.subtitle}>{t('selectDateTime')}</p>
         </header>
 
         {/* Controls */}
@@ -329,14 +331,14 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
             <button
               className={`${styles.viewButton} ${viewMode === 'list' ? styles.active : ''}`}
               onClick={() => setViewMode('list')}
-              aria-label="List view"
+              aria-label={t('listView')}
             >
               <ListIcon />
             </button>
             <button
               className={`${styles.viewButton} ${viewMode === 'calendar' ? styles.active : ''}`}
               onClick={() => setViewMode('calendar')}
-              aria-label="Calendar view"
+              aria-label={t('calendarView')}
             >
               <CalendarIcon />
             </button>
@@ -345,7 +347,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
           <div className={styles.durationSelector}>
             <label htmlFor="duration" className={styles.durationLabel}>
               <ClockIcon />
-              Duration
+              {t('duration')}
             </label>
             <select
               id="duration"
@@ -353,12 +355,12 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
               onChange={(e) => setDuration(parseInt(e.target.value))}
               className={styles.durationSelect}
             >
-              <option value={15}>15 minutes</option>
-              <option value={30}>30 minutes</option>
-              <option value={45}>45 minutes</option>
-              <option value={60}>1 hour</option>
-              <option value={75}>1 hour 15 minutes</option>
-              <option value={90}>1 hour 30 minutes</option>
+              <option value={15}>15 {t('minutes')}</option>
+              <option value={30}>30 {t('minutes')}</option>
+              <option value={45}>45 {t('minutes')}</option>
+              <option value={60}>1 {t('hour')}</option>
+              <option value={75}>1 {t('hour')} 15 {t('minutes')}</option>
+              <option value={90}>1 {t('hour')} 30 {t('minutes')}</option>
             </select>
           </div>
 
@@ -366,13 +368,13 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
             className={styles.customTimeButton}
             onClick={() => setShowCustomTime(!showCustomTime)}
           >
-            Custom Time
+            {t('customTime')}
           </button>
         </div>
 
         {showCustomTime && (
           <div className={styles.customTimePicker}>
-            <p className={styles.customTimeText}>Select a custom date range and time:</p>
+            <p className={styles.customTimeText}>{t('selectCustomDateTime')}</p>
             <div className={styles.customTimeInputs}>
             <input
               type="date"
@@ -383,21 +385,21 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
               type="time"
               className={styles.timeInput}
             />
-            <span>to</span>
+            <span>{t('to')}</span>
             <input
               type="time"
               className={styles.timeInput}
             />
             </div>
-            <p className={styles.customTimeNote}>Custom time selection is a feature coming soon. For now, please select from the available slots above.</p>
+            <p className={styles.customTimeNote}>{t('customTimeNote')}</p>
           </div>
         )}
 
         {/* Available Slots */}
         {availableSlots.length === 0 ? (
           <div className={styles.noSlots}>
-            <p>No available time slots found for the next 30 days.</p>
-            <p>Try adjusting the duration or contact me directly.</p>
+            <p>{t('noSlotsFound')}</p>
+            <p>{t('tryAdjusting')}</p>
           </div>
         ) : (
           <div className={styles.slotsContainer}>
@@ -405,7 +407,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
               <div key={day.date} className={styles.daySection}>
                 <h3 className={styles.dayTitle}>
                   {formatDate(day.date)}
-                  {isToday(day.date) && <span className={styles.todayBadge}>Today</span>}
+                  {isToday(day.date) && <span className={styles.todayBadge}>{t('today')}</span>}
                 </h3>
                 <div className={styles.slotsGrid}>
                   {day.slots.map((slot) => (
@@ -431,7 +433,7 @@ export default function BookingCalendarPage({ params }: { params: Promise<{ type
               <span className={styles.selectionTime}>{formatTime(selectedSlot.startTime)} - {formatTime(selectedSlot.endTime)}</span>
             </div>
             <button onClick={handleContinue} className={styles.continueButton}>
-              Continue
+              {t('continue')}
             </button>
           </div>
         )}

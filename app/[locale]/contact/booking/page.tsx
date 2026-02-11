@@ -1,20 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/app/i18n/routing'
+import { useTranslations } from 'next-intl'
 import styles from './page.module.scss'
 
 // Booking type data structure with subcategories
 interface BookingType {
   id: string
-  title: string
-  description: string
+  titleKey: string
+  descKey: string
   icon: React.ReactNode
   color: string
   subcategories: {
     id: string
-    title: string
-    description: string
+    titleKey: string
+    descKey: string
   }[]
 }
 
@@ -49,89 +50,91 @@ const ChevronUpIcon = () => (
   </svg>
 )
 
-// Booking types data
-const bookingTypes: BookingType[] = [
+// Get booking types data with translation keys
+const getBookingTypes = (): BookingType[] => [
   {
     id: 'professional',
-    title: 'Professional',
-    description: 'Schedule meetings for work, collaborations, or professional consultations',
+    titleKey: 'professional',
+    descKey: 'professionalDesc',
     icon: <BriefcaseIcon />,
     color: 'sage',
     subcategories: [
       {
         id: 'consultation',
-        title: 'Consultation Call',
-        description: '30-minute consultation to discuss your project needs'
+        titleKey: 'consultation',
+        descKey: 'consultationDesc'
       },
       {
         id: 'interview',
-        title: 'Job Interview',
-        description: 'Schedule an interview for a potential opportunity'
+        titleKey: 'interview',
+        descKey: 'interviewDesc'
       },
       {
         id: 'collaboration',
-        title: 'Collaboration Meeting',
-        description: 'Discuss potential collaborations or partnerships'
+        titleKey: 'collaboration',
+        descKey: 'collaborationDesc'
       },
       {
         id: 'technical-discussion',
-        title: 'Technical Discussion',
-        description: 'Deep dive into technical topics or code reviews'
+        titleKey: 'technicalDiscussion',
+        descKey: 'technicalDiscussionDesc'
       }
     ]
   },
   {
     id: 'friends',
-    title: 'Friends',
-    description: 'Catch up with friends, schedule social activities, or just chat',
+    titleKey: 'friends',
+    descKey: 'friendsDesc',
     icon: <UsersIcon />,
     color: 'plum',
     subcategories: [
       {
         id: 'coffee-chat',
-        title: 'Coffee Chat',
-        description: 'Casual conversation over coffee (in-person or virtual)'
+        titleKey: 'coffeeChat',
+        descKey: 'coffeeChatDesc'
       },
       {
         id: 'catch-up',
-        title: 'Catch Up Call',
-        description: 'Life updates and catching up on what\'s new'
+        titleKey: 'catchUp',
+        descKey: 'catchUpDesc'
       },
       {
         id: 'activity',
-        title: 'Social Activity',
-        description: 'Plan an activity together (hiking, gaming, etc.)'
+        titleKey: 'activity',
+        descKey: 'activityDesc'
       }
     ]
   },
   {
     id: 'kid-activities',
-    title: 'Kid Activities',
-    description: 'Schedule playdates, educational activities, or family-friendly events',
+    titleKey: 'kidActivities',
+    descKey: 'kidActivitiesDesc',
     icon: <ChildIcon />,
     color: 'rose',
     subcategories: [
       {
         id: 'playdate',
-        title: 'Playdate',
-        description: 'Schedule a fun playdate for the kids'
+        titleKey: 'playdate',
+        descKey: 'playdateDesc'
       },
       {
         id: 'educational',
-        title: 'Educational Activity',
-        description: 'Learning activities, tutoring, or educational games'
+        titleKey: 'educational',
+        descKey: 'educationalDesc'
       },
       {
         id: 'family-event',
-        title: 'Family Event',
-        description: 'Plan a family-friendly activity or gathering'
+        titleKey: 'familyEvent',
+        descKey: 'familyEventDesc'
       }
     ]
   }
 ]
 
 export default function BookingPage() {
+  const t = useTranslations('booking')
   const [expandedType, setExpandedType] = useState<string | null>(null)
+  const bookingTypes = getBookingTypes()
 
   const toggleType = (typeId: string) => {
     setExpandedType(expandedType === typeId ? null : typeId)
@@ -141,9 +144,9 @@ export default function BookingPage() {
     <div className={styles.bookingPage}>
       <div className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>Schedule a Meeting</h1>
+          <h1 className={styles.title}>{t('scheduleMeeting')}</h1>
           <p className={styles.subtitle}>
-            Choose a booking type below to see available times and schedule your meeting
+            {t('chooseBookingType')}
           </p>
         </header>
 
@@ -160,8 +163,8 @@ export default function BookingPage() {
               >
                 <div className={styles.iconWrapper}>{type.icon}</div>
                 <div className={styles.headerContent}>
-                  <h2 className={styles.bookingTypeTitle}>{type.title}</h2>
-                  <p className={styles.bookingTypeDescription}>{type.description}</p>
+                  <h2 className={styles.bookingTypeTitle}>{t(type.titleKey)}</h2>
+                  <p className={styles.bookingTypeDescription}>{t(type.descKey)}</p>
                 </div>
                 <div className={styles.chevron}>
                   {expandedType === type.id ? <ChevronUpIcon /> : <ChevronDownIcon />}
@@ -176,8 +179,8 @@ export default function BookingPage() {
                       href={`/contact/booking/${type.id}/${subcategory.id}`}
                       className={styles.subcategoryCard}
                     >
-                      <h3 className={styles.subcategoryTitle}>{subcategory.title}</h3>
-                      <p className={styles.subcategoryDescription}>{subcategory.description}</p>
+                      <h3 className={styles.subcategoryTitle}>{t(subcategory.titleKey)}</h3>
+                      <p className={styles.subcategoryDescription}>{t(subcategory.descKey)}</p>
                       <div className={styles.subcategoryArrow}>
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -192,7 +195,7 @@ export default function BookingPage() {
         </div>
 
         <div className={styles.helpText}>
-          <p>Need help or have questions? <a href="mailto:eviemariekolb@gmail.com">Send me an email</a></p>
+          <p>{t('needHelp')} <a href="mailto:eviemariekolb@gmail.com">{t('sendEmail')}</a></p>
         </div>
       </div>
     </div>
