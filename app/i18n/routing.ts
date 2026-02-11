@@ -12,7 +12,9 @@ export const routing = defineRouting({
   localePrefix: 'never'
 });
 
-// Lightweight wrappers around Next.js' navigation APIs
-// that will consider the routing configuration
-export const { Link, redirect, usePathname, useRouter } =
-  createNavigation(routing);
+// Export custom Link that handles pinyin path mapping
+export { Link } from './Link';
+
+// Other navigation utilities from next-intl
+const { redirect, usePathname, useRouter } = createNavigation(routing);
+export { redirect, usePathname, useRouter };

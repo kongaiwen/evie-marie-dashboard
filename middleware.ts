@@ -1,5 +1,6 @@
 import { auth } from "@/auth"
 import { NextResponse, type NextRequest } from "next/server"
+import { getEnglishPath } from "./app/i18n/pathMappings"
 
 // Main middleware function
 function mainMiddleware(req: NextRequest) {
@@ -14,15 +15,35 @@ function mainMiddleware(req: NextRequest) {
                             pathname === '/en' ||
                             pathname === '/zh'
 
-  // If no locale in pathname, rewrite to add it internally (not redirect!)
+  // If no locale in pathname, rewrite to add it internally
   if (!pathnameHasLocale) {
     const url = req.nextUrl.clone()
 
+    // For Chinese locale, check if path needs to be mapped from pinyin to English
+    let targetPath = pathname
+    if (locale === 'zh') {
+      // Check if this is a Chinese pinyin path that needs mapping
+      const englishPath = getEnglishPath(pathname)
+      if (englishPath !== pathname) {
+        targetPath = englishPath
+      }
+
+      // Also check for dynamic routes (e.g., /xiangmu/some-id)
+      const pathSegments = pathname.split('/').filter(Boolean)
+      if (pathSegments.length > 0) {
+        const firstSegment = `/${pathSegments[0]}`
+        const mappedFirst = getEnglishPath(firstSegment)
+        if (mappedFirst !== firstSegment) {
+          targetPath = pathname.replace(firstSegment, mappedFirst)
+        }
+      }
+    }
+
     // Build the new pathname with locale
-    if (pathname === '/') {
+    if (targetPath === '/') {
       url.pathname = `/${locale}`
     } else {
-      url.pathname = `/${locale}${pathname}`
+      url.pathname = `/${locale}${targetPath}`
     }
 
     // Rewrite to the locale-prefixed path (user doesn't see it)
