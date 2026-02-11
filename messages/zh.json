@@ -1,6 +1,6 @@
 {
   "nav": {
-    "logo": "龚爱文",
+    "logo": "孔爱文",
     "about": "关于我",
     "projects": "项目",
     "journey": "人生旅程",
@@ -12,7 +12,7 @@
     "openMenu": "打开菜单"
   },
   "footer": {
-    "copyright": "© 2025 龚爱文 版权所有"
+    "copyright": "© 2025 孔爱文 版权所有"
   },
   "home": {
     "status": "欢迎机会垂询",
@@ -183,17 +183,17 @@
     "chinese": "中文"
   },
   "metadata": {
-    "title": "龚爱文 | 全栈软件工程师",
+    "title": "孔爱文 | 全栈软件工程师",
     "description": "全栈软件工程师，专注于 React、React Native 和 Node.js。构建可访问、高性能的应用程序。",
-    "aboutTitle": "关于我 | 龚爱文",
-    "aboutDesc": "了解龚爱文的背景、经验和技术技能。",
-    "projectsTitle": "项目 | 龚爱文",
+    "aboutTitle": "关于我 | 孔爱文",
+    "aboutDesc": "了解孔爱文的背景、经验和技术技能。",
+    "projectsTitle": "项目 | 孔爱文",
     "projectsDesc": "展示多个专业领域专业知识的个人项目。",
-    "journeyTitle": "我的人生旅程 | 龚爱文",
-    "journeyDesc": "龚爱文的个人旅程，从在中西部长大到周游世界，找到对工程学的热情，并成为真实的自己。",
-    "interestsTitle": "兴趣爱好 | 龚爱文",
+    "journeyTitle": "我的人生旅程 | 孔爱文",
+    "journeyDesc": "孔爱文的个人旅程，从在中西部长大到周游世界，找到对工程学的热情，并成为真实的自己。",
+    "interestsTitle": "兴趣爱好 | 孔爱文",
     "interestsDesc": "音乐、攀岩、旅行、烹饪、园艺等。塑造我作为程序员之外身份的热情所在。",
-    "contactTitle": "联系 | 龚爱文",
-    "contactDesc": "联系龚爱文，探讨机会、项目或只是建立联系。"
+    "contactTitle": "联系 | 孔爱文",
+    "contactDesc": "联系孔爱文，探讨机会、项目或只是建立联系。"
   }
 }
