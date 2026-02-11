@@ -52,7 +52,7 @@ export default function CategoryBreakdown({ data }: Props) {
             cy="50%"
             outerRadius={100}
             innerRadius={60}
-            label={(entry) => `${entry.percentage.toFixed(1)}%`}
+            label={(entry) => `${((entry.percent ?? 0) * 100).toFixed(1)}%`}
           >
             {data.map((entry, index) => (
               <Cell
