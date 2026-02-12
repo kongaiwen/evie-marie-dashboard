@@ -99,6 +99,44 @@
   font-weight: $font-weight-medium;
 }
 
+.hiddenControls {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  cursor: pointer;
+}
+
+.toggleCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: $sage-600;
+}
+
+.unhideAllButton {
+  padding: $space-2 $space-3;
+  background: $sage-100;
+  color: $sage-700;
+  border: 1px solid $sage-300;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $sage-200;
+    border-color: $sage-400;
+  }
+}
+
 .clearButton {
   width: 100%;
   padding: $space-3;

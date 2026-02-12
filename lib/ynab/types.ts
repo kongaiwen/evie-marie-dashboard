@@ -88,6 +88,7 @@ export interface FilterState {
   endDate: Date;
   minAmount?: number;
   maxAmount?: number;
+  showHidden: boolean;
 }
 
 // =============================================================================
@@ -109,6 +110,10 @@ export interface StoredPreferences {
     spendingOverTime: 'line' | 'area';
     categoryBreakdown: 'pie' | 'donut';
   };
+}
+
+export interface StoredHiddenTransactions {
+  hidden: string[]; // Array of hidden transaction IDs
 }
 
 // =============================================================================

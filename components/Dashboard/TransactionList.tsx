@@ -4,14 +4,15 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { EnrichedTransaction } from '@/lib/ynab/types';
 import { formatCurrency } from '@/lib/ynab/utils';
-import { setTransactionTags } from '@/lib/ynab/storage';
+import { setTransactionTags, hideTransaction } from '@/lib/ynab/storage';
 import styles from './TransactionList.module.scss';
 
 interface Props {
   transactions: EnrichedTransaction[];
+  onRefresh?: () => void;
 }
 
-export default function TransactionList({ transactions }: Props) {
+export default function TransactionList({ transactions, onRefresh }: Props) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagInput, setTagInput] = useState('');
 
@@ -26,8 +27,16 @@ export default function TransactionList({ transactions }: Props) {
     setTagInput('');
     setEditingId(null);
 
-    // Trigger a re-render by updating the transaction locally
-    window.location.reload(); // Simple approach for now
+    // Trigger refresh to show updated tags
+    if (onRefresh) onRefresh();
+    else window.location.reload();
+  };
+
+  const handleHideTransaction = (transactionId: string) => {
+    hideTransaction(transactionId);
+    // Trigger refresh to hide the transaction
+    if (onRefresh) onRefresh();
+    else window.location.reload();
   };
 
   if (outflowTransactions.length === 0) {
@@ -52,6 +61,7 @@ export default function TransactionList({ transactions }: Props) {
           <div className={styles.col}>Category</div>
           <div className={styles.col}>Amount</div>
           <div className={styles.col}>Tags</div>
+          <div className={styles.col}></div>
         </div>
 
         <div className={styles.body}>
@@ -99,6 +109,15 @@ export default function TransactionList({ transactions }: Props) {
                     </button>
                   )}
                 </div>
+              </div>
+              <div className={styles.col}>
+                <button
+                  className={styles.hideButton}
+                  onClick={() => handleHideTransaction(transaction.id)}
+                  title="Hide this transaction"
+                >
+                  Hide
+                </button>
               </div>
             </div>
           ))}

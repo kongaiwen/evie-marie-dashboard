@@ -13,7 +13,7 @@ import {
   fetchTransactions,
   YnabApiError,
 } from './api-client';
-import { getTransactionTags } from './storage';
+import { getTransactionTags, getHiddenTransactions } from './storage';
 import { format } from 'date-fns';
 
 /**
@@ -153,7 +153,14 @@ export function useFilteredTransactions(
   transactions: EnrichedTransaction[],
   filters: FilterState
 ) {
+  const hiddenTransactionIds = getHiddenTransactions();
+
   return transactions.filter((t) => {
+    // Hide transactions that are in the blocklist (unless showHidden is true)
+    if (!filters.showHidden && hiddenTransactionIds.includes(t.id)) {
+      return false;
+    }
+
     // Category filter
     if (
       filters.categories.length > 0 &&

@@ -6,12 +6,14 @@ import {
   StoredTags,
   StoredThresholds,
   StoredPreferences,
+  StoredHiddenTransactions,
 } from './types';
 
 const STORAGE_KEYS = {
   TAGS: 'ynab_custom_tags',
   THRESHOLDS: 'ynab_thresholds',
   PREFERENCES: 'ynab_preferences',
+  HIDDEN_TRANSACTIONS: 'ynab_hidden_transactions',
 } as const;
 
 // =============================================================================
@@ -147,5 +149,55 @@ export function setPreferences(prefs: Partial<StoredPreferences>): void {
   localStorage.setItem(
     STORAGE_KEYS.PREFERENCES,
     JSON.stringify(updated)
+  );
+}
+
+// =============================================================================
+// Hidden Transactions Management
+// =============================================================================
+
+function getStoredHiddenTransactions(): StoredHiddenTransactions {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.HIDDEN_TRANSACTIONS);
+    return stored ? JSON.parse(stored) : { hidden: [] };
+  } catch {
+    return { hidden: [] };
+  }
+}
+
+export function getHiddenTransactions(): string[] {
+  const stored = getStoredHiddenTransactions();
+  return stored.hidden || [];
+}
+
+export function isTransactionHidden(transactionId: string): boolean {
+  const hidden = getHiddenTransactions();
+  return hidden.includes(transactionId);
+}
+
+export function hideTransaction(transactionId: string): void {
+  const stored = getStoredHiddenTransactions();
+  if (!stored.hidden.includes(transactionId)) {
+    stored.hidden.push(transactionId);
+    localStorage.setItem(
+      STORAGE_KEYS.HIDDEN_TRANSACTIONS,
+      JSON.stringify(stored)
+    );
+  }
+}
+
+export function unhideTransaction(transactionId: string): void {
+  const stored = getStoredHiddenTransactions();
+  stored.hidden = stored.hidden.filter((id) => id !== transactionId);
+  localStorage.setItem(
+    STORAGE_KEYS.HIDDEN_TRANSACTIONS,
+    JSON.stringify(stored)
+  );
+}
+
+export function unhideAllTransactions(): void {
+  localStorage.setItem(
+    STORAGE_KEYS.HIDDEN_TRANSACTIONS,
+    JSON.stringify({ hidden: [] })
   );
 }

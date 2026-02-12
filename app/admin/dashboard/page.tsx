@@ -32,6 +32,7 @@ export default function YnabDashboardPage() {
     tags: [],
     startDate,
     endDate,
+    showHidden: false,
   });
 
   // Fetch data
@@ -150,6 +151,7 @@ export default function YnabDashboardPage() {
               categories={categories}
               filters={filters}
               onFiltersChange={setFilters}
+              onRefresh={refetch}
             />
             <ThresholdSettings categories={categories} />
           </aside>
@@ -165,7 +167,10 @@ export default function YnabDashboardPage() {
             </div>
 
             {/* Transaction List */}
-            <TransactionList transactions={filteredTransactions} />
+            <TransactionList
+              transactions={filteredTransactions}
+              onRefresh={refetch}
+            />
           </main>
         </div>
       </div>

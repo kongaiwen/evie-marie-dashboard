@@ -2,7 +2,7 @@
 
 import { format } from 'date-fns';
 import { FilterState, YnabCategory } from '@/lib/ynab/types';
-import { getAllTags } from '@/lib/ynab/storage';
+import { getAllTags, getHiddenTransactions, unhideAllTransactions } from '@/lib/ynab/storage';
 import { getDateRangePreset } from '@/lib/ynab/utils';
 import styles from './FilterPanel.module.scss';
 
@@ -10,14 +10,24 @@ interface Props {
   categories: YnabCategory[];
   filters: FilterState;
   onFiltersChange: (filters: FilterState) => void;
+  onRefresh?: () => void;
 }
 
 export default function FilterPanel({
   categories,
   filters,
   onFiltersChange,
+  onRefresh,
 }: Props) {
   const allTags = getAllTags();
+  const hiddenCount = getHiddenTransactions().length;
+
+  const handleUnhideAll = () => {
+    unhideAllTransactions();
+    // Trigger refresh to show unhidden transactions
+    if (onRefresh) onRefresh();
+    else window.location.reload();
+  };
 
   const handlePresetChange = (
     preset: 'week' | 'month' | 'quarter' | 'year'
@@ -124,6 +134,34 @@ export default function FilterPanel({
                 {tag}
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Hidden Transactions */}
+      {hiddenCount > 0 && (
+        <div className={styles.section}>
+          <label className={styles.label}>
+            Hidden Transactions ({hiddenCount})
+          </label>
+          <div className={styles.hiddenControls}>
+            <label className={styles.toggleLabel}>
+              <input
+                type="checkbox"
+                checked={filters.showHidden}
+                onChange={(e) =>
+                  onFiltersChange({ ...filters, showHidden: e.target.checked })
+                }
+                className={styles.toggleCheckbox}
+              />
+              Show hidden transactions
+            </label>
+            <button
+              className={styles.unhideAllButton}
+              onClick={handleUnhideAll}
+            >
+              Unhide All
+            </button>
           </div>
         </div>
       )}

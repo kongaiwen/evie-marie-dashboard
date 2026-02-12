@@ -27,7 +27,7 @@
 
 .header {
   display: grid;
-  grid-template-columns: 100px 1fr 150px 100px 200px;
+  grid-template-columns: 100px 1fr 150px 100px 200px 60px;
   gap: $space-3;
   padding: $space-3;
   background: $gray-50;
@@ -46,7 +46,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 100px 1fr 150px 100px 200px;
+  grid-template-columns: 100px 1fr 150px 100px 200px 60px;
   gap: $space-3;
   padding: $space-3;
   border: 1px solid $gray-200;
@@ -107,5 +107,22 @@
   &:hover {
     background: $sage-200;
     color: $sage-700;
+  }
+}
+
+.hideButton {
+  padding: $space-1 $space-2;
+  background: $rose-100;
+  color: $rose-700;
+  border: 1px solid $rose-200;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $rose-200;
+    border-color: $rose-300;
   }
 }
