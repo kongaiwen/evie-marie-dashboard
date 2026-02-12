@@ -158,17 +158,17 @@
 
 .tagEditButton {
   padding: $space-1 $space-2;
-  background: $blue-50;
-  color: $blue-700;
-  border: 1px solid $blue-200;
+  background: $teal-50;
+  color: $teal-600;
+  border: 1px solid $teal-200;
   border-radius: $radius-md;
   font-size: $font-size-xs;
   cursor: pointer;
   transition: all $transition-default $ease-default;
 
   &:hover {
-    background: $blue-100;
-    border-color: $blue-300;
+    background: $teal-200;
+    border-color: $teal-400;
   }
 }
 
