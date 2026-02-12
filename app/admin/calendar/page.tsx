@@ -9,6 +9,7 @@ interface CalendarStatus {
   calendars: Array<{
     name: string
     id: string
+    envVar: string
     found: boolean
   }>
   events: Array<{
@@ -184,7 +185,13 @@ export default function AdminCalendarPage() {
                   </div>
                   <div className={styles.calendarInfo}>
                     <span className={styles.calendarName}>{cal.name}</span>
-                    <span className={styles.calendarId}>{cal.found ? cal.id : 'Not found in your Google Calendar'}</span>
+                    {cal.found ? (
+                      <span className={styles.calendarId}>{cal.id}</span>
+                    ) : (
+                      <span className={styles.calendarId}>
+                        Set env var: <code>{cal.envVar}</code>
+                      </span>
+                    )}
                   </div>
                 </div>
               ))

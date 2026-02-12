@@ -36,10 +36,11 @@ export async function GET(request: NextRequest) {
         const calendarIds = getAllCalendarIds();
 
         // Build calendar status list
-        calendars = CALENDAR_CONFIG.calendars.map((name) => ({
-          name,
-          id: calendarIds[name] || '',
-          found: !!calendarIds[name],
+        calendars = CALENDAR_CONFIG.calendars.map((cal) => ({
+          name: cal.name,
+          id: calendarIds[cal.name] || '',
+          envVar: cal.envVar,
+          found: !!calendarIds[cal.name],
         }));
 
         isConnected = Object.values(calendarIds).some((id) => id !== '');

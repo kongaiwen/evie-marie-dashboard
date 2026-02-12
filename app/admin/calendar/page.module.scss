@@ -300,6 +300,14 @@
   @include body-text;
   font-size: $font-size-xs;
   color: $earth-500;
+
+  code {
+    font-family: monospace;
+    background: rgba($plum-100, 0.5);
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    color: $plum-700;
+  }
 }
 
 // Events List

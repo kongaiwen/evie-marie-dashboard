@@ -70,9 +70,10 @@ export async function getServiceAccountCalendarClient() {
 /**
  * Initialize calendar IDs using service account
  *
- * Since service accounts for personal Gmail cannot list all calendars,
- * we need the calendars to be shared with the service account email.
- * The shared calendars will appear in the service account's calendar list.
+ * For personal Gmail accounts, the calendarList.list() API does NOT return
+ * calendars shared with the service account. Instead, we read calendar IDs
+ * directly from environment variables and validate access by attempting to fetch
+ * events from each calendar.
  */
 export async function initializeServiceAccountCalendarIds(): Promise<void> {
   // Check if cache is still valid
@@ -86,45 +87,55 @@ export async function initializeServiceAccountCalendarIds(): Promise<void> {
   const calendar = await getServiceAccountCalendarClient();
 
   try {
-    const response = await calendar.calendarList.list({
-      maxResults: 250,
-    });
+    console.log('[ServiceAccount] Initializing calendars from environment variables...');
 
-    const calendars = response.data.items || [];
+    // Read calendar IDs from environment variables
+    for (const { name, envVar } of CALENDAR_CONFIG.calendars) {
+      const calendarId = process.env[envVar];
 
-    console.log(
-      '[ServiceAccount] Available calendars:',
-      calendars.map((c) => `${c.summary} (${c.id})`).join(', ')
-    );
-
-    // Find and map the configured calendars
-    for (const calendarName of CALENDAR_CONFIG.calendars) {
-      const matchedCalendar = calendars.find((cal) => {
-        const summary = (cal.summary || '').toLowerCase();
-        const searchName = calendarName.toLowerCase();
-
-        // Try exact match (case-insensitive)
-        if (summary === searchName) {
-          return true;
-        }
-        // Try partial match (case-insensitive)
-        if (summary.includes(searchName)) {
-          return true;
-        }
-        return false;
-      });
-
-      if (matchedCalendar?.id) {
-        setCalendarId(calendarName, matchedCalendar.id);
-        serviceAccountCalendarIds[calendarName] = matchedCalendar.id;
-        console.log(
-          `[ServiceAccount] Mapped calendar "${calendarName}" to ID: ${matchedCalendar.id}`
-        );
-      } else {
+      if (!calendarId) {
         console.warn(
-          `[ServiceAccount] Could not find calendar "${calendarName}". ` +
-            `Make sure it's shared with the service account: ${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`
+          `[ServiceAccount] Environment variable ${envVar} not set for calendar "${name}"`
         );
+        continue;
+      }
+
+      // Validate access by attempting to fetch a single event
+      // (using a very small time window to minimize data transfer)
+      try {
+        const now = new Date();
+        const oneMinuteFromNow = new Date(now.getTime() + 60 * 1000);
+
+        await calendar.events.list({
+          calendarId,
+          timeMin: now.toISOString(),
+          timeMax: oneMinuteFromNow.toISOString(),
+          singleEvents: true,
+          orderBy: 'startTime',
+          maxResults: 1,
+        });
+
+        setCalendarId(name, calendarId);
+        serviceAccountCalendarIds[name] = calendarId;
+        console.log(
+          `[ServiceAccount] Validated access to calendar "${name}" (ID: ${calendarId})`
+        );
+      } catch (error: any) {
+        if (error?.code === 404 || error?.response?.status === 404) {
+          console.warn(
+            `[ServiceAccount] Calendar "${name}" (ID: ${calendarId}) not found or not shared with service account`
+          );
+        } else if (error?.code === 403 || error?.response?.status === 403) {
+          console.warn(
+            `[ServiceAccount] Access denied to calendar "${name}" (ID: ${calendarId}). ` +
+              `Make sure it's shared with: ${process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL}`
+          );
+        } else {
+          console.warn(
+            `[ServiceAccount] Error validating calendar "${name}":`,
+            error?.message || error
+          );
+        }
       }
     }
 
