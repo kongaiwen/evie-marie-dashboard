@@ -6,7 +6,7 @@ import styles from './admin.module.scss'
 
 interface CalendarStatus {
   isConnected: boolean
-  hasAccessToken: boolean
+  hasServiceAccount: boolean
   error?: string
 }
 
@@ -29,19 +29,19 @@ export default function AdminDashboardPage() {
           const data = await calendarRes.json()
           setCalendarStatus({
             isConnected: data.isConnected,
-            hasAccessToken: data.hasAccessToken,
+            hasServiceAccount: data.hasServiceAccount,
           })
         } else {
           setCalendarStatus({
             isConnected: false,
-            hasAccessToken: false,
+            hasServiceAccount: false,
             error: 'Failed to fetch status',
           })
         }
       } catch (error) {
         setCalendarStatus({
           isConnected: false,
-          hasAccessToken: false,
+          hasServiceAccount: false,
           error: 'Network error',
         })
       }
@@ -66,8 +66,8 @@ export default function AdminDashboardPage() {
 
   const getCalendarStatusClass = () => {
     if (isLoading) return styles.loading
-    if (calendarStatus?.isConnected && calendarStatus?.hasAccessToken) return styles.success
-    if (calendarStatus?.isConnected) return styles.warning
+    if (calendarStatus?.isConnected && calendarStatus?.hasServiceAccount) return styles.success
+    if (calendarStatus?.hasServiceAccount) return styles.warning
     return styles.error
   }
 
@@ -124,10 +124,10 @@ export default function AdminDashboardPage() {
                   {isLoading
                     ? 'Checking connection...'
                     : calendarStatus?.isConnected
-                    ? calendarStatus?.hasAccessToken
-                      ? 'Connected with valid token'
-                      : 'Connected but token expired'
-                    : 'Not connected'}
+                    ? 'Connected via service account'
+                    : calendarStatus?.hasServiceAccount
+                    ? 'Service account configured but no calendars found'
+                    : 'Service account not configured'}
                 </p>
               </div>
             </div>

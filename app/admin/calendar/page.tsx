@@ -5,7 +5,7 @@ import styles from './page.module.scss'
 
 interface CalendarStatus {
   isConnected: boolean
-  hasAccessToken: boolean
+  hasServiceAccount: boolean
   calendars: Array<{
     name: string
     id: string
@@ -70,7 +70,7 @@ export default function AdminCalendarPage() {
     } catch (err) {
       setStatus({
         isConnected: false,
-        hasAccessToken: false,
+        hasServiceAccount: false,
         calendars: [],
         events: [],
         upcomingBookings: 0,
@@ -157,13 +157,13 @@ export default function AdminCalendarPage() {
                 <p>{status?.isConnected ? 'Connected' : 'Not Connected'}</p>
               </div>
             </div>
-            <div className={`${styles.statusCard} ${status?.hasAccessToken ? styles.success : styles.error}`}>
+            <div className={`${styles.statusCard} ${status?.hasServiceAccount ? styles.success : styles.error}`}>
               <div className={styles.statusIcon}>
-                {status?.hasAccessToken ? <CheckIcon /> : <XIcon />}
+                {status?.hasServiceAccount ? <CheckIcon /> : <XIcon />}
               </div>
               <div className={styles.statusInfo}>
-                <h3>Access Token</h3>
-                <p>{status?.hasAccessToken ? 'Valid' : 'Missing or Expired'}</p>
+                <h3>Service Account</h3>
+                <p>{status?.hasServiceAccount ? 'Configured' : 'Not Configured'}</p>
               </div>
             </div>
           </div>
@@ -250,14 +250,6 @@ export default function AdminCalendarPage() {
             >
               Open Google Calendar
             </a>
-            {!status?.isConnected && (
-              <a
-                href="/auth/signin"
-                className={styles.actionButton}
-              >
-                Reconnect Google Calendar
-              </a>
-            )}
           </div>
         </section>
       </div>

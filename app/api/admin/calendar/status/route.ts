@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import {
-  fetchEventsFromCalendars,
-  initializeCalendarIds,
-} from '@/lib/booking/calendar-service';
+  isServiceAccountConfigured,
+  initializeServiceAccountCalendarIds,
+  fetchEventsWithServiceAccount,
+} from '@/lib/booking/service-account-calendar';
 import { CALENDAR_CONFIG, getAllCalendarIds } from '@/lib/booking/calendar-config';
 
 export async function GET(request: NextRequest) {
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const hasAccessToken = !!session.accessToken;
+    const serviceAccountConfigured = isServiceAccountConfigured();
 
     // Get events for the next 7 days
     const today = new Date();
@@ -28,10 +29,10 @@ export async function GET(request: NextRequest) {
     let isConnected = false;
     let calendars: Array<{ name: string; id: string; found: boolean }> = [];
 
-    if (hasAccessToken) {
+    if (serviceAccountConfigured) {
       try {
-        // Initialize calendar IDs
-        await initializeCalendarIds(session.accessToken!);
+        // Initialize calendar IDs using service account
+        await initializeServiceAccountCalendarIds();
         const calendarIds = getAllCalendarIds();
 
         // Build calendar status list
@@ -43,8 +44,8 @@ export async function GET(request: NextRequest) {
 
         isConnected = Object.values(calendarIds).some((id) => id !== '');
 
-        // Fetch events
-        events = await fetchEventsFromCalendars(session.accessToken!, today, endDate);
+        // Fetch events using service account
+        events = await fetchEventsWithServiceAccount(today, endDate);
       } catch (error) {
         console.error('Error fetching calendar data:', error);
         isConnected = false;
@@ -72,7 +73,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       isConnected,
-      hasAccessToken,
+      hasServiceAccount: serviceAccountConfigured,
       calendars,
       events: formattedEvents,
       upcomingBookings,
