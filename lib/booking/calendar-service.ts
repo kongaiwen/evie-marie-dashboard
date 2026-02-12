@@ -31,7 +31,8 @@ export async function initializeCalendarIds(accessToken: string): Promise<void> 
     const calendars = response.data.items || [];
 
     // Find and map the configured calendars
-    for (const calendarName of CALENDAR_CONFIG.calendars) {
+    for (const calendarConfig of CALENDAR_CONFIG.calendars) {
+      const calendarName = calendarConfig.name;
       const matchedCalendar = calendars.find((cal) => {
         const summary = (cal.summary || '').toLowerCase();
         const searchName = calendarName.toLowerCase();
