@@ -73,8 +73,14 @@
 
 .chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: $space-2;
+}
+
+.tagContainer {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
 }
 
 .chip {
@@ -97,6 +103,89 @@
   background: $sage-100;
   color: $sage-800;
   font-weight: $font-weight-medium;
+}
+
+.tagEditRow,
+.tagConfirmRow {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+}
+
+.tagEditInput {
+  padding: $space-1 $space-2;
+  border: 1px solid $sage-300;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  min-width: 100px;
+
+  &:focus {
+    outline: none;
+    border-color: $sage-500;
+  }
+}
+
+.tagActionButton {
+  padding: $space-1 $space-2;
+  background: $gray-100;
+  color: $gray-700;
+  border: 1px solid $gray-300;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $gray-200;
+  }
+}
+
+.tagConfirmYes {
+  background: $rose-100;
+  color: $rose-700;
+  border-color: $rose-300;
+
+  &:hover {
+    background: $rose-200;
+  }
+}
+
+.tagConfirmText {
+  font-size: $font-size-sm;
+  color: $gray-700;
+}
+
+.tagEditButton {
+  padding: $space-1 $space-2;
+  background: $blue-50;
+  color: $blue-700;
+  border: 1px solid $blue-200;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $blue-100;
+    border-color: $blue-300;
+  }
+}
+
+.tagDeleteButton {
+  padding: $space-1 $space-2;
+  background: $rose-50;
+  color: $rose-700;
+  border: 1px solid $rose-200;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $rose-100;
+    border-color: $rose-300;
+  }
 }
 
 .hiddenControls {

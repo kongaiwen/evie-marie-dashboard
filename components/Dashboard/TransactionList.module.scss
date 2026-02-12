@@ -80,6 +80,32 @@
   color: $sage-800;
   border-radius: $radius-md;
   font-size: $font-size-xs;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+}
+
+.tagRemoveButton {
+  background: transparent;
+  border: none;
+  color: $sage-600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 2px;
+  font-size: $font-size-xs;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $sage-200;
+    color: $rose-600;
+  }
 }
 
 .tagInput {

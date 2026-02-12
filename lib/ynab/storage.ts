@@ -45,6 +45,83 @@ export function getAllTags(): string[] {
   return Array.from(tagSet).sort();
 }
 
+/**
+ * Removes a tag from ALL transactions
+ * @param tagName - The name of the tag to delete
+ */
+export function deleteTag(tagName: string): void {
+  const allTags = getStoredTags();
+  let hasChanges = false;
+
+  Object.keys(allTags).forEach((transactionId) => {
+    const tags = allTags[transactionId];
+    const index = tags.indexOf(tagName);
+    if (index !== -1) {
+      tags.splice(index, 1);
+      hasChanges = true;
+    }
+    // Remove empty arrays to clean up
+    if (tags.length === 0) {
+      delete allTags[transactionId];
+    }
+  });
+
+  if (hasChanges) {
+    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
+  }
+}
+
+/**
+ * Renames a tag across all transactions
+ * @param oldName - The current name of the tag
+ * @param newName - The new name for the tag
+ */
+export function renameTag(oldName: string, newName: string): void {
+  const allTags = getStoredTags();
+  let hasChanges = false;
+
+  Object.keys(allTags).forEach((transactionId) => {
+    const tags = allTags[transactionId];
+    const index = tags.indexOf(oldName);
+    if (index !== -1) {
+      // Replace the old name with the new name
+      tags[index] = newName;
+      // Remove any duplicates that might result from the rename
+      const uniqueTags = Array.from(new Set(tags));
+      if (uniqueTags.length !== tags.length) {
+        allTags[transactionId] = uniqueTags;
+      }
+      hasChanges = true;
+    }
+  });
+
+  if (hasChanges) {
+    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
+  }
+}
+
+/**
+ * Removes a specific tag from a specific transaction
+ * @param transactionId - The ID of the transaction
+ * @param tag - The tag to remove from the transaction
+ */
+export function removeTagFromTransaction(transactionId: string, tag: string): void {
+  const allTags = getStoredTags();
+  const tags = allTags[transactionId];
+
+  if (!tags) return;
+
+  const index = tags.indexOf(tag);
+  if (index !== -1) {
+    tags.splice(index, 1);
+    // Remove empty arrays to clean up
+    if (tags.length === 0) {
+      delete allTags[transactionId];
+    }
+    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
+  }
+}
+
 function getStoredTags(): StoredTags {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.TAGS);

@@ -161,14 +161,6 @@ export function useFilteredTransactions(
       return false;
     }
 
-    // Category filter
-    if (
-      filters.categories.length > 0 &&
-      !filters.categories.includes(t.category_name || 'Uncategorized')
-    ) {
-      return false;
-    }
-
     // Tag filter
     if (filters.tags.length > 0) {
       const hasTag = filters.tags.some((tag) =>

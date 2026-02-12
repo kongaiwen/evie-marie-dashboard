@@ -82,7 +82,6 @@ export interface ThresholdConfig {
 
 export interface FilterState {
   budgetId: string | null;
-  categories: string[];
   tags: string[];
   startDate: Date;
   endDate: Date;

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 import { EnrichedTransaction } from '@/lib/ynab/types';
 import { formatCurrency } from '@/lib/ynab/utils';
-import { setTransactionTags, hideTransaction } from '@/lib/ynab/storage';
+import { setTransactionTags, hideTransaction, removeTagFromTransaction } from '@/lib/ynab/storage';
 import styles from './TransactionList.module.scss';
 
 interface Props {
@@ -35,6 +35,13 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
   const handleHideTransaction = (transactionId: string) => {
     hideTransaction(transactionId);
     // Trigger refresh to hide the transaction
+    if (onRefresh) onRefresh();
+    else window.location.reload();
+  };
+
+  const handleRemoveTag = (transactionId: string, tag: string) => {
+    removeTagFromTransaction(transactionId, tag);
+    // Trigger refresh to show updated tags
     if (onRefresh) onRefresh();
     else window.location.reload();
   };
@@ -82,6 +89,13 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
                   {transaction.customTags.map((tag) => (
                     <span key={tag} className={styles.tag}>
                       {tag}
+                      <button
+                        className={styles.tagRemoveButton}
+                        onClick={() => handleRemoveTag(transaction.id, tag)}
+                        title={`Remove "${tag}" tag`}
+                      >
+                        &#215;
+                      </button>
                     </span>
                   ))}
                   {editingId === transaction.id ? (

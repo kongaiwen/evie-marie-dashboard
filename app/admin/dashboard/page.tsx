@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { redirect } from 'next/navigation';
 import {
   useBudgets,
-  useCategories,
   useTransactions,
   useFilteredTransactions,
 } from '@/lib/ynab/hooks';
@@ -17,7 +16,6 @@ import CategoryBreakdown from '@/components/Dashboard/Charts/CategoryBreakdown';
 import CategoryComparison from '@/components/Dashboard/Charts/CategoryComparison';
 import BudgetVsActual from '@/components/Dashboard/Charts/BudgetVsActual';
 import TransactionList from '@/components/Dashboard/TransactionList';
-import ThresholdSettings from '@/components/Dashboard/ThresholdSettings';
 import styles from './page.module.scss';
 
 export default function YnabDashboardPage() {
@@ -28,7 +26,6 @@ export default function YnabDashboardPage() {
   const { startDate, endDate } = getDateRangePreset('month');
   const [filters, setFilters] = useState<FilterState>({
     budgetId: null,
-    categories: [],
     tags: [],
     startDate,
     endDate,
@@ -37,9 +34,6 @@ export default function YnabDashboardPage() {
 
   // Fetch data
   const { budgets, loading: budgetsLoading } = useBudgets();
-  const { categories, loading: categoriesLoading } = useCategories(
-    filters.budgetId
-  );
   const {
     transactions,
     loading: transactionsLoading,
@@ -148,12 +142,10 @@ export default function YnabDashboardPage() {
           {/* Filters Sidebar */}
           <aside className={styles.sidebar}>
             <FilterPanel
-              categories={categories}
               filters={filters}
               onFiltersChange={setFilters}
               onRefresh={refetch}
             />
-            <ThresholdSettings categories={categories} />
           </aside>
 
           {/* Dashboard Content */}
