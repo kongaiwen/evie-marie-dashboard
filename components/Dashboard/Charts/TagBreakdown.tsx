@@ -8,12 +8,12 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import { CategoryTotal } from '@/lib/ynab/types';
+import { TagTotal } from '@/lib/ynab/types';
 import { formatCurrency } from '@/lib/ynab/utils';
-import styles from './CategoryBreakdown.module.scss';
+import styles from './TagBreakdown.module.scss';
 
 interface Props {
-  data: CategoryTotal[];
+  data: TagTotal[];
 }
 
 const COLORS = [
@@ -27,13 +27,13 @@ const COLORS = [
   '#34d399', // emerald-400
 ];
 
-export default function CategoryBreakdown({ data }: Props) {
+export default function TagBreakdown({ data }: Props) {
   if (data.length === 0) {
     return (
       <div className={styles.container}>
-        <h3 className={styles.title}>Category Breakdown</h3>
+        <h3 className={styles.title}>Tag Breakdown</h3>
         <div className={styles.empty}>
-          <p>No category data available</p>
+          <p>No tag data available</p>
         </div>
       </div>
     );
@@ -41,13 +41,13 @@ export default function CategoryBreakdown({ data }: Props) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Category Breakdown</h3>
+      <h3 className={styles.title}>Tag Breakdown</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={data}
             dataKey="total"
-            nameKey="category"
+            nameKey="tag"
             cx="50%"
             cy="50%"
             outerRadius={100}

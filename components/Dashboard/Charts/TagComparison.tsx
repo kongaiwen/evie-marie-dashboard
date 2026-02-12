@@ -9,21 +9,21 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { CategoryTotal } from '@/lib/ynab/types';
+import { TagTotal } from '@/lib/ynab/types';
 import { formatCurrency } from '@/lib/ynab/utils';
-import styles from './CategoryComparison.module.scss';
+import styles from './TagComparison.module.scss';
 
 interface Props {
-  data: CategoryTotal[];
+  data: TagTotal[];
 }
 
-export default function CategoryComparison({ data }: Props) {
+export default function TagComparison({ data }: Props) {
   if (data.length === 0) {
     return (
       <div className={styles.container}>
-        <h3 className={styles.title}>Category Comparison</h3>
+        <h3 className={styles.title}>Tag Comparison</h3>
         <div className={styles.empty}>
-          <p>No category data available</p>
+          <p>No tag data available</p>
         </div>
       </div>
     );
@@ -34,7 +34,7 @@ export default function CategoryComparison({ data }: Props) {
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Category Comparison (Top 10)</h3>
+      <h3 className={styles.title}>Tag Comparison (Top 10)</h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={sortedData} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -46,7 +46,7 @@ export default function CategoryComparison({ data }: Props) {
           />
           <YAxis
             type="category"
-            dataKey="category"
+            dataKey="tag"
             width={120}
             stroke="#6b7280"
             style={{ fontSize: '12px' }}

@@ -8,13 +8,11 @@ import {
   useFilteredTransactions,
 } from '@/lib/ynab/hooks';
 import { FilterState } from '@/lib/ynab/types';
-import { getDateRangePreset, getSpendingByDate } from '@/lib/ynab/utils';
-import { calculateCategoryTotals, checkThresholds } from '@/lib/ynab/threshold-monitor';
+import { getDateRangePreset, getSpendingByDate, calculateTagTotals } from '@/lib/ynab/utils';
 import FilterPanel from '@/components/Dashboard/FilterPanel';
 import SpendingOverTime from '@/components/Dashboard/Charts/SpendingOverTime';
-import CategoryBreakdown from '@/components/Dashboard/Charts/CategoryBreakdown';
-import CategoryComparison from '@/components/Dashboard/Charts/CategoryComparison';
-import BudgetVsActual from '@/components/Dashboard/Charts/BudgetVsActual';
+import TagBreakdown from '@/components/Dashboard/Charts/TagBreakdown';
+import TagComparison from '@/components/Dashboard/Charts/TagComparison';
 import TransactionList from '@/components/Dashboard/TransactionList';
 import styles from './page.module.scss';
 
@@ -73,16 +71,9 @@ export default function YnabDashboardPage() {
     checkSession();
   }, [budgets, filters.budgetId]);
 
-  // Check thresholds when transactions change
-  useEffect(() => {
-    if (transactions.length > 0) {
-      checkThresholds(transactions);
-    }
-  }, [transactions]);
-
   // Prepare chart data
   const spendingByDate = getSpendingByDate(filteredTransactions);
-  const categoryTotals = calculateCategoryTotals(filteredTransactions);
+  const tagTotals = calculateTagTotals(filteredTransactions);
 
   if (loading || budgetsLoading) {
     return (
@@ -153,9 +144,8 @@ export default function YnabDashboardPage() {
             {/* Charts Grid */}
             <div className={styles.chartsGrid}>
               <SpendingOverTime data={spendingByDate} />
-              <CategoryBreakdown data={categoryTotals} />
-              <CategoryComparison data={categoryTotals} />
-              <BudgetVsActual categories={categories} />
+              <TagBreakdown data={tagTotals} />
+              <TagComparison data={tagTotals} />
             </div>
 
             {/* Transaction List */}

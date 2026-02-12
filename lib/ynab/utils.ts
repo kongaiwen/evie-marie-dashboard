@@ -1,5 +1,5 @@
 import { format, subDays, subMonths, startOfMonth, endOfMonth } from 'date-fns';
-import { EnrichedTransaction, SpendingData } from './types';
+import { EnrichedTransaction, SpendingData, TagTotal } from './types';
 
 /**
  * Get spending data grouped by date for time-series charts
@@ -92,4 +92,33 @@ export function getTopCategories(
     .map(([category, total]) => ({ category, total }))
     .sort((a, b) => b.total - a.total)
     .slice(0, limit);
+}
+
+/**
+ * Calculate spending totals by tag
+ */
+export function calculateTagTotals(
+  transactions: EnrichedTransaction[]
+): TagTotal[] {
+  const tagTotals: Record<string, number> = {};
+  let totalSpending = 0;
+
+  transactions.forEach((t) => {
+    if (t.amount >= 0) return; // Skip income
+
+    const amount = Math.abs(t.amountInCurrency);
+    totalSpending += amount;
+
+    t.customTags.forEach((tag) => {
+      tagTotals[tag] = (tagTotals[tag] || 0) + amount;
+    });
+  });
+
+  return Object.entries(tagTotals)
+    .map(([tag, total]) => ({
+      tag,
+      total,
+      percentage: totalSpending > 0 ? (total / totalSpending) * 100 : 0,
+    }))
+    .sort((a, b) => b.total - a.total);
 }

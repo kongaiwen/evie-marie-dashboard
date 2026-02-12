@@ -73,6 +73,12 @@ export interface CategoryTotal {
   percentage: number;
 }
 
+export interface TagTotal {
+  tag: string;
+  total: number;
+  percentage: number;
+}
+
 export interface ThresholdConfig {
   category: string;
   limit: number; // in currency units

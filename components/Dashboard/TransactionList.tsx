@@ -65,7 +65,6 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
         <div className={styles.header}>
           <div className={styles.col}>Date</div>
           <div className={styles.col}>Payee</div>
-          <div className={styles.col}>Category</div>
           <div className={styles.col}>Amount</div>
           <div className={styles.col}>Tags</div>
           <div className={styles.col}></div>
@@ -78,9 +77,6 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
                 {format(new Date(transaction.date), 'MMM d, yyyy')}
               </div>
               <div className={styles.col}>{transaction.payee_name || 'N/A'}</div>
-              <div className={styles.col}>
-                {transaction.category_name || 'Uncategorized'}
-              </div>
               <div className={styles.col}>
                 {formatCurrency(Math.abs(transaction.amountInCurrency))}
               </div>
