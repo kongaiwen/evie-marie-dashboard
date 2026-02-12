@@ -104,6 +104,26 @@ export interface StoredTags {
   [transactionId: string]: string[];
 }
 
+// =============================================================================
+// Tag Hierarchy Types
+// =============================================================================
+
+export interface TagHierarchy {
+  name: string;
+  parent: string | null; // null = root level tag
+  children: string[]; // array of child tag names
+}
+
+export interface SubTag {
+  name: string;
+  parent: string | null;
+  path: string[]; // e.g., ['Parent', 'Child'] for display
+}
+
+export interface StoredTagHierarchy {
+  [tagName: string]: string | null; // tag -> parent tag name (null = root)
+}
+
 export interface StoredThresholds {
   [category: string]: ThresholdConfig;
 }

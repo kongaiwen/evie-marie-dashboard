@@ -108,6 +108,10 @@
   }
 }
 
+.tagInputWrapper {
+  position: relative;
+}
+
 .tagInput {
   padding: $space-1 $space-2;
   border: 1px solid $sage-300;
@@ -118,6 +122,39 @@
   &:focus {
     outline: none;
     border-color: $sage-500;
+  }
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: $space-1;
+  width: 200px;
+}
+
+.suggestionItem {
+  padding: $space-2 $space-3;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  cursor: pointer;
+  transition: background $transition-default $ease-default;
+
+  &:hover {
+    background: $sage-50;
+  }
+
+  &.suggestionSelected {
+    background: $sage-100;
+    color: $sage-800;
+    font-weight: $font-weight-medium;
   }
 }
 

@@ -83,6 +83,26 @@
   gap: $space-1;
 }
 
+.tagNested {
+  background: rgba($sage-50, 0.3);
+  border-radius: $radius-lg;
+  padding: $space-1;
+}
+
+.tagExpandButton {
+  padding: $space-1;
+  background: transparent;
+  border: none;
+  color: $sage-600;
+  cursor: pointer;
+  font-size: $font-size-xs;
+  transition: color $transition-default $ease-default;
+
+  &:hover {
+    color: $sage-800;
+  }
+}
+
 .chip {
   padding: $space-2 $space-3;
   border-radius: $radius-full;

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { EnrichedTransaction } from '@/lib/ynab/types';
 import { formatCurrency } from '@/lib/ynab/utils';
-import { setTransactionTags, hideTransaction, removeTagFromTransaction } from '@/lib/ynab/storage';
+import { setTransactionTags, hideTransaction, removeTagFromTransaction, getAllTagsWithHierarchy } from '@/lib/ynab/storage';
 import styles from './TransactionList.module.scss';
 
 interface Props {
@@ -15,35 +15,90 @@ interface Props {
 export default function TransactionList({ transactions, onRefresh }: Props) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [tagInput, setTagInput] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
 
   // Show only outflow transactions (spending)
   const outflowTransactions = transactions.filter((t) => t.amount < 0);
 
-  const handleAddTag = (transaction: EnrichedTransaction) => {
-    if (!tagInput.trim()) return;
+  // Get all tags with hierarchy for autosuggest
+  const allTagsWithHierarchy = getAllTagsWithHierarchy();
 
-    const newTags = [...transaction.customTags, tagInput.trim()];
+  const handleAddTag = (transaction: EnrichedTransaction, tagName: string) => {
+    if (!tagName.trim()) return;
+
+    const newTags = [...transaction.customTags, tagName.trim()];
     setTransactionTags(transaction.id, newTags);
     setTagInput('');
+    setShowSuggestions(false);
     setEditingId(null);
 
-    // Trigger refresh to show updated tags
     if (onRefresh) onRefresh();
     else window.location.reload();
   };
 
   const handleHideTransaction = (transactionId: string) => {
     hideTransaction(transactionId);
-    // Trigger refresh to hide the transaction
     if (onRefresh) onRefresh();
     else window.location.reload();
   };
 
   const handleRemoveTag = (transactionId: string, tag: string) => {
     removeTagFromTransaction(transactionId, tag);
-    // Trigger refresh to show updated tags
     if (onRefresh) onRefresh();
     else window.location.reload();
+  };
+
+  // Update suggestions based on input
+  useEffect(() => {
+    if (tagInput.trim()) {
+      const filtered = allTagsWithHierarchy
+        .filter((t) => t.name.toLowerCase().includes(tagInput.toLowerCase()))
+        .map((t) => t.path.join(' > '))
+        .slice(0, 8); // Limit to 8 suggestions
+      setSuggestions(filtered);
+      setSelectedIndex(0);
+    } else {
+      setSuggestions([]);
+    }
+  }, [tagInput, allTagsWithHierarchy]);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node) &&
+        !inputRef.current?.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Handle keyboard navigation in suggestions
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, transaction: EnrichedTransaction) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === 'Enter' && suggestions.length > 0) {
+      e.preventDefault();
+      const selectedTag = allTagsWithHierarchy.find((t) => t.path.join(' > ') === suggestions[selectedIndex]);
+      if (selectedTag) {
+        handleAddTag(transaction, selectedTag.name);
+      }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+    }
   };
 
   if (outflowTransactions.length === 0) {
@@ -95,25 +150,46 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
                     </span>
                   ))}
                   {editingId === transaction.id ? (
-                    <input
-                      type="text"
-                      className={styles.tagInput}
-                      placeholder="Add tag..."
-                      value={tagInput}
-                      onChange={(e) => setTagInput(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleAddTag(transaction);
-                      }}
-                      onBlur={() => {
-                        if (tagInput) handleAddTag(transaction);
-                        else setEditingId(null);
-                      }}
-                      autoFocus
-                    />
+                    <div className={styles.tagInputWrapper}>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        className={styles.tagInput}
+                        placeholder="Add tag..."
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        onFocus={() => setShowSuggestions(true)}
+                        onKeyDown={(e) => handleKeyDown(e, transaction)}
+                        autoFocus
+                      />
+                      {showSuggestions && suggestions.length > 0 && (
+                        <div ref={suggestionsRef} className={styles.suggestions}>
+                          {suggestions.map((suggestion, index) => (
+                            <div
+                              key={suggestion}
+                              className={`${styles.suggestionItem} ${
+                                index === selectedIndex ? styles.suggestionSelected : ''
+                              }`}
+                              onClick={() => {
+                                const tag = allTagsWithHierarchy.find((t) => t.path.join(' > ') === suggestion);
+                                if (tag) {
+                                  handleAddTag(transaction, tag.name);
+                                }
+                              }}
+                            >
+                              {suggestion}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <button
                       className={styles.addTagButton}
-                      onClick={() => setEditingId(transaction.id)}
+                      onClick={() => {
+                        setEditingId(transaction.id);
+                        setShowSuggestions(true);
+                      }}
                     >
                       +
                     </button>
