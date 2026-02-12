@@ -256,7 +256,7 @@ interface TagItemProps {
   onSaveTagRename: () => void;
   onCancelEditTag: () => void;
   onEditedTagNameChange: (value: string) => void;
-  onDeleteTag: (tag: string) => void;
+  onDeleteTag: (tag: string | null) => void;
   onToggleExpanded: (tag: string) => void;
 }
 
