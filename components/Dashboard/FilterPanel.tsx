@@ -45,14 +45,6 @@ export default function FilterPanel({
     onFiltersChange({ ...filters, startDate, endDate });
   };
 
-  const handleCategoryToggle = (categoryName: string) => {
-    const newCategories = filters.categories.includes(categoryName)
-      ? filters.categories.filter((c) => c !== categoryName)
-      : [...filters.categories, categoryName];
-
-    onFiltersChange({ ...filters, categories: newCategories });
-  };
-
   const handleTagToggle = (tag: string) => {
     const newTags = filters.tags.includes(tag)
       ? filters.tags.filter((t) => t !== tag)
