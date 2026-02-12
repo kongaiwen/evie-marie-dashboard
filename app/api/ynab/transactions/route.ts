@@ -34,6 +34,13 @@ export async function GET(request: NextRequest) {
       endDate
     );
 
+    // Debug logging
+    console.log(`[YNAB Debug] budgetId: ${budgetId}, startDate: ${startDate}, endDate: ${endDate}`);
+    console.log(`[YNAB Debug] Fetched ${transactions.length} transactions`);
+    if (transactions.length > 0) {
+      console.log(`[YNAB Debug] First transaction date: ${transactions[0].date}, Last transaction date: ${transactions[transactions.length - 1].date}`);
+    }
+
     // Enrich with custom tags (note: tags stored client-side)
     // This endpoint returns base data; client will populate from localStorage
     const enriched: EnrichedTransaction[] = transactions.map((t) => ({

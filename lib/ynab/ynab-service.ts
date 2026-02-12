@@ -109,11 +109,18 @@ export async function getTransactionsByDateRange(
   startDate: string,
   endDate: string
 ): Promise<YnabTransaction[]> {
+  console.log(`[YNAB Service] Fetching transactions since ${startDate}`);
   const transactions = await getTransactions(budgetId, token, startDate);
 
-  return transactions.filter(
+  console.log(`[YNAB Service] API returned ${transactions.length} total transactions`);
+  console.log(`[YNAB Service] Filtering to range ${startDate} to ${endDate}`);
+
+  const filtered = transactions.filter(
     (t) => t.date >= startDate && t.date <= endDate
   );
+
+  console.log(`[YNAB Service] After filtering: ${filtered.length} transactions`);
+  return filtered;
 }
 
 /**
