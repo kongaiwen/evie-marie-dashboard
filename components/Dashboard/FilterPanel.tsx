@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { FilterState, YnabCategory } from '@/lib/ynab/types';
+import { FilterState, YnabCategory, TagHierarchy } from '@/lib/ynab/types';
 import {
   getTagHierarchy,
   getHiddenTransactions,
@@ -190,6 +190,7 @@ export default function FilterPanel({
                 deleteConfirmTag={deleteConfirmTag}
                 expandedTags={expandedTags}
                 editedTagName={editedTagName}
+                allTags={tagHierarchy}
                 onTagToggle={handleTagToggle}
                 onStartEditTag={handleStartEditTag}
                 onSaveTagRename={handleSaveTagRename}
@@ -251,6 +252,7 @@ interface TagItemProps {
   deleteConfirmTag: string | null;
   expandedTags: Set<string>;
   editedTagName: string;
+  allTags: TagHierarchy[]; // Full hierarchy for looking up children
   onTagToggle: (tag: string) => void;
   onStartEditTag: (tag: string) => void;
   onSaveTagRename: () => void;
@@ -268,6 +270,7 @@ function TagItem({
   deleteConfirmTag,
   expandedTags,
   editedTagName,
+  allTags,
   onTagToggle,
   onStartEditTag,
   onSaveTagRename,
@@ -281,6 +284,12 @@ function TagItem({
   const isExpanded = expandedTags.has(tag.name);
   const hasChildren = tag.children.length > 0;
   const isSelected = filters.tags.includes(tag.name);
+
+  // Find the full tag object from allTags to get proper children
+  const getTagChildren = (tagName: string): string[] => {
+    const found = allTags.find(t => t.name === tagName);
+    return found?.children || [];
+  };
 
   return (
     <>
@@ -373,13 +382,14 @@ function TagItem({
           return (
             <TagItem
               key={childName}
-              tag={{ name: childName, children: [], parent: tag.name }}
+              tag={{ name: childName, children: getTagChildren(childName), parent: tag.name }}
               level={level + 1}
               filters={filters}
               editingTag={editingTag}
               deleteConfirmTag={deleteConfirmTag}
               expandedTags={expandedTags}
               editedTagName={editedTagName}
+              allTags={allTags}
               onTagToggle={onTagToggle}
               onStartEditTag={onStartEditTag}
               onSaveTagRename={onSaveTagRename}
