@@ -1,5 +1,8 @@
 /**
  * localStorage helpers for persisting user data
+ *
+ * This module now syncs data with the server for persistence across devices.
+ * All write operations are synced to the server, and localStorage serves as a cache.
  */
 
 import {
@@ -11,6 +14,20 @@ import {
   TagHierarchy,
   SubTag,
 } from './types';
+
+// Re-export server-synced functions
+export {
+  syncFromServer,
+  setTransactionTags,
+  removeTagFromTransaction,
+  setTagParent,
+  deleteTag,
+  renameTag,
+  hideTransaction,
+  unhideTransaction,
+  unhideAllTransactions,
+  setPreferences,
+} from './server-storage';
 
 const STORAGE_KEYS = {
   TAGS: 'ynab_custom_tags',
@@ -29,30 +46,7 @@ export function getTransactionTags(transactionId: string): string[] {
   return tags[transactionId] || [];
 }
 
-export function setTransactionTags(
-  transactionId: string,
-  tags: string[]
-): void {
-  const allTags = getStoredTags();
-  const hierarchy = getStoredHierarchy();
-
-  // When adding a sub-tag, ensure parent tag is also included
-  const tagsWithParents = new Set<string>();
-
-  tags.forEach((tag) => {
-    tagsWithParents.add(tag);
-
-    // Add all parent tags
-    let currentParent = hierarchy[tag];
-    while (currentParent) {
-      tagsWithParents.add(currentParent);
-      currentParent = hierarchy[currentParent];
-    }
-  });
-
-  allTags[transactionId] = Array.from(tagsWithParents);
-  localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
-}
+// setTransactionTags is now imported from server-storage.ts
 
 export function getAllTags(): string[] {
   const allTags = getStoredTags();
@@ -156,25 +150,8 @@ export function getAllTagsWithHierarchy(): SubTag[] {
 
 /**
  * Set a tag's parent. Moving a tag to be a child of another tag.
+ * Now imported from server-storage.ts with server sync
  */
-export function setTagParent(tagName: string, parentName: string | null): void {
-  const hierarchy = getStoredHierarchy();
-
-  // Prevent circular references
-  if (parentName) {
-    let currentParent = hierarchy[parentName];
-    while (currentParent) {
-      if (currentParent === tagName) {
-        console.error('Cannot create circular reference in tag hierarchy');
-        return;
-      }
-      currentParent = hierarchy[currentParent];
-    }
-  }
-
-  hierarchy[tagName] = parentName;
-  saveHierarchy(hierarchy);
-}
 
 /**
  * Get all descendants of a tag (children, grandchildren, etc.)
@@ -215,118 +192,18 @@ export function getParentTag(tagName: string): string | null {
 /**
  * Removes a tag from ALL transactions
  * Cascades to delete all child tags as well
- * @param tagName - The name of tag to delete
+ * Now imported from server-storage.ts with server sync
  */
-export function deleteTag(tagName: string): void {
-  const allTags = getStoredTags();
-  const hierarchy = getStoredHierarchy();
-  let hasChanges = false;
-
-  // Get all tags to delete (this tag + all descendants)
-  const tagsToDelete = new Set<string>([tagName]);
-  const descendants = getDescendants(tagName);
-  descendants.forEach((child) => tagsToDelete.add(child));
-
-  Object.keys(allTags).forEach((transactionId) => {
-    const tags = allTags[transactionId];
-    let modified = false;
-
-    // Remove all tags in the delete set
-    const filteredTags = tags.filter((tag) => {
-      if (tagsToDelete.has(tag)) {
-        modified = true;
-        return false;
-      }
-      return true;
-    });
-
-    if (modified) {
-      allTags[transactionId] = filteredTags;
-      hasChanges = true;
-    }
-
-    // Remove empty arrays to clean up
-    if (filteredTags.length === 0) {
-      delete allTags[transactionId];
-    }
-  });
-
-  if (hasChanges) {
-    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
-  }
-
-  // Remove from hierarchy
-  delete hierarchy[tagName];
-  descendants.forEach((child) => delete hierarchy[child]);
-  saveHierarchy(hierarchy);
-}
 
 /**
  * Renames a tag across all transactions
- * @param oldName - The current name of tag
- * @param newName - The new name for the tag
+ * Now imported from server-storage.ts with server sync
  */
-export function renameTag(oldName: string, newName: string): void {
-  const allTags = getStoredTags();
-  const hierarchy = getStoredHierarchy();
-  let hasChanges = false;
-
-  Object.keys(allTags).forEach((transactionId) => {
-    const tags = allTags[transactionId];
-    const index = tags.indexOf(oldName);
-    if (index !== -1) {
-      // Replace old name with new name
-      tags[index] = newName;
-      // Remove any duplicates that might result from rename
-      const uniqueTags = Array.from(new Set(tags));
-      if (uniqueTags.length !== tags.length) {
-        allTags[transactionId] = uniqueTags;
-      }
-      hasChanges = true;
-    }
-  });
-
-  if (hasChanges) {
-    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
-  }
-
-  // Update hierarchy if present
-  if (hierarchy[oldName] !== undefined) {
-    hierarchy[newName] = hierarchy[oldName];
-    delete hierarchy[oldName];
-  }
-
-  // Update any references to old name as parent
-  Object.entries(hierarchy).forEach(([tag, parent]) => {
-    if (parent === oldName) {
-      hierarchy[tag] = newName;
-    }
-  });
-
-  saveHierarchy(hierarchy);
-}
 
 /**
  * Removes a specific tag from a specific transaction
- * @param transactionId - The ID of transaction
- * @param tag - The tag to remove from transaction
+ * Now imported from server-storage.ts with server sync
  */
-export function removeTagFromTransaction(transactionId: string, tag: string): void {
-  const allTags = getStoredTags();
-  const tags = allTags[transactionId];
-
-  if (!tags) return;
-
-  const index = tags.indexOf(tag);
-  if (index !== -1) {
-    tags.splice(index, 1);
-    // Remove empty arrays to clean up
-    if (tags.length === 0) {
-      delete allTags[transactionId];
-    }
-    localStorage.setItem(STORAGE_KEYS.TAGS, JSON.stringify(allTags));
-  }
-}
 
 function getStoredTags(): StoredTags {
   try {
@@ -426,14 +303,7 @@ export function getPreferences(): StoredPreferences {
   }
 }
 
-export function setPreferences(prefs: Partial<StoredPreferences>): void {
-  const current = getPreferences();
-  const updated = { ...current, ...prefs };
-  localStorage.setItem(
-    STORAGE_KEYS.PREFERENCES,
-    JSON.stringify(updated)
-  );
-}
+// setPreferences is now imported from server-storage.ts
 
 // =============================================================================
 // Hidden Transactions Management
@@ -458,29 +328,4 @@ export function isTransactionHidden(transactionId: string): boolean {
   return hidden.includes(transactionId);
 }
 
-export function hideTransaction(transactionId: string): void {
-  const stored = getStoredHiddenTransactions();
-  if (!stored.hidden.includes(transactionId)) {
-    stored.hidden.push(transactionId);
-    localStorage.setItem(
-      STORAGE_KEYS.HIDDEN_TRANSACTIONS,
-      JSON.stringify(stored)
-    );
-  }
-}
-
-export function unhideTransaction(transactionId: string): void {
-  const stored = getStoredHiddenTransactions();
-  stored.hidden = stored.hidden.filter((id) => id !== transactionId);
-  localStorage.setItem(
-    STORAGE_KEYS.HIDDEN_TRANSACTIONS,
-    JSON.stringify(stored)
-  );
-}
-
-export function unhideAllTransactions(): void {
-  localStorage.setItem(
-    STORAGE_KEYS.HIDDEN_TRANSACTIONS,
-    JSON.stringify({ hidden: [] })
-  );
-}
+// hideTransaction, unhideTransaction, unhideAllTransactions are now imported from server-storage.ts

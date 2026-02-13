@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const budgetId = searchParams.get('budgetId');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
     if (!budgetId) {
       // Return available budgets
@@ -29,8 +31,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Get transactions since the beginning of time (no date filter)
-    const allTransactions = await getTransactions(budgetId, token);
+    // Get transactions - if startDate provided, use it, otherwise get all
+    const allTransactions = await getTransactions(budgetId, token, startDate || undefined);
 
     // Get transaction date range
     const dates = allTransactions.map((t) => t.date).sort();
@@ -44,6 +46,33 @@ export async function GET(request: NextRequest) {
       byMonth[month] = (byMonth[month] || 0) + 1;
     }
 
+    // Get recent transactions (last 10)
+    const recentTransactions = allTransactions
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 10);
+
+    // Filter by date range if provided
+    let filteredTransactions = allTransactions;
+    let filteredInRange = null;
+
+    if (startDate && endDate) {
+      filteredTransactions = allTransactions.filter(
+        (t) => t.date >= startDate && t.date <= endDate
+      );
+      filteredInRange = {
+        startDate,
+        endDate,
+        count: filteredTransactions.length,
+        transactions: filteredTransactions.slice(0, 20).map((t) => ({
+          id: t.id,
+          date: t.date,
+          amount: t.amount,
+          payee: t.payee_name,
+          category: t.category_name,
+        })),
+      };
+    }
+
     return NextResponse.json({
       debug: {
         budgetId,
@@ -51,13 +80,14 @@ export async function GET(request: NextRequest) {
         oldestDate,
         newestDate,
         byMonth,
-        sampleTransactions: allTransactions.slice(0, 5).map((t) => ({
+        recentTransactions: recentTransactions.map((t) => ({
           id: t.id,
           date: t.date,
           amount: t.amount,
           payee: t.payee_name,
           category: t.category_name,
         })),
+        filteredInRange,
       },
     });
   } catch (error) {

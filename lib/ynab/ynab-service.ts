@@ -80,6 +80,9 @@ export async function getCategories(
 /**
  * Fetch transactions for a budget
  * Optionally filter by date (since_date)
+ *
+ * Note: YNAB API returns up to 1000 transactions per request.
+ * If more transactions exist, we need to handle pagination.
  */
 export async function getTransactions(
   budgetId: string,
@@ -91,12 +94,24 @@ export async function getTransactions(
     endpoint += `?since_date=${since}`;
   }
 
-  const result = await fetchYnab<{ transactions: YnabTransaction[] }>(
+  console.log(`[YNAB Service] Fetching: ${endpoint}`);
+
+  const result = await fetchYnab<{
+    transactions: YnabTransaction[];
+    server_knowledge?: number;
+  }>(
     endpoint,
     token
   );
 
-  return result.transactions;
+  const transactions = result.transactions || [];
+  console.log(`[YNAB Service] Received ${transactions.length} transactions`);
+  if (transactions.length > 0) {
+    const dates = transactions.map(t => t.date).sort();
+    console.log(`[YNAB Service] Date range: ${dates[0]} to ${dates[dates.length - 1]}`);
+  }
+
+  return transactions;
 }
 
 /**
@@ -115,11 +130,24 @@ export async function getTransactionsByDateRange(
   console.log(`[YNAB Service] API returned ${transactions.length} total transactions`);
   console.log(`[YNAB Service] Filtering to range ${startDate} to ${endDate}`);
 
+  // Include all transactions from startDate to endDate (inclusive)
   const filtered = transactions.filter(
     (t) => t.date >= startDate && t.date <= endDate
   );
 
   console.log(`[YNAB Service] After filtering: ${filtered.length} transactions`);
+
+  // Log the dates of filtered transactions for debugging
+  if (filtered.length > 0) {
+    const dates = filtered.map(t => t.date).sort();
+    console.log(`[YNAB Service] Filtered date range: ${dates[0]} to ${dates[dates.length - 1]}`);
+  } else {
+    console.warn(`[YNAB Service] No transactions found in date range!`);
+    // Log a few sample transaction dates for debugging
+    const sampleDates = transactions.slice(0, 5).map(t => `${t.date}: ${t.payee_name || t.memo || 'no description'}`);
+    console.log(`[YNAB Service] Sample transactions:`, sampleDates);
+  }
+
   return filtered;
 }
 

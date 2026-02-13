@@ -9,6 +9,7 @@ import {
 } from '@/lib/ynab/hooks';
 import { FilterState } from '@/lib/ynab/types';
 import { getDateRangePreset, getSpendingByDate, calculateTagTotals } from '@/lib/ynab/utils';
+import { syncFromServer } from '@/lib/ynab/server-storage';
 import FilterPanel from '@/components/Dashboard/FilterPanel';
 import SpendingOverTime from '@/components/Dashboard/Charts/SpendingOverTime';
 import TagBreakdown from '@/components/Dashboard/Charts/TagBreakdown';
@@ -44,7 +45,7 @@ export default function YnabDashboardPage() {
     filters
   );
 
-  // Session check
+  // Session check and server sync
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -52,6 +53,9 @@ export default function YnabDashboardPage() {
         if (response.ok) {
           const data = await response.json();
           setSession(data);
+
+          // Sync user data from server (tags, hidden transactions, preferences)
+          await syncFromServer();
 
           // Set default budget if available
           if (!filters.budgetId && budgets.length > 0) {
