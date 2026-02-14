@@ -80,7 +80,7 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [showSuggestions]);
 
   // Handle keyboard navigation in suggestions
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, transaction: EnrichedTransaction) => {
@@ -90,11 +90,17 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setSelectedIndex((prev) => Math.max(prev - 1, 0));
-    } else if (e.key === 'Enter' && suggestions.length > 0) {
+    } else if (e.key === 'Enter') {
       e.preventDefault();
-      const selectedTag = allTagsWithHierarchy.find((t) => t.path.join(' > ') === suggestions[selectedIndex]);
-      if (selectedTag) {
-        handleAddTag(transaction, selectedTag.name);
+      if (suggestions.length > 0 && selectedIndex < suggestions.length) {
+        // Use the selected suggestion
+        const selectedTag = allTagsWithHierarchy.find((t) => t.path.join(' > ') === suggestions[selectedIndex]);
+        if (selectedTag) {
+          handleAddTag(transaction, selectedTag.name);
+        }
+      } else if (tagInput.trim()) {
+        // Create a new tag if input is not empty
+        handleAddTag(transaction, tagInput.trim());
       }
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
@@ -160,6 +166,17 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
                         onChange={(e) => setTagInput(e.target.value)}
                         onFocus={() => setShowSuggestions(true)}
                         onKeyDown={(e) => handleKeyDown(e, transaction)}
+                        onBlur={() => {
+                          // Small delay to allow suggestion click to register
+                          setTimeout(() => {
+                            if (tagInput.trim()) {
+                              handleAddTag(transaction, tagInput.trim());
+                            } else {
+                              setEditingId(null);
+                              setShowSuggestions(false);
+                            }
+                          }, 150);
+                        }}
                         autoFocus
                       />
                       {showSuggestions && suggestions.length > 0 && (
