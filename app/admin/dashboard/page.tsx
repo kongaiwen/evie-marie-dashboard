@@ -29,7 +29,7 @@ export default function YnabDashboardPage() {
     startDate,
     endDate,
     showHidden: false,
-    showPending: false,
+    showPending: true, // Show pending transactions by default
   });
 
   // Fetch data

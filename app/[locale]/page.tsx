@@ -4,24 +4,27 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/app/i18n/routing';
 import Image from "next/image"
 import ParallaxSection from "@/components/ParallaxSection"
+import SolarpunkDivider from "@/components/SolarpunkBanner"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import DomainCard from "@/components/DomainCard"
 import { SolarpunkGallery } from "@/components/SolarpunkArtwork"
 import { getEstablishedDomains, getPivotDomains } from "@/app/[locale]/domains/domainsData"
+import { useSolarpunkBackgroundWithMeta } from "@/lib/solarpunk/useSolarpunk"
 import styles from "./page.module.scss"
 
 export default function Home() {
   const t = useTranslations('home');
   const quotes = useTranslations('quotes.home');
+  const { url: heroBgUrl } = useSolarpunkBackgroundWithMeta('home-hero');
 
   return (
     <div className={`${styles.page} watercolor-wash`}>
       <Nav />
 
-      {/* Hero with parallax background */}
+      {/* Hero with parallax solarpunk background */}
       <ParallaxSection
-        imageSrc="/images/backgrounds/mountain-panorama.jpg"
+        imageSrc={heroBgUrl}
         overlayColor="rgba(255, 255, 255, 0.82)"
         blur={2}
         minHeight="0px"
@@ -123,6 +126,9 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Solarpunk divider */}
+        <SolarpunkDivider seed="divider-1" />
+
         {/* Solarpunk Art Gallery */}
         <div className={styles.solarpunkSection}>
           <h2 className={styles.sectionHeading}>Visions of a Better Future</h2>
@@ -145,6 +151,9 @@ export default function Home() {
             </a>
           </div>
         </div>
+
+        {/* Solarpunk divider */}
+        <SolarpunkDivider seed="divider-2" />
 
         {/* Personal Highlights Strip */}
         <div className={styles.highlightsSection}>

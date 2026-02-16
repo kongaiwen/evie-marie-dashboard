@@ -37,6 +37,19 @@ export async function GET(request: NextRequest) {
     // Debug logging
     console.log(`[YNAB Debug] budgetId: ${budgetId}, startDate: ${startDate}, endDate: ${endDate}`);
     console.log(`[YNAB Debug] Fetched ${transactions.length} transactions`);
+
+    // Log pending (uncleared) transactions
+    const pendingTransactions = transactions.filter(t => t.cleared === 'uncleared');
+    console.log(`[YNAB Debug] Pending (uncleared) transactions: ${pendingTransactions.length}`);
+    if (pendingTransactions.length > 0) {
+      console.log(`[YNAB Debug] Pending transactions:`, pendingTransactions.map(t => ({
+        date: t.date,
+        payee: t.payee_name,
+        amount: milliunitsToCurrency(t.amount),
+        cleared: t.cleared
+      })));
+    }
+
     if (transactions.length > 0) {
       console.log(`[YNAB Debug] First transaction date: ${transactions[0].date}, Last transaction date: ${transactions[transactions.length - 1].date}`);
     }
