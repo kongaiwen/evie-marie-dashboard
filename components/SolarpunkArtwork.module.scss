@@ -1,0 +1,267 @@
+@use '../styles/variables' as *;
+
+.artworkContainer {
+  position: relative;
+  overflow: hidden;
+
+  &.full {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.card {
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-md;
+    transition: transform $transition-default $ease-default, box-shadow $transition-default $ease-default;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $shadow-lg;
+    }
+  }
+
+  &.banner {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  // Aspect ratios based on artwork orientation
+  .artworkContainer.card & {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+
+  .artworkContainer.card:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba($sage-200, 0.8) 0%,
+    rgba($plum-200, 0.8) 50%,
+    rgba($rose-200, 0.8) 100%
+  );
+  transition: opacity 0.5s ease;
+
+  &.loaded {
+    opacity: 0;
+  }
+}
+
+// Attribution card styles
+.attribution {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $space-4;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    transparent 100%
+  );
+  backdrop-filter: blur(8px);
+  transition: all $transition-default $ease-default;
+  pointer-events: none;
+
+  &.hover {
+    opacity: 0;
+    transform: translateY(20px);
+
+    .artworkContainer:hover & {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  }
+
+  &.always {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.attributionLink {
+  display: block;
+  color: $white;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+.attributionContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+}
+
+.artworkInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.artworkTitle {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  line-height: 1.3;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.artistName {
+  display: block;
+  font-size: $font-size-xs;
+  opacity: 0.9;
+  font-weight: $font-weight-normal;
+}
+
+.licenseBadge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba($white, 0.15);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ccIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.sourceIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: $space-1;
+  font-size: $font-size-xs;
+  opacity: 0.7;
+}
+
+.externalIcon {
+  width: 12px;
+  height: 12px;
+}
+
+// Gallery styles
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $space-6;
+
+  @media (max-width: $bp-md) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $space-4;
+  }
+}
+
+// Background component styles
+.background {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  overflow: hidden;
+}
+
+.backgroundImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba($sage-900, 0.7) 0%,
+    rgba($plum-900, 0.6) 50%,
+    rgba($rose-900, 0.7) 100%
+  );
+  transition: opacity $transition-default $ease-default;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: $space-8;
+}
+
+.cornerAttribution {
+  position: absolute;
+  bottom: $space-4;
+  right: $space-4;
+  padding: $space-1 $space-2;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: $radius-sm;
+  color: $white;
+  font-size: $font-size-xs;
+  text-decoration: none;
+  transition: all $transition-default $ease-default;
+  z-index: 10;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+.minAttribution {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// Accent banner variant for decorative use
+.banner {
+  .attribution {
+    &.hover {
+      opacity: 1;
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        transparent 100%
+      );
+    }
+  }
+
+  .artworkTitle {
+    font-size: $font-size-base;
+  }
+
+  .artistName {
+    font-size: $font-size-sm;
+  }
+}

@@ -7,6 +7,7 @@ import ParallaxSection from "@/components/ParallaxSection"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import DomainCard from "@/components/DomainCard"
+import { SolarpunkGallery } from "@/components/SolarpunkArtwork"
 import { getEstablishedDomains, getPivotDomains } from "@/app/[locale]/domains/domainsData"
 import styles from "./page.module.scss"
 
@@ -119,6 +120,29 @@ export default function Home() {
               <div className={styles.statValue}>React</div>
               <div className={styles.statLabel}>{t('specialist')}</div>
             </div>
+          </div>
+        </div>
+
+        {/* Solarpunk Art Gallery */}
+        <div className={styles.solarpunkSection}>
+          <h2 className={styles.sectionHeading}>Visions of a Better Future</h2>
+          <p className={styles.solarpunkIntro}>
+            Artwork from the Storyseed Library - a collection of solarpunk art imagining sustainable, hopeful futures.
+            Hover over any image to see artist attribution.
+          </p>
+          <SolarpunkGallery limit={6} className={styles.solarpunkGallery} />
+          <div className={styles.solarpunkFooter}>
+            <a
+              href="https://storyseedlibrary.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.solarpunkLink}
+            >
+              Explore more at Storyseed Library
+              <svg className={styles.externalIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
           </div>
         </div>
 

@@ -310,6 +310,65 @@
   background: $mist;
 }
 
+.solarpunkSection {
+  margin-top: $space-24;
+  padding: $space-16 $space-8;
+  background: linear-gradient(
+    135deg,
+    rgba($sage-50, 0.5) 0%,
+    rgba($plum-50, 0.3) 50%,
+    rgba($rose-50, 0.5) 100%
+  );
+  border-radius: $radius-3xl;
+  border: 1px solid rgba($plum-200, 0.3);
+}
+
+.solarpunkIntro {
+  text-align: center;
+  color: $earth-700;
+  max-width: $max-w-3xl;
+  margin: 0 auto $space-10;
+  line-height: $leading-relaxed;
+  font-size: $font-size-base;
+
+  @include md {
+    font-size: $font-size-lg;
+  }
+}
+
+.solarpunkGallery {
+  margin-bottom: $space-8;
+}
+
+.solarpunkFooter {
+  text-align: center;
+}
+
+.solarpunkLink {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-6;
+  background: $white;
+  color: $plum-700;
+  text-decoration: none;
+  border-radius: $radius-xl;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-md;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $plum-50;
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+  }
+}
+
+.externalIcon {
+  width: 16px;
+  height: 16px;
+}
+
 .highlightsSection {
   margin-top: $space-24;
 }

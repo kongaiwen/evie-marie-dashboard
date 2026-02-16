@@ -1,0 +1,211 @@
+@use '../styles/variables' as *;
+
+.banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.small {
+    height: 200px;
+
+    @include md {
+      height: 250px;
+    }
+  }
+
+  &.medium {
+    height: 300px;
+
+    @include md {
+      height: 400px;
+    }
+  }
+
+  &.large {
+    height: 400px;
+
+    @include md {
+      height: 500px;
+    }
+
+    @include lg {
+      height: 600px;
+    }
+  }
+}
+
+.imageContainer {
+  position: absolute;
+  inset: 0;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+.attribution {
+  position: absolute;
+  bottom: $space-4;
+  left: $space-4;
+  right: $space-4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-3 $space-4;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border-radius: $radius-xl;
+  color: $white;
+  text-decoration: none;
+  transition: all $transition-default $ease-default;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  @include md {
+    left: $space-6;
+    bottom: $space-6;
+    max-width: 500px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.attributionContent {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+  flex: 1;
+  min-width: 0;
+}
+
+.artworkTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @include md {
+    font-size: $font-size-base;
+  }
+}
+
+.artistInfo {
+  font-size: $font-size-xs;
+  opacity: 0.9;
+
+  @include md {
+    font-size: $font-size-sm;
+  }
+}
+
+.artistName {
+  font-weight: $font-weight-medium;
+}
+
+.license {
+  font-size: $font-size-xs;
+  opacity: 0.7;
+}
+
+.externalIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-left: $space-2;
+}
+
+.libraryBadge {
+  position: absolute;
+  top: $space-4;
+  right: $space-4;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  background: rgba($sage-500, 0.9);
+  color: $white;
+  text-decoration: none;
+  border-radius: $radius-lg;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  transition: all $transition-default $ease-default;
+  box-shadow: $shadow-md;
+
+  &:hover {
+    background: rgba($sage-600, 0.95);
+    transform: scale(1.05);
+  }
+}
+
+.leafIcon {
+  width: 14px;
+  height: 14px;
+}
+
+// Divider variant
+.divider {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  margin: $space-12 0;
+  overflow: hidden;
+  border-radius: $radius-2xl;
+
+  @include md {
+    height: 150px;
+  }
+}
+
+.dividerImage {
+  position: absolute;
+  inset: 0;
+}
+
+.dividerOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba($sage-900, 0.4) 0%,
+    rgba($plum-900, 0.3) 50%,
+    rgba($rose-900, 0.4) 100%
+  );
+}
+
+.dividerAttribution {
+  position: absolute;
+  bottom: $space-3;
+  right: $space-3;
+  padding: $space-2 $space-3;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  border-radius: $radius-md;
+  color: $white;
+  font-size: $font-size-xs;
+  text-decoration: none;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
