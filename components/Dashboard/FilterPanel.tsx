@@ -204,6 +204,22 @@ export default function FilterPanel({
         </div>
       )}
 
+      {/* Pending Transactions */}
+      <div className={styles.section}>
+        <label className={styles.label}>Pending Transactions</label>
+        <label className={styles.toggleLabel}>
+          <input
+            type="checkbox"
+            checked={filters.showPending}
+            onChange={(e) =>
+              onFiltersChange({ ...filters, showPending: e.target.checked })
+            }
+            className={styles.toggleCheckbox}
+          />
+          Show pending transactions
+        </label>
+      </div>
+
       {/* Hidden Transactions */}
       {hiddenCount > 0 && (
         <div className={styles.section}>

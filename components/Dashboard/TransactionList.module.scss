@@ -189,3 +189,21 @@
     border-color: $rose-300;
   }
 }
+
+.pending {
+  background: $amber-50;
+
+  &:hover {
+    background: $amber-100;
+  }
+}
+
+.pendingBadge {
+  margin-left: $space-2;
+  padding: $space-0-5 $space-2;
+  background: $amber-200;
+  color: $amber-800;
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+}

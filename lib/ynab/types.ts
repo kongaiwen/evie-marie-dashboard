@@ -94,6 +94,7 @@ export interface FilterState {
   minAmount?: number;
   maxAmount?: number;
   showHidden: boolean;
+  showPending: boolean;
 }
 
 // =============================================================================

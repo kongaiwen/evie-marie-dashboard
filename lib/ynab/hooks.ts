@@ -161,6 +161,11 @@ export function useFilteredTransactions(
       return false;
     }
 
+    // Pending transaction filter (unless showPending is true, filter out uncleared)
+    if (!filters.showPending && t.cleared === 'uncleared') {
+      return false;
+    }
+
     // Tag filter
     if (filters.tags.length > 0) {
       const hasTag = filters.tags.some((tag) =>

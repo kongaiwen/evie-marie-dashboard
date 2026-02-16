@@ -29,6 +29,7 @@ export default function YnabDashboardPage() {
     startDate,
     endDate,
     showHidden: false,
+    showPending: false,
   });
 
   // Fetch data
