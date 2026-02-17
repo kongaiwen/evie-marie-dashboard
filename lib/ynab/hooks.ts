@@ -155,6 +155,12 @@ export function useFilteredTransactions(
 ) {
   const hiddenTransactionIds = getHiddenTransactions();
 
+  // Debug logging
+  const pendingCount = transactions.filter(t => t.cleared === 'uncleared').length;
+  console.log('[Filter Debug] Total transactions:', transactions.length);
+  console.log('[Filter Debug] Pending (uncleared) transactions:', pendingCount);
+  console.log('[Filter Debug] showPending filter:', filters.showPending);
+
   return transactions.filter((t) => {
     // Hide transactions that are in the blocklist (unless showHidden is true)
     if (!filters.showHidden && hiddenTransactionIds.includes(t.id)) {

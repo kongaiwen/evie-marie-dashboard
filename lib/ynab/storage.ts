@@ -85,6 +85,10 @@ export function getTagHierarchy(): TagHierarchy[] {
   const rootTags: TagHierarchy[] = [];
   const tagMap: Map<string, TagHierarchy> = new Map();
 
+  // Debug logging
+  console.log('[TagHierarchy Debug] All tags:', allTags);
+  console.log('[TagHierarchy Debug] Stored hierarchy:', hierarchy);
+
   // Initialize all tags in the map
   allTags.forEach((tag) => {
     tagMap.set(tag, {
@@ -119,6 +123,8 @@ export function getTagHierarchy(): TagHierarchy[] {
   };
 
   rootTags.forEach((tag) => sortChildren(tag));
+
+  console.log('[TagHierarchy Debug] Root tags with children:', rootTags.map(t => ({ name: t.name, children: t.children })));
 
   return rootTags;
 }

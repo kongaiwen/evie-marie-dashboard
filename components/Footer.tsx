@@ -17,46 +17,33 @@ export default function Footer({ quote, attribution }: FooterProps) {
 
   return (
     <>
-      {/* Solarpunk art banner before footer */}
-      {bannerArtwork && (
-        <div className={styles.solarpunkBanner}>
-          <div className={styles.bannerImage}>
-            <Image
-              src={bannerUrl}
-              alt={bannerArtwork.title}
-              fill
-              sizes="100vw"
-              className={styles.bannerImg}
-            />
-            <div className={styles.bannerOverlay} />
-          </div>
-          <div className={styles.bannerContent}>
-            <Link
-              href={bannerArtwork.artistUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.artworkCredit}
-            >
-              <span className={styles.artworkTitle}>{bannerArtwork.title}</span>
-              <span className={styles.artistName}>by {bannerArtwork.artist}</span>
-              <span className={styles.license}>{bannerArtwork.license}</span>
-            </Link>
-            <Link
-              href="https://storyseedlibrary.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.libraryLink}
-            >
-              <svg className={styles.leafIcon} viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
-              </svg>
-              <span>Art from Storyseed Library</span>
-            </Link>
-          </div>
-        </div>
-      )}
+      {/* Solarpunk vignette as backdrop for quote */}
+      <footer className={styles.footer} style={{ position: 'relative' }}>
+        {bannerArtwork && (
+          <>
+            <div className={styles.vignetteBackdrop}>
+              <Image
+                src={bannerUrl}
+                alt={bannerArtwork.title}
+                fill
+                sizes="100vw"
+                className={styles.vignetteImage}
+              />
+              <div className={styles.vignetteOverlay} />
+            </div>
+            <div className={styles.artworkAttribution}>
+              <Link
+                href={bannerArtwork.artistUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.attributionLink}
+              >
+                {bannerArtwork.title} by {bannerArtwork.artist}
+              </Link>
+            </div>
+          </>
+        )}
 
-      <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.quoteBlock}>
             <p className={styles.quote}>&ldquo;{quote}&rdquo;</p>

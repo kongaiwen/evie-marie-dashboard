@@ -1,122 +1,66 @@
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
 
-// Solarpunk banner before footer
-.solarpunkBanner {
+.footer {
   position: relative;
-  width: 100%;
-  height: 180px;
+  border-top: 1px solid rgba($sage-100, 0.6);
+  background: rgba($parchment, 0.5);
   margin-top: $space-16;
+  overflow: hidden;
+}
+
+// Vignette backdrop for quote
+.vignetteBackdrop {
+  position: absolute;
+  inset: 0;
+  height: 300px;
   overflow: hidden;
 
   @include md {
-    height: 220px;
+    height: 350px;
   }
 }
 
-.bannerImage {
-  position: absolute;
-  inset: 0;
-}
-
-.bannerImg {
+.vignetteImage {
   object-fit: cover;
   object-position: center;
+  opacity: 0.3;
 }
 
-.bannerOverlay {
+.vignetteOverlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.4) 100%
+    rgba($parchment, 0.85) 0%,
+    rgba($parchment, 0.7) 50%,
+    rgba($parchment, 0.9) 100%
   );
 }
 
-.bannerContent {
-  position: relative;
+.artworkAttribution {
+  position: absolute;
+  bottom: $space-3;
+  right: $space-4;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: $space-3;
-  height: 100%;
-  padding: $space-6;
-}
-
-.artworkCredit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $space-1;
-  padding: $space-3 $space-5;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  border-radius: $radius-lg;
-  color: $white;
-  text-decoration: none;
-  transition: all $transition-default $ease-default;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.7);
-    transform: translateY(-2px);
-  }
-}
-
-.artworkTitle {
-  font-size: $font-size-sm;
-  font-weight: $font-weight-semibold;
-  text-align: center;
-  max-width: 400px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: $font-size-xs;
+  opacity: 0.6;
 
   @include md {
-    font-size: $font-size-base;
+    bottom: $space-4;
+    right: $space-8;
   }
 }
 
-.artistName {
-  font-size: $font-size-xs;
-  opacity: 0.9;
-}
-
-.license {
-  font-size: $font-size-xs;
-  opacity: 0.7;
-}
-
-.libraryLink {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-  padding: $space-2 $space-4;
-  background: rgba($sage-500, 0.9);
-  color: $white;
+.attributionLink {
+  color: $earth-500;
   text-decoration: none;
-  border-radius: $radius-md;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-medium;
-  transition: all $transition-default $ease-default;
+  transition: opacity $transition-default $ease-default;
 
   &:hover {
-    background: rgba($sage-600, 0.95);
-    transform: scale(1.05);
+    opacity: 1;
+    text-decoration: underline;
   }
-}
-
-.leafIcon {
-  width: 14px;
-  height: 14px;
-}
-
-.footer {
-  border-top: 1px solid rgba($sage-100, 0.6);
-  background: rgba($parchment, 0.5);
-  margin-top: $space-16;
 }
 
 .container {

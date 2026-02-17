@@ -3,73 +3,61 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/app/i18n/routing';
 import Image from "next/image"
-import ParallaxSection from "@/components/ParallaxSection"
-import SolarpunkDivider from "@/components/SolarpunkBanner"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import DomainCard from "@/components/DomainCard"
-import { SolarpunkGallery } from "@/components/SolarpunkArtwork"
 import { getEstablishedDomains, getPivotDomains } from "@/app/[locale]/domains/domainsData"
-import { useSolarpunkBackgroundWithMeta } from "@/lib/solarpunk/useSolarpunk"
 import styles from "./page.module.scss"
 
 export default function Home() {
   const t = useTranslations('home');
   const quotes = useTranslations('quotes.home');
-  const { url: heroBgUrl } = useSolarpunkBackgroundWithMeta('home-hero');
 
   return (
     <div className={`${styles.page} watercolor-wash`}>
       <Nav />
 
-      {/* Hero with parallax solarpunk background */}
-      <ParallaxSection
-        imageSrc={heroBgUrl}
-        overlayColor="rgba(255, 255, 255, 0.82)"
-        blur={2}
-        minHeight="0px"
-      >
-        <main className={styles.heroMain}>
-          <div className={styles.heroTextCenter}>
-            <div className={styles.profileLinkWrapper}>
-              <Link href="/profile" className={styles.profileLink}>
-                <div className={styles.profileGlow}></div>
-                <Image
-                  src="/images/profile.jpg"
-                  alt="Evie Marie Kolb"
-                  width={180}
-                  height={180}
-                  className={styles.profileImage}
-                  priority
-                />
-              </Link>
-            </div>
-
-            <div className={styles.statusBadge}>
-              <span className={styles.statusDot}></span>
-              <span className={styles.statusText}>{t('status')}</span>
-            </div>
-
-            <h1 className={styles.heroTitle}>
-              {t('title')}
-            </h1>
-            <p className={styles.heroSubtitle}>
-              {t('subtitle')}
-            </p>
-            <div className={styles.heroButtons}>
-              <Link href="/projects" className={styles.primaryButton}>
-                {t('viewWork')}
-                <svg className={styles.buttonIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-              <Link href="/contact" className={styles.secondaryButton}>
-                {t('getInTouch')}
-              </Link>
-            </div>
+      {/* Hero section */}
+      <main className={styles.heroMain}>
+        <div className={styles.heroTextCenter}>
+          <div className={styles.profileLinkWrapper}>
+            <Link href="/profile" className={styles.profileLink}>
+              <div className={styles.profileGlow}></div>
+              <Image
+                src="/images/profile.jpg"
+                alt="Evie Marie Kolb"
+                width={180}
+                height={180}
+                className={styles.profileImage}
+                priority
+              />
+            </Link>
           </div>
-        </main>
-      </ParallaxSection>
+
+          <div className={styles.statusBadge}>
+            <span className={styles.statusDot}></span>
+            <span className={styles.statusText}>{t('status')}</span>
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            {t('title')}
+          </h1>
+          <p className={styles.heroSubtitle}>
+            {t('subtitle')}
+          </p>
+          <div className={styles.heroButtons}>
+            <Link href="/projects" className={styles.primaryButton}>
+              {t('viewWork')}
+              <svg className={styles.buttonIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+            <Link href="/contact" className={styles.secondaryButton}>
+              {t('getInTouch')}
+            </Link>
+          </div>
+        </div>
+      </main>
 
       <div className={styles.container}>
         <div className={styles.whatIDoSection}>
@@ -125,35 +113,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* Solarpunk divider */}
-        <SolarpunkDivider seed="divider-1" />
-
-        {/* Solarpunk Art Gallery */}
-        <div className={styles.solarpunkSection}>
-          <h2 className={styles.sectionHeading}>Visions of a Better Future</h2>
-          <p className={styles.solarpunkIntro}>
-            Artwork from the Storyseed Library - a collection of solarpunk art imagining sustainable, hopeful futures.
-            Hover over any image to see artist attribution.
-          </p>
-          <SolarpunkGallery limit={6} className={styles.solarpunkGallery} />
-          <div className={styles.solarpunkFooter}>
-            <a
-              href="https://storyseedlibrary.org"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.solarpunkLink}
-            >
-              Explore more at Storyseed Library
-              <svg className={styles.externalIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </div>
-        </div>
-
-        {/* Solarpunk divider */}
-        <SolarpunkDivider seed="divider-2" />
 
         {/* Personal Highlights Strip */}
         <div className={styles.highlightsSection}>
