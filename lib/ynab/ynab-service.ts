@@ -116,40 +116,40 @@ export async function getTransactions(
 }
 
 /**
- * Fetch pending transactions for a budget
- * Includes both bank-pending (cleared === 'uncleared') and YNAB-unapproved (approved === false)
- * Fetches the most recent transactions (up to 1000) and filters for pending status
+ * Fetch ALL transactions from YNAB with minimal restrictions
+ * Returns the most recent 1000 transactions (YNAB's per-request limit)
+ * This is used to supplement the date-range query to catch pending transactions
  */
-export async function getPendingTransactions(
+export async function getAllRecentTransactions(
   budgetId: string,
   token: string
 ): Promise<YnabTransaction[]> {
-  // Fetch without date range to get the most recent transactions (up to 1000)
   const endpoint = `/budgets/${budgetId}/transactions`;
-  console.log(`[YNAB Service] Fetching recent transactions for pending check: ${endpoint}`);
+  console.log(`[YNAB Service] Fetching ALL recent transactions: ${endpoint}`);
 
   const result = await fetchYnab<{
     transactions: YnabTransaction[];
+    server_knowledge?: number;
   }>(endpoint, token, { noCache: true });
 
   const allTransactions = result.transactions || [];
-  console.log(`[YNAB Service] Received ${allTransactions.length} transactions from YNAB`);
+  console.log(`[YNAB Service] Received ${allTransactions.length} total transactions from YNAB`);
 
-  // Log date range of received transactions
   if (allTransactions.length > 0) {
     const dates = allTransactions.map(t => t.date).sort();
-    console.log(`[YNAB Service] Date range: ${dates[0]} to ${dates[dates.length - 1]}`);
+    const oldest = dates[0];
+    const newest = dates[dates.length - 1];
+    console.log(`[YNAB Service] Date range: ${oldest} to ${newest}`);
+
+    // Count pending transactions
+    const uncleared = allTransactions.filter(t => t.cleared === 'uncleared').length;
+    const unapproved = allTransactions.filter(t => !t.approved).length;
+    const pending = allTransactions.filter(t => t.cleared === 'uncleared' || !t.approved).length;
+
+    console.log(`[YNAB Service] Transaction breakdown: ${uncleared} uncleared, ${unapproved} unapproved, ${pending} total pending`);
   }
 
-  // Include both bank-pending and unapproved transactions
-  const pending = allTransactions.filter(t => t.cleared === 'uncleared' || !t.approved);
-  const unclearedCount = allTransactions.filter(t => t.cleared === 'uncleared').length;
-  const unapprovedCount = allTransactions.filter(t => !t.approved).length;
-
-  console.log(`[YNAB Service] Found ${unclearedCount} uncleared (bank-pending), ${unapprovedCount} unapproved in YNAB, ${pending.length} total pending`);
-  console.log(`[YNAB Service] Pending transaction dates:`, pending.map(t => `${t.date}: ${t.payee_name || 'N/A'}`).slice(0, 10));
-
-  return pending;
+  return allTransactions;
 }
 
 /**

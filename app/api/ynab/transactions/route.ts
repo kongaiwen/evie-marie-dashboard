@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
   getTransactionsByDateRange,
-  getPendingTransactions,
+  getAllRecentTransactions,
   milliunitsToCurrency,
 } from '@/lib/ynab/ynab-service';
 import { EnrichedTransaction } from '@/lib/ynab/types';
@@ -28,36 +28,41 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch date-range transactions and pending (uncleared) transactions in parallel
-    const [transactions, pendingTransactions] = await Promise.all([
+    // Fetch date-range transactions AND all recent transactions in parallel
+    // This ensures we get pending transactions even if they're outside the date range
+    const [dateRangeTransactions, allRecentTransactions] = await Promise.all([
       getTransactionsByDateRange(budgetId, token, startDate, endDate),
-      getPendingTransactions(budgetId, token),
+      getAllRecentTransactions(budgetId, token),
     ]);
 
-    // Merge pending transactions that aren't already in the date-range results
-    const existingIds = new Set(transactions.map(t => t.id));
-    const additionalPending = pendingTransactions.filter(t => !existingIds.has(t.id));
-    const allTransactions = [...transactions, ...additionalPending];
+    // Merge transactions: start with date-range, then add any from allRecent that aren't duplicates
+    const existingIds = new Set(dateRangeTransactions.map(t => t.id));
+    const additionalTransactions = allRecentTransactions.filter(t => !existingIds.has(t.id));
+    const allTransactions = [...dateRangeTransactions, ...additionalTransactions];
 
     // Debug logging
     console.log(`[YNAB Debug] budgetId: ${budgetId}, startDate: ${startDate}, endDate: ${endDate}`);
-    console.log(`[YNAB Debug] Date-range transactions: ${transactions.length}`);
-    console.log(`[YNAB Debug] Pending (uncleared or unapproved) transactions from API: ${pendingTransactions.length}`);
-    console.log(`[YNAB Debug] Additional pending (outside date range): ${additionalPending.length}`);
+    console.log(`[YNAB Debug] Date-range transactions: ${dateRangeTransactions.length}`);
+    console.log(`[YNAB Debug] All recent transactions from YNAB: ${allRecentTransactions.length}`);
+    console.log(`[YNAB Debug] Additional transactions (outside date range): ${additionalTransactions.length}`);
     console.log(`[YNAB Debug] Total merged transactions: ${allTransactions.length}`);
 
-    // Log pending details with breakdown
-    if (pendingTransactions.length > 0) {
-      const uncleared = pendingTransactions.filter(t => t.cleared === 'uncleared').length;
-      const unapproved = pendingTransactions.filter(t => !t.approved).length;
-      console.log(`[YNAB Debug] Pending breakdown: ${uncleared} uncleared, ${unapproved} unapproved`);
-      console.log(`[YNAB Debug] Pending transactions:`, pendingTransactions.map(t => ({
-        date: t.date,
-        payee: t.payee_name,
-        amount: milliunitsToCurrency(t.amount),
-        approved: t.approved,
-        cleared: t.cleared
-      })));
+    // Log breakdown of pending transactions
+    const unclearedInAll = allTransactions.filter(t => t.cleared === 'uncleared');
+    const unapprovedInAll = allTransactions.filter(t => !t.approved);
+    console.log(`[YNAB Debug] In all transactions: ${unclearedInAll.length} uncleared, ${unapprovedInAll.length} unapproved`);
+
+    if (unclearedInAll.length > 0 || unapprovedInAll.length > 0) {
+      console.log(`[YNAB Debug] Pending transactions details:`, allTransactions
+        .filter(t => t.cleared === 'uncleared' || !t.approved)
+        .map(t => ({
+          date: t.date,
+          payee: t.payee_name,
+          amount: milliunitsToCurrency(t.amount),
+          approved: t.approved,
+          cleared: t.cleared
+        }))
+      );
     }
 
     if (allTransactions.length > 0) {

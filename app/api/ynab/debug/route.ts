@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getTransactions,
   getBudgets,
-  getPendingTransactions,
+  getAllRecentTransactions,
   milliunitsToCurrency,
 } from '@/lib/ynab/ynab-service';
 
@@ -53,11 +53,12 @@ export async function GET(request: NextRequest) {
       .sort((a, b) => b.date.localeCompare(a.date))
       .slice(0, 10);
 
-    // Get pending transactions
-    const pendingTransactions = await getPendingTransactions(budgetId, token);
-    const unclearedCount = allTransactions.filter(t => t.cleared === 'uncleared').length;
-    const unapprovedCount = allTransactions.filter(t => !t.approved).length;
-    const combinedPendingCount = allTransactions.filter(t => t.cleared === 'uncleared' || !t.approved).length;
+    // Get ALL recent transactions (not just date range) to ensure we catch pending ones
+    const allRecentTransactions = await getAllRecentTransactions(budgetId, token);
+    const unclearedCount = allRecentTransactions.filter(t => t.cleared === 'uncleared').length;
+    const unapprovedCount = allRecentTransactions.filter(t => !t.approved).length;
+    const combinedPendingCount = allRecentTransactions.filter(t => t.cleared === 'uncleared' || !t.approved).length;
+    const pendingTransactions = allRecentTransactions.filter(t => t.cleared === 'uncleared' || !t.approved);
 
     // Filter by date range if provided
     let filteredTransactions = allTransactions;
