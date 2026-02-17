@@ -42,12 +42,15 @@ export async function GET(request: NextRequest) {
     // Debug logging
     console.log(`[YNAB Debug] budgetId: ${budgetId}, startDate: ${startDate}, endDate: ${endDate}`);
     console.log(`[YNAB Debug] Date-range transactions: ${transactions.length}`);
-    console.log(`[YNAB Debug] Pending (uncleared) transactions from API: ${pendingTransactions.length}`);
+    console.log(`[YNAB Debug] Pending (uncleared or unapproved) transactions from API: ${pendingTransactions.length}`);
     console.log(`[YNAB Debug] Additional pending (outside date range): ${additionalPending.length}`);
     console.log(`[YNAB Debug] Total merged transactions: ${allTransactions.length}`);
 
-    // Log pending details
+    // Log pending details with breakdown
     if (pendingTransactions.length > 0) {
+      const uncleared = pendingTransactions.filter(t => t.cleared === 'uncleared').length;
+      const unapproved = pendingTransactions.filter(t => !t.approved).length;
+      console.log(`[YNAB Debug] Pending breakdown: ${uncleared} uncleared, ${unapproved} unapproved`);
       console.log(`[YNAB Debug] Pending transactions:`, pendingTransactions.map(t => ({
         date: t.date,
         payee: t.payee_name,

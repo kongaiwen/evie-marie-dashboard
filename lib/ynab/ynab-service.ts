@@ -116,9 +116,9 @@ export async function getTransactions(
 }
 
 /**
- * Fetch pending (uncleared) transactions for a budget
- * Fetches recent transactions and filters for cleared === 'uncleared'
- * This catches bank-pending transactions regardless of YNAB approval status
+ * Fetch pending transactions for a budget
+ * Includes both bank-pending (cleared === 'uncleared') and YNAB-unapproved (approved === false)
+ * Fetches recent transactions and filters for either condition
  */
 export async function getPendingTransactions(
   budgetId: string,
@@ -137,8 +137,11 @@ export async function getPendingTransactions(
   }>(endpoint, token, { noCache: true });
 
   const allTransactions = result.transactions || [];
-  const pending = allTransactions.filter(t => t.cleared === 'uncleared');
-  console.log(`[YNAB Service] Received ${allTransactions.length} recent transactions, ${pending.length} are uncleared (pending)`);
+  // Include both bank-pending and unapproved transactions
+  const pending = allTransactions.filter(t => t.cleared === 'uncleared' || !t.approved);
+  const unclearedCount = allTransactions.filter(t => t.cleared === 'uncleared').length;
+  const unapprovedCount = allTransactions.filter(t => !t.approved).length;
+  console.log(`[YNAB Service] Received ${allTransactions.length} recent transactions, ${unclearedCount} uncleared (bank-pending), ${unapprovedCount} unapproved in YNAB, ${pending.length} total pending`);
   return pending;
 }
 

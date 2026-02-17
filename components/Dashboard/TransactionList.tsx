@@ -132,21 +132,32 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
         </div>
 
         <div className={styles.body}>
-          {outflowTransactions.slice(0, 50).map((transaction) => (
-            <div
-              key={transaction.id}
-              className={`${styles.row} ${transaction.cleared === 'uncleared' ? styles.pending : ''}`}
-            >
-              <div className={styles.col}>
-                {format(new Date(transaction.date), 'MMM d, yyyy')}
-              </div>
-              <div className={styles.col}>
-                {transaction.payee_name || 'N/A'}
-                {transaction.cleared === 'uncleared' && (
-                  <span className={styles.pendingBadge}>Pending</span>
-                )}
-              </div>
-              <div className={styles.col}>
+          {outflowTransactions.slice(0, 50).map((transaction) => {
+            const isUncleared = transaction.cleared === 'uncleared';
+            const isUnapproved = !transaction.approved;
+            const isPending = isUncleared || isUnapproved;
+
+            return (
+              <div
+                key={transaction.id}
+                className={`${styles.row} ${isPending ? styles.pending : ''}`}
+              >
+                <div className={styles.col}>
+                  {format(new Date(transaction.date), 'MMM d, yyyy')}
+                </div>
+                <div className={styles.col}>
+                  {transaction.payee_name || 'N/A'}
+                  {isUncleared && (
+                    <span className={styles.pendingBadge}>Bank Pending</span>
+                  )}
+                  {isUnapproved && !isUncleared && (
+                    <span className={styles.pendingBadge}>Needs Approval</span>
+                  )}
+                  {isUncleared && isUnapproved && (
+                    <span className={styles.pendingBadge}>Unapproved</span>
+                  )}
+                </div>
+                <div className={styles.col}>
                 {formatCurrency(Math.abs(transaction.amountInCurrency))}
               </div>
               <div className={styles.col}>
@@ -231,7 +242,8 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
                 </button>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

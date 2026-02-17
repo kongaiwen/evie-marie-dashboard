@@ -156,9 +156,13 @@ export function useFilteredTransactions(
   const hiddenTransactionIds = getHiddenTransactions();
 
   // Debug logging
-  const pendingCount = transactions.filter(t => t.cleared === 'uncleared').length;
+  const unclearedCount = transactions.filter(t => t.cleared === 'uncleared').length;
+  const unapprovedCount = transactions.filter(t => !t.approved).length;
+  const pendingCount = transactions.filter(t => t.cleared === 'uncleared' || !t.approved).length;
   console.log('[Filter Debug] Total transactions:', transactions.length);
-  console.log('[Filter Debug] Pending (uncleared) transactions:', pendingCount);
+  console.log('[Filter Debug] Uncleared (bank-pending):', unclearedCount);
+  console.log('[Filter Debug] Unapproved in YNAB:', unapprovedCount);
+  console.log('[Filter Debug] Total pending:', pendingCount);
   console.log('[Filter Debug] showPending filter:', filters.showPending);
 
   return transactions.filter((t) => {
@@ -167,8 +171,8 @@ export function useFilteredTransactions(
       return false;
     }
 
-    // Pending transaction filter (unless showPending is true, filter out uncleared)
-    if (!filters.showPending && t.cleared === 'uncleared') {
+    // Pending transaction filter (unless showPending is true, filter out both uncleared and unapproved)
+    if (!filters.showPending && (t.cleared === 'uncleared' || !t.approved)) {
       return false;
     }
 
