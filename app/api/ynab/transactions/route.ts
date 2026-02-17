@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getTransactionsByDateRange,
   getAllRecentTransactions,
+  clearAllPendingTransactions,
   milliunitsToCurrency,
 } from '@/lib/ynab/ynab-service';
 import { EnrichedTransaction } from '@/lib/ynab/types';
@@ -28,7 +29,12 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch date-range transactions AND all recent transactions in parallel
+    // STEP 1: Clear all pending transactions in YNAB before fetching
+    // This ensures all transactions show as regular transactions (cleared + approved)
+    console.log(`[YNAB API] Step 1: Clearing pending transactions...`);
+    await clearAllPendingTransactions(budgetId, token);
+
+    // STEP 2: Fetch date-range transactions AND all recent transactions in parallel
     // This ensures we get pending transactions even if they're outside the date range
     const [dateRangeTransactions, allRecentTransactions] = await Promise.all([
       getTransactionsByDateRange(budgetId, token, startDate, endDate),

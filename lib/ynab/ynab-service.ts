@@ -9,6 +9,38 @@ import {
 const YNAB_API_BASE = 'https://api.ynab.com/v1';
 
 /**
+ * Bulk update transactions in YNAB
+ */
+async function updateTransactions(
+  budgetId: string,
+  token: string,
+  transactions: Array<{ id: string; cleared?: string; approved?: boolean }>
+): Promise<void> {
+  const endpoint = `/budgets/${budgetId}/transactions`;
+
+  console.log(`[YNAB Service] Bulk updating ${transactions.length} transactions`);
+
+  const payload = {
+    transactions: transactions.map(t => ({
+      id: t.id,
+      cleared: t.cleared,
+      approved: t.approved,
+    })),
+  };
+
+  await fetch(`${YNAB_API_BASE}${endpoint}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  console.log(`[YNAB Service] Successfully updated ${transactions.length} transactions}`);
+}
+
+/**
  * YNAB API Service
  * Server-side only - uses YNAB_API_TOKEN from env
  */
@@ -150,6 +182,48 @@ export async function getAllRecentTransactions(
   }
 
   return allTransactions;
+}
+
+/**
+ * Clear all pending transactions in YNAB
+ * Marks all uncleared transactions as cleared and all unapproved as approved
+ * This ensures all transactions will be treated as regular transactions
+ */
+export async function clearAllPendingTransactions(
+  budgetId: string,
+  token: string
+): Promise<void> {
+  console.log(`[YNAB Service] Clearing all pending transactions...`);
+
+  // Fetch all recent transactions to find pending ones
+  const allTransactions = await getAllRecentTransactions(budgetId, token);
+
+  // Find transactions that need to be updated
+  const transactionsToUpdate = allTransactions
+    .filter(t => t.cleared === 'uncleared' || !t.approved)
+    .map(t => ({
+      id: t.id,
+      cleared: t.cleared === 'uncleared' ? 'cleared' : undefined,
+      approved: !t.approved ? true : undefined,
+    }))
+    .filter(t => t.cleared !== undefined || t.approved !== undefined);
+
+  if (transactionsToUpdate.length === 0) {
+    console.log(`[YNAB Service] No pending transactions to clear`);
+    return;
+  }
+
+  console.log(`[YNAB Service] Found ${transactionsToUpdate.length} pending transactions to clear`);
+
+  // Update in batches (YNAB API limit is 100 transactions per request)
+  const batchSize = 100;
+  for (let i = 0; i < transactionsToUpdate.length; i += batchSize) {
+    const batch = transactionsToUpdate.slice(i, i + batchSize);
+    await updateTransactions(budgetId, token, batch);
+    console.log(`[YNAB Service] Cleared batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(transactionsToUpdate.length / batchSize)}`);
+  }
+
+  console.log(`[YNAB Service] Successfully cleared all ${transactionsToUpdate.length} pending transactions`);
 }
 
 /**
