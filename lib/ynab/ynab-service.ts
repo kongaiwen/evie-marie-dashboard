@@ -15,14 +15,15 @@ const YNAB_API_BASE = 'https://api.ynab.com/v1';
 
 async function fetchYnab<T>(
   endpoint: string,
-  token: string
+  token: string,
+  options?: { noCache?: boolean }
 ): Promise<T> {
   const response = await fetch(`${YNAB_API_BASE}${endpoint}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    next: { revalidate: 300 }, // Cache for 5 minutes
+    ...(options?.noCache ? { cache: 'no-store' as const } : { next: { revalidate: 300 } }),
   });
 
   if (!response.ok) {
@@ -115,23 +116,30 @@ export async function getTransactions(
 }
 
 /**
- * Fetch unapproved transactions for a budget
- * Uses the YNAB ?type=unapproved filter to get pending/imported transactions
+ * Fetch pending (uncleared) transactions for a budget
+ * Fetches recent transactions and filters for cleared === 'uncleared'
+ * This catches bank-pending transactions regardless of YNAB approval status
  */
-export async function getUnapprovedTransactions(
+export async function getPendingTransactions(
   budgetId: string,
   token: string
 ): Promise<YnabTransaction[]> {
-  const endpoint = `/budgets/${budgetId}/transactions?type=unapproved`;
-  console.log(`[YNAB Service] Fetching unapproved: ${endpoint}`);
+  // Fetch last 60 days to catch any pending transactions
+  const sinceDate = new Date();
+  sinceDate.setDate(sinceDate.getDate() - 60);
+  const since = sinceDate.toISOString().split('T')[0];
+
+  const endpoint = `/budgets/${budgetId}/transactions?since_date=${since}`;
+  console.log(`[YNAB Service] Fetching recent transactions for pending check: ${endpoint}`);
 
   const result = await fetchYnab<{
     transactions: YnabTransaction[];
-  }>(endpoint, token);
+  }>(endpoint, token, { noCache: true });
 
-  const transactions = result.transactions || [];
-  console.log(`[YNAB Service] Received ${transactions.length} unapproved transactions`);
-  return transactions;
+  const allTransactions = result.transactions || [];
+  const pending = allTransactions.filter(t => t.cleared === 'uncleared');
+  console.log(`[YNAB Service] Received ${allTransactions.length} recent transactions, ${pending.length} are uncleared (pending)`);
+  return pending;
 }
 
 /**

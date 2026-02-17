@@ -156,9 +156,9 @@ export function useFilteredTransactions(
   const hiddenTransactionIds = getHiddenTransactions();
 
   // Debug logging
-  const pendingCount = transactions.filter(t => !t.approved).length;
+  const pendingCount = transactions.filter(t => t.cleared === 'uncleared').length;
   console.log('[Filter Debug] Total transactions:', transactions.length);
-  console.log('[Filter Debug] Pending (unapproved) transactions:', pendingCount);
+  console.log('[Filter Debug] Pending (uncleared) transactions:', pendingCount);
   console.log('[Filter Debug] showPending filter:', filters.showPending);
 
   return transactions.filter((t) => {
@@ -167,8 +167,8 @@ export function useFilteredTransactions(
       return false;
     }
 
-    // Pending transaction filter (unless showPending is true, filter out unapproved)
-    if (!filters.showPending && !t.approved) {
+    // Pending transaction filter (unless showPending is true, filter out uncleared)
+    if (!filters.showPending && t.cleared === 'uncleared') {
       return false;
     }
 
