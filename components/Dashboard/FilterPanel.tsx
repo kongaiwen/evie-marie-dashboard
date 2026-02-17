@@ -30,6 +30,8 @@ export default function FilterPanel({
   const [editedTagName, setEditedTagName] = useState('');
   const [deleteConfirmTag, setDeleteConfirmTag] = useState<string | null>(null);
   const [expandedTags, setExpandedTags] = useState<Set<string>>(new Set());
+  const [settingParentTag, setSettingParentTag] = useState<string | null>(null);
+  const [selectedParentTag, setSelectedParentTag] = useState<string | null>(null);
 
   const tagHierarchy = getTagHierarchy();
   const hiddenCount = getHiddenTransactions().length;
@@ -129,6 +131,28 @@ export default function FilterPanel({
     setExpandedTags(newExpanded);
   };
 
+  const handleStartSetParent = (tag: string) => {
+    setSettingParentTag(tag);
+    const currentParent = getParentTag(tag);
+    setSelectedParentTag(currentParent);
+  };
+
+  const handleSaveParentTag = async (tagName: string) => {
+    await setTagParent(tagName, selectedParentTag);
+    setSettingParentTag(null);
+    setSelectedParentTag(null);
+    if (onRefresh) onRefresh();
+    else window.location.reload();
+  };
+
+  const handleCancelParentTag = () => {
+    setSettingParentTag(null);
+    setSelectedParentTag(null);
+  };
+
+  // Get all tag names as a flat list for the parent dropdown
+  const allTagNames = tagHierarchy.map(t => t.name);
+
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>Filters</h3>
@@ -198,6 +222,12 @@ export default function FilterPanel({
                 onEditedTagNameChange={setEditedTagName}
                 onDeleteTag={setDeleteConfirmTag}
                 onToggleExpanded={toggleTagExpanded}
+                onSetParentTag={handleStartSetParent}
+                settingParentTag={settingParentTag}
+                onSaveParentTag={handleSaveParentTag}
+                onCancelParentTag={handleCancelParentTag}
+                onParentTagChange={setSelectedParentTag}
+                potentialParents={allTagNames}
               />
             ))}
           </div>
@@ -276,6 +306,12 @@ interface TagItemProps {
   onEditedTagNameChange: (value: string) => void;
   onDeleteTag: (tag: string | null) => void;
   onToggleExpanded: (tag: string) => void;
+  onSetParentTag?: (tag: string) => void;
+  settingParentTag?: string | null;
+  onSaveParentTag?: (tag: string) => void;
+  onCancelParentTag?: () => void;
+  onParentTagChange?: (parent: string) => void;
+  potentialParents?: string[];
 }
 
 function TagItem({
@@ -294,9 +330,16 @@ function TagItem({
   onEditedTagNameChange,
   onDeleteTag,
   onToggleExpanded,
+  onSetParentTag,
+  settingParentTag,
+  onSaveParentTag,
+  onCancelParentTag,
+  onParentTagChange,
+  potentialParents,
 }: TagItemProps) {
   const isEditing = editingTag === tag.name;
   const isDeleting = deleteConfirmTag === tag.name;
+  const isSettingParent = settingParentTag === tag.name;
   const isExpanded = expandedTags.has(tag.name);
   const hasChildren = tag.children.length > 0;
   const isSelected = filters.tags.includes(tag.name);
@@ -306,6 +349,26 @@ function TagItem({
     const found = allTags.find(t => t.name === tagName);
     return found?.children || [];
   };
+
+  // Get descendants to prevent circular references
+  const getDescendants = (tagName: string): string[] => {
+    const descendants: string[] = [];
+    const findChildren = (parent: string) => {
+      allTags.forEach(t => {
+        if (t.parent === parent && !descendants.includes(t.name)) {
+          descendants.push(t.name);
+          findChildren(t.name);
+        }
+      });
+    };
+    findChildren(tagName);
+    return descendants;
+  };
+
+  const currentDescendants = getDescendants(tag.name);
+  const validParents = potentialParents?.filter(
+    p => p !== tag.name && !currentDescendants.includes(p)
+  ) || [];
 
   return (
     <>
@@ -357,6 +420,37 @@ function TagItem({
               No
             </button>
           </div>
+        ) : isSettingParent ? (
+          <div className={styles.tagEditRow}>
+            <span className={styles.tagLabel}>{tag.name}</span>
+            <select
+              className={styles.tagParentSelect}
+              defaultValue={tag.parent || ''}
+              onChange={(e) => onParentTagChange?.(e.target.value)}
+              autoFocus
+            >
+              <option value="">No parent (root level)</option>
+              {validParents.map(parentName => (
+                <option key={parentName} value={parentName}>
+                  {parentName}
+                </option>
+              ))}
+            </select>
+            <button
+              className={styles.tagActionButton}
+              onClick={() => onSaveParentTag?.(tag.name)}
+              title="Save"
+            >
+              &#10003;
+            </button>
+            <button
+              className={styles.tagActionButton}
+              onClick={onCancelParentTag}
+              title="Cancel"
+            >
+              &#10005;
+            </button>
+          </div>
         ) : (
           <>
             <button
@@ -376,6 +470,13 @@ function TagItem({
                 {isExpanded ? '▼' : '▶'}
               </button>
             )}
+            <button
+              className={styles.tagParentButton}
+              onClick={() => onSetParentTag?.(tag.name)}
+              title="Set parent tag"
+            >
+              &#128193;
+            </button>
             <button
               className={styles.tagEditButton}
               onClick={() => onStartEditTag(tag.name)}
@@ -413,6 +514,12 @@ function TagItem({
               onEditedTagNameChange={onEditedTagNameChange}
               onDeleteTag={onDeleteTag}
               onToggleExpanded={onToggleExpanded}
+              onSetParentTag={onSetParentTag}
+              settingParentTag={settingParentTag}
+              onSaveParentTag={onSaveParentTag}
+              onCancelParentTag={onCancelParentTag}
+              onParentTagChange={onParentTagChange}
+              potentialParents={potentialParents}
             />
           );
         })}

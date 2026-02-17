@@ -192,6 +192,48 @@
   }
 }
 
+.tagParentButton {
+  padding: $space-1 $space-2;
+  background: $blue-50;
+  color: $blue-700;
+  border: 1px solid $blue-200;
+  border-radius: $radius-md;
+  font-size: $font-size-xs;
+  cursor: pointer;
+  transition: all $transition-default $ease-default;
+
+  &:hover {
+    background: $blue-100;
+    border-color: $blue-500;
+  }
+}
+
+.tagParentSelect {
+  padding: $space-1 $space-2;
+  border: 1px solid $sage-300;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  background: $white;
+  color: $gray-700;
+  cursor: pointer;
+  max-width: 200px;
+
+  &:focus {
+    outline: none;
+    border-color: $sage-500;
+  }
+}
+
+.tagLabel {
+  font-size: $font-size-sm;
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
 .tagDeleteButton {
   padding: $space-1 $space-2;
   background: $rose-50;
