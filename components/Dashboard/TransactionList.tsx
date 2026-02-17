@@ -135,14 +135,14 @@ export default function TransactionList({ transactions, onRefresh }: Props) {
           {outflowTransactions.slice(0, 50).map((transaction) => (
             <div
               key={transaction.id}
-              className={`${styles.row} ${transaction.cleared === 'uncleared' ? styles.pending : ''}`}
+              className={`${styles.row} ${!transaction.approved ? styles.pending : ''}`}
             >
               <div className={styles.col}>
                 {format(new Date(transaction.date), 'MMM d, yyyy')}
               </div>
               <div className={styles.col}>
                 {transaction.payee_name || 'N/A'}
-                {transaction.cleared === 'uncleared' && (
+                {!transaction.approved && (
                   <span className={styles.pendingBadge}>Pending</span>
                 )}
               </div>

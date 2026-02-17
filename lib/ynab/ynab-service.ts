@@ -115,6 +115,26 @@ export async function getTransactions(
 }
 
 /**
+ * Fetch unapproved transactions for a budget
+ * Uses the YNAB ?type=unapproved filter to get pending/imported transactions
+ */
+export async function getUnapprovedTransactions(
+  budgetId: string,
+  token: string
+): Promise<YnabTransaction[]> {
+  const endpoint = `/budgets/${budgetId}/transactions?type=unapproved`;
+  console.log(`[YNAB Service] Fetching unapproved: ${endpoint}`);
+
+  const result = await fetchYnab<{
+    transactions: YnabTransaction[];
+  }>(endpoint, token);
+
+  const transactions = result.transactions || [];
+  console.log(`[YNAB Service] Received ${transactions.length} unapproved transactions`);
+  return transactions;
+}
+
+/**
  * Fetch transactions within a specific date range
  * YNAB doesn't have native date range query, so we fetch since startDate and filter
  */
